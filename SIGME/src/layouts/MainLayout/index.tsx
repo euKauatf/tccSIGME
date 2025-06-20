@@ -26,7 +26,10 @@ function MainLayout() {
           No clique do hamburger, a função toggleSidebar é chamada e muda o estado da sidebar */}
       <Sidebar isOpen={isSidebarOpen} />
       <main className={`main-content ${isSidebarOpen ? "shifted" : ""}`}>
-        <Navbar onHamburgerClick={toggleSidebar} />
+        <Navbar
+          onHamburgerClick={toggleSidebar}
+          isSidebarOpen={isSidebarOpen}
+        />
 
         {/* Outlet é o componente que renderiza as páginas do router */}
         <Outlet />
