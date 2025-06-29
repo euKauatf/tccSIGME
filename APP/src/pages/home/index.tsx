@@ -1,11 +1,17 @@
+import { useUser } from "../../layouts/MainLayout"; // Importa o hook que criamos no MainLayout
 import "./style.css";
 
 function HomePage() {
+  // O hook 'useUser' pega os dados (o 'context') fornecido pelo <Outlet /> no MainLayout.
+  const { user } = useUser();
+
   return (
     <div className="main font-sans flex flex-col items-center justify-center">
       {/* -=-=-=-=-=-=-=-=-=-=-=- Texto do topo do site -=-=-=-=-=-=-=-=-=-=-=- */}
       <h1 className="text-5xl font-bold text-center text-emerald-800 py-3">
-        Bem-vindo(a) ao SIGME, <br></br>NOME!
+        Bem-vindo(a) ao SIGME, <br />
+        {/* A MUDANÇA: Exibe o nome do usuário de forma segura com 'Optional Chaining' (user?.name) */}
+        {user?.name}!
       </h1>
       {/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */}
 

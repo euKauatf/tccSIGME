@@ -1,16 +1,52 @@
+// -=-=-=-=-=-=-=-=-=-=-=-=-=- Importações -=-=-=-=-=-=-=-=-=-=-=-=-=- //
 import { Link, useNavigate } from "react-router-dom";
 import "./style.css";
+// --- INÍCIO DAS ALTERAÇÕES LÓGICAS ---
+import { useState } from "react";
+import apiClient from "../../api/apiClient"; // Verifique se este caminho está correto
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- //
 
 function LoginPage() {
   const navigate = useNavigate();
 
-  const handleLogin = (event: React.FormEvent) => {
-    event.preventDefault();
+  // Estados para guardar o email, a senha e mensagens de erro
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-    // Aqui que vai vir a logica de autenticação do usuário
+  // Função para lidar com o submit do formulário de login
+  const handleLogin = async (event: React.FormEvent) => {
+    event.preventDefault(); // Previne o recarregamento da página
+    setError(''); // Limpa erros anteriores
 
-    navigate("/home");
+    try {
+      // Envia os dados dos estados para a API no backend
+      const response = await apiClient.post('/login', {
+        email,
+        password,
+      });
+
+      // Se o login for bem-sucedido, pega o token da resposta
+      const token = response.data.access_token;
+
+      // Guarda o token no navegador para futuras requisições
+      localStorage.setItem("authToken", token);
+
+      // Redireciona o usuário para a página principal
+      navigate("/home");
+
+    } catch (err: any) {
+      console.error("Erro no login:", err);
+      // Define uma mensagem de erro para ser exibida ao usuário
+      if (err.response && err.response.status === 401) {
+        setError("Email ou senha inválidos.");
+      } else {
+        setError("Ocorreu um erro. Tente novamente mais tarde.");
+      }
+    }
   };
+  // --- FIM DAS ALTERAÇÕES LÓGICAS ---
 
   return (
     <div className="flex flex-col h-screen font-san">
@@ -52,7 +88,8 @@ function LoginPage() {
                     <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                   </g>
                 </svg>
-                <input type="email" placeholder="seuemail@site.com" required />
+                {/* Conectando o input ao estado 'email' */}
+                <input type="email" placeholder="seuemail@site.com" required value={email} onChange={e => setEmail(e.target.value)} />
               </label>
             </div>
 
@@ -81,16 +118,20 @@ function LoginPage() {
                     ></circle>
                   </g>
                 </svg>
+                {/* Conectando o input ao estado 'password' */}
                 <input
                   type="password"
                   required
                   placeholder="Senha"
                   minLength={8}
-                  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                   title="A senha deve ter mais de 8 caracteres, incluindo números e letras maiúsculas e minúsculas."
+                  value={password} onChange={e => setPassword(e.target.value)}
                 />
               </label>
             </div>
+
+            {/* Espaço para exibir mensagens de erro */}
+            {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
 
             <button
               type="submit"
