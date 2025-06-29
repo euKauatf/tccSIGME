@@ -11,66 +11,56 @@ use Illuminate\Validation\Rules;
 class AuthController extends Controller
 {
     /**
-     * Lida com uma requisição de registro de um novo usuário.
+     * Lida com o registro de um novo usuário.
      */
     public function register(Request $request)
     {
-        // 1. Validação dos dados recebidos do formulário de registro.
-        // O Laravel verifica se os dados seguem estas regras.
-        // Se a validação falhar, ele automaticamente retorna um erro para o frontend.
+        // 1. Valida os dados que vieram do formulário do React
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'matricula' => ['required', 'string', 'max:255', 'unique:'.User::class],
+            'cpf' => ['required', 'string', 'max:14', 'unique:'.User::class],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        // 2. Se a validação passar, cria o novo usuário no banco de dados.
-        // IMPORTANTE: A senha é criptografada com Hash::make() antes de ser salva.
-        // Nunca salve senhas como texto puro!
+        // 2. Cria o usuário no banco de dados, criptografando a senha
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'matricula' => $request->matricula,
+            'cpf' => $request->cpf,
             'password' => Hash::make($request->password),
         ]);
 
-        // 3. Gera um token de API para o usuário recém-criado usando o Laravel Sanctum.
-        // Este token será usado pelo frontend para fazer requisições autenticadas.
+        // 3. Gera um token de API para o novo usuário
         $token = $user->createToken('auth_token_for_' . $user->name)->plainTextToken;
 
-        // 4. Retorna uma resposta JSON para o frontend com o token de acesso.
+        // 4. Retorna o token para o frontend
         return response()->json([
-            'message' => 'Usuário registrado com sucesso!',
             'access_token' => $token,
             'token_type' => 'Bearer',
-            'user' => $user
         ]);
     }
 
     /**
-     * Lida com uma requisição de login.
+     * Lida com a tentativa de login de um usuário.
      */
     public function login(Request $request)
     {
-        // 1. Pega apenas o email e a senha da requisição.
-        $credentials = $request->only('email', 'password');
-
-        // 2. Tenta autenticar o usuário.
-        // O método Auth::attempt() faz a mágica: ele pega o email, busca o usuário,
-        // criptografa a senha recebida e compara com a senha criptografada no banco.
-        if (!Auth::attempt($credentials)) {
-            // Se a autenticação falhar, retorna um erro 401 (Não Autorizado).
-            return response()->json(['message' => 'Email ou senha inválidos'], 401);
+        // Tenta autenticar com o email e a senha fornecidos
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            return response()->json(['message' => 'Credenciais inválidas'], 401);
         }
 
-        // 3. Se a autenticação for bem-sucedida, pega a instância do usuário.
-        $user = $request->user();
-
-        // 4. Gera um novo token de API para este usuário.
+        // Se a autenticação for bem-sucedida, encontra o usuário
+        $user = User::where('email', $request['email'])->firstOrFail();
+        
+        // Cria um novo token para a sessão de login
         $token = $user->createToken('auth_token_for_' . $user->name)->plainTextToken;
 
-        // 5. Retorna uma resposta JSON para o frontend com o token e os dados do usuário.
+        // Retorna o token e os dados do usuário para o frontend
         return response()->json([
-            'message' => 'Login realizado com sucesso!',
             'access_token' => $token,
             'token_type' => 'Bearer',
             'user' => $user
@@ -78,17 +68,13 @@ class AuthController extends Controller
     }
 
     /**
-     * Lida com uma requisição de logout.
-     * Esta rota deve ser protegida pelo middleware 'auth:sanctum'.
+     * Lida com o logout do usuário.
      */
     public function logout(Request $request)
     {
-        // Revoga (invalida) o token que foi usado para fazer esta requisição.
-        // Isso efetivamente desloga o usuário da sessão atual.
+        // Invalida o token que foi usado para fazer esta requisição
         $request->user()->currentAccessToken()->delete();
 
-        return response()->json([
-            'message' => 'Logout realizado com sucesso!'
-        ]);
+        return response()->json(['message' => 'Logout realizado com sucesso']);
     }
 }

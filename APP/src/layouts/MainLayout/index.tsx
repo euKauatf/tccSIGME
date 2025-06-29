@@ -1,41 +1,72 @@
 // LAYOUT PRINCIPAL DAS APLICAÇÕES DO SITE! UTILIZADA EM TODAS AS PÁGINAS!
 
 // -=-=-=-=-=-=-=- Importações -=-=-=-=-=-=-=- //
-import { useState } from "react"; // Importação para utilizacao de hooks (a tal da State Machine rs)
-import { Outlet } from "react-router-dom"; // Importação para poder acessar as páginas do router. É a forma de ligar as páginas
-import Navbar from "../../components/Navbar"; // Importação da navbar do site
-import Sidebar from "../../components/Sidebar"; // Importação da sidebar do site
-import "./style.css"; // Importação do arquivo CSS padrão do projeto
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- //
+import { useState, useEffect } from "react";
+import { Outlet, useNavigate, useOutletContext } from "react-router-dom";
+import Navbar from "../../components/Navbar";
+import Sidebar from "../../components/Sidebar";
+import "./style.css";
+import apiClient from "../../api/apiClient";
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
 
 // Função que retorna o HTML da página
 function MainLayout() {
-  const [isSidebarOpen, setSidebarOpen] = useState(false); // Controlar a sidebar (false de padrão no hook para carregar fechada)
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const navigate = useNavigate();
+  const [user, setUser] = useState<User | null>(null);
+
+  // Busca os dados do usuário ao carregar o layout
+  useEffect(() => {
+    apiClient.get('/user')
+      .then(response => {
+        setUser(response.data);
+      })
+      .catch(error => {
+        console.error("Falha na autenticação:", error);
+        localStorage.removeItem('authToken');
+        navigate('/login');
+      });
+  }, [navigate]);
+
+  // Função de logout que será passada para a Sidebar
+  const handleLogout = async () => {
+    try {
+      await apiClient.post('/logout');
+    } finally {
+      localStorage.removeItem('authToken');
+      navigate('/');
+    }
+  };
 
   // Função para abrir e fechar a sidebar
   const toggleSidebar = () => {
-    setSidebarOpen(!isSidebarOpen); // Se isSidebarOpen = false, entao ele vai setar a sidebar como true, e vice-versa
+    setSidebarOpen(!isSidebarOpen);
   };
 
   return (
     <div className="app-container">
       {/* Container principal da aplicação */}
-
-      {/* Sidebar que recebe a propriedade isOpen (inicia como false)
-          Se a isSidebarOpen for true, então haverá a classe "shifted" que abrirá a sidebar
-          No clique do hamburger, a função toggleSidebar é chamada e muda o estado da sidebar */}
-      <Sidebar isOpen={isSidebarOpen} />
+      <Sidebar isOpen={isSidebarOpen} user={user} onLogout={handleLogout} />
       <main className={`main-content ${isSidebarOpen ? "shifted" : ""}`}>
         <Navbar
           onHamburgerClick={toggleSidebar}
           isSidebarOpen={isSidebarOpen}
         />
-
-        {/* Outlet é o componente que renderiza as páginas do router */}
-        <Outlet />
+        {/* Outlet renderiza as páginas e passa o 'user' para elas */}
+        <Outlet context={{ user }} />
       </main>
     </div>
   );
+}
+
+// Função auxiliar para os filhos pegarem o contexto
+export function useUser() {
+  return useOutletContext<{ user: User | null }>();
 }
 
 export default MainLayout;
