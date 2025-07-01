@@ -6,7 +6,6 @@ protected $middlewareGroups = [
     ],
 
     'api' => [
-        // vvv ESTA É A LINHA QUE ESTÁ FALTANDO vvv
         \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
         
         'throttle:api',
