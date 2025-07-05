@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import "./style.css";
-// --- INÍCIO DAS ALTERAÇÕES LÓGICAS ---
+// --- INÍCIO DAS LÓGICAS ---
 import { useState } from "react";
 import apiClient from "../../api/apiClient"; // Verifique se o caminho está correto
 
@@ -53,7 +53,7 @@ function RegisterPage() {
         }
     }
   };
-  // --- FIM DAS ALTERAÇÕES LÓGICAS ---
+  // --- FIM DAS LÓGICAS ---
 
   return (
     <div className="flex flex-col h-screen font-san">
