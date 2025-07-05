@@ -1,27 +1,48 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=- Importações -=-=-=-=-=-=-=-=-=-=-=-=-=- //
 import { Link, useNavigate } from "react-router-dom";
 import "./style.css";
+<<<<<<< HEAD
 import { useState } from "react";
 import apiClient from "../../api/apiClient";
+=======
+// --- INÍCIO DAS ALTERAÇÕES LÓGICAS ---
+import { useState } from "react";
+import apiClient from "../../api/apiClient"; // Verifique se este caminho está correto
+>>>>>>> 450da4c (Criação das páginas da sidebar e implementação da página de alunos para administradores)
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- //
 
 function LoginPage() {
   const navigate = useNavigate();
 
+<<<<<<< HEAD
   //estados para guardar o email, a senha e mensagens de erro
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+=======
+  // Estados para guardar o email, a senha e mensagens de erro
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+>>>>>>> 450da4c (Criação das páginas da sidebar e implementação da página de alunos para administradores)
 
   // Função para lidar com o submit do formulário de login
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault(); // Previne o recarregamento da página
+<<<<<<< HEAD
     setError(''); // Limpa erros anteriores
 
     try {
       // Envia os dados dos estados para a API no backend
       const response = await apiClient.post('/login', {
+=======
+    setError(""); // Limpa erros anteriores
+
+    try {
+      // Envia os dados dos estados para a API no backend
+      const response = await apiClient.post("/login", {
+>>>>>>> 450da4c (Criação das páginas da sidebar e implementação da página de alunos para administradores)
         email,
         password,
       });
@@ -34,7 +55,10 @@ function LoginPage() {
 
       // Redireciona o usuário para a página principal
       navigate("/home");
+<<<<<<< HEAD
 
+=======
+>>>>>>> 450da4c (Criação das páginas da sidebar e implementação da página de alunos para administradores)
     } catch (err: any) {
       console.error("Erro no login:", err);
       // Define uma mensagem de erro para ser exibida ao usuário
@@ -45,7 +69,11 @@ function LoginPage() {
       }
     }
   };
+<<<<<<< HEAD
   // --- FIM DAS LÓGICAS ---
+=======
+  // --- FIM DAS ALTERAÇÕES LÓGICAS ---
+>>>>>>> 450da4c (Criação das páginas da sidebar e implementação da página de alunos para administradores)
 
   return (
     <div className="flex flex-col h-screen font-san">
@@ -88,7 +116,17 @@ function LoginPage() {
                   </g>
                 </svg>
                 {/* Conectando o input ao estado 'email' */}
+<<<<<<< HEAD
                 <input type="email" placeholder="seuemail@site.com" required value={email} onChange={e => setEmail(e.target.value)} />
+=======
+                <input
+                  type="email"
+                  placeholder="seuemail@site.com"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+>>>>>>> 450da4c (Criação das páginas da sidebar e implementação da página de alunos para administradores)
               </label>
             </div>
 
@@ -124,13 +162,24 @@ function LoginPage() {
                   placeholder="Senha"
                   minLength={8}
                   title="A senha deve ter mais de 8 caracteres, incluindo números e letras maiúsculas e minúsculas."
+<<<<<<< HEAD
                   value={password} onChange={e => setPassword(e.target.value)}
+=======
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+>>>>>>> 450da4c (Criação das páginas da sidebar e implementação da página de alunos para administradores)
                 />
               </label>
             </div>
 
             {/* Espaço para exibir mensagens de erro */}
+<<<<<<< HEAD
             {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
+=======
+            {error && (
+              <p className="text-red-500 text-sm text-center mt-2">{error}</p>
+            )}
+>>>>>>> 450da4c (Criação das páginas da sidebar e implementação da página de alunos para administradores)
 
             <button
               type="submit"
@@ -161,4 +210,8 @@ function LoginPage() {
   );
 }
 
+<<<<<<< HEAD
 export default LoginPage;
+=======
+export default LoginPage;
+>>>>>>> 450da4c (Criação das páginas da sidebar e implementação da página de alunos para administradores)
