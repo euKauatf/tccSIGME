@@ -1,16 +1,15 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=- Importações -=-=-=-=-=-=-=-=-=-=-=-=-=- //
 import { Link, useNavigate } from "react-router-dom";
 import "./style.css";
-// --- INÍCIO DAS ALTERAÇÕES LÓGICAS ---
 import { useState } from "react";
-import apiClient from "../../api/apiClient"; // Verifique se este caminho está correto
+import apiClient from "../../api/apiClient";
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- //
 
 function LoginPage() {
   const navigate = useNavigate();
 
-  // Estados para guardar o email, a senha e mensagens de erro
+  //estados para guardar o email, a senha e mensagens de erro
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -46,7 +45,7 @@ function LoginPage() {
       }
     }
   };
-  // --- FIM DAS ALTERAÇÕES LÓGICAS ---
+  // --- FIM DAS LÓGICAS ---
 
   return (
     <div className="flex flex-col h-screen font-san">

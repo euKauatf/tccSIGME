@@ -1,12 +1,12 @@
 // LAYOUT PRINCIPAL DAS APLICAÇÕES DO SITE! UTILIZADA EM TODAS AS PÁGINAS!
 
 // -=-=-=-=-=-=-=- Importações -=-=-=-=-=-=-=- //
-import { useState, useEffect } from "react";
-import { Outlet, useNavigate, useOutletContext } from "react-router-dom";
+import { useState, useEffect } from "react"; //funcoes que permitem usar estados e efeitos colaterais
+import { Outlet, useNavigate, useOutletContext } from "react-router-dom"; //funcoes que permitem renderizar as paginas e navegar entre elas
 import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
 import "./style.css";
-import apiClient from "../../api/apiClient";
+import apiClient from "../../api/apiClient"; //importa o cliente da api, pro arquivo se comunicar com o backend
 
 interface User {
   id: number;
@@ -18,28 +18,29 @@ interface User {
 function MainLayout() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(null); //cria um estado para o usuario logado, que pode ser o user ou nulo, mas começa nulo
 
-  // Busca os dados do usuário ao carregar o layout
+  //pega os dados do usuario logado assim que monta o componente
   useEffect(() => {
-    apiClient.get('/user')
-      .then(response => {
-        setUser(response.data);
+    apiClient.get('/user') //pega as informações do usuário logado
+      .then(response => { //espera a resposta da api
+        setUser(response.data); //usa o hook setUser para atualizar os dados do usuario logado e salva o token
       })
+      //se deu erro, tira o token do localstorage (local onde ele ta sendo armazenado), pra nao deixar ele logar sem login
       .catch(error => {
         console.error("Falha na autenticação:", error);
         localStorage.removeItem('authToken');
-        navigate('/login');
+        navigate('/');
       });
   }, [navigate]);
 
-  // Função de logout que será passada para a Sidebar
+  //logout que vai ser chamado na sidebar, faz um request pra api deslogar o user e remove o token dele do localstorage
   const handleLogout = async () => {
     try {
       await apiClient.post('/logout');
     } finally {
-      localStorage.removeItem('authToken');
-      navigate('/');
+      localStorage.removeItem('authToken'); //tira o token salvo
+      navigate('/'); //volta pra pag de login
     }
   };
 
@@ -64,9 +65,10 @@ function MainLayout() {
   );
 }
 
-// Função auxiliar para os filhos pegarem o contexto
-export function useUser() {
-  return useOutletContext<{ user: User | null }>();
+/*hook que permite acessar o contexto do Outlet, que é o usuário logado, aqui temos a rota pai (mainlayout é o principal do site), e as outras paginas (rotas filhas) pegam 
+esse contexto para usar o user*/
+export function useUser() { //exporta uma funcao pra ser usada nas outras paginas
+  return useOutletContext<{ user: User | null }>(); //permite que as paginas acessem o usuario logado, que como estipulado no useState(Funcao do react), pode ser nulo
 }
 
 export default MainLayout;
