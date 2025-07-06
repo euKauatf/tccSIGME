@@ -1,10 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import "./style.css";
-<<<<<<< HEAD
-// --- INÍCIO DAS LÓGICAS ---
-=======
 // --- INÍCIO DAS ALTERAÇÕES LÓGICAS ---
->>>>>>> 450da4c (Criação das páginas da sidebar e implementação da página de alunos para administradores)
 import { useState } from "react";
 import apiClient from "../../api/apiClient"; // Verifique se o caminho está correto
 
@@ -57,11 +53,7 @@ function RegisterPage() {
         }
     }
   };
-<<<<<<< HEAD
-  // --- FIM DAS LÓGICAS ---
-=======
   // --- FIM DAS ALTERAÇÕES LÓGICAS ---
->>>>>>> 450da4c (Criação das páginas da sidebar e implementação da página de alunos para administradores)
 
   return (
     <div className="flex flex-col h-screen font-san">
