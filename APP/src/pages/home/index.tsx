@@ -14,7 +14,7 @@ function HomePage() {
       {/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */}
 
       {/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=- Condição para admin ou não -=-=-=-=-=-=-=-=-=--=-=-=-=-=- */}
-      {user?.email == "admin@gmail.com" ? (
+      {user?.tipo === 'adm' ? (
         <>
         {/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=- Divisão do site -=-=-=-=-=-=-=-=-=--=-=-=-=-=- */}
         <div className="gap-6 flex flex-row justify-between w-full">
