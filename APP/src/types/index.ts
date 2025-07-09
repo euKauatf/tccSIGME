@@ -1,8 +1,10 @@
 export interface User {
-  // Dados de usuário
   id: number;
   name: string;
   email: string;
+  matricula: string;
   cpf: string;
-  matricula: number;
+  tipo: 'aluno' | 'adm';
+  created_at: string;
+  updated_at: string;
 }

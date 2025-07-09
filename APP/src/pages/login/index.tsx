@@ -1,43 +1,44 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=- Importações -=-=-=-=-=-=-=-=-=-=-=-=-=- //
 import { Link, useNavigate } from "react-router-dom";
 import "./style.css";
-// --- INÍCIO DAS ALTERAÇÕES LÓGICAS ---
-import { useState } from "react";
-import apiClient from "../../api/apiClient"; // Verifique se este caminho está correto
+import { useState } from "react"; //hook do react que permite usar estados
+import apiClient from "../../api/apiClient"; //importa o cliente da api, pro arquivo se comunicar com o backend
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- //
 
 function LoginPage() {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); //hook do react que permite navegacao entre paginas
 
-  // Estados para guardar o email, a senha e mensagens de erro
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  //estados para guardar o email, a senha e mensagens de erro, vazio pq o usuario ainda nao digitou nada
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  // Função para lidar com o submit do formulário de login
-  const handleLogin = async (event: React.FormEvent) => {
-    event.preventDefault(); // Previne o recarregamento da página
-    setError(""); // Limpa erros anteriores
+  //função para lidar com o submit do formulário de login
+  const handleLogin = async (event: React.FormEvent) => { //async pq espera resposta da api
+    event.preventDefault(); //previne o recarregamento da página
+    setError(''); //limpa erros anteriores
 
     try {
-      // Envia os dados dos estados para a API no backend
-      const response = await apiClient.post("/login", {
+      //envia os dados dos estados para a API no backend
+      const response = await apiClient.post('/login', { //o await faz o codigo espearar a resposta da api, e ela chama o endpoint /login
         email,
         password,
       });
 
-      // Se o login for bem-sucedido, pega o token da resposta
+      //se o login for bem sucedido, pega o token da resposta
       const token = response.data.access_token;
+      const user = response.data.user;
 
-      // Guarda o token no navegador para futuras requisições
+      //guarda o token no navegador para futuras requisições
       localStorage.setItem("authToken", token);
 
-      // Redireciona o usuário para a página principal
+      //redireciona o usuário para a página principal
       navigate("/home");
-    } catch (err: any) {
+
+    } catch (err: any) { //se o login falhar, captura o erro (checa isso tudo no network do navegador se precisar)
       console.error("Erro no login:", err);
-      // Define uma mensagem de erro para ser exibida ao usuário
+      //define uma mensagem de erro generica para ser exibida ao usuário
       if (err.response && err.response.status === 401) {
         setError("Email ou senha inválidos.");
       } else {
@@ -45,7 +46,7 @@ function LoginPage() {
       }
     }
   };
-  // --- FIM DAS ALTERAÇÕES LÓGICAS ---
+  //pra ca baixo e o site
 
   return (
     <div className="flex flex-col h-screen font-san">
@@ -88,13 +89,7 @@ function LoginPage() {
                   </g>
                 </svg>
                 {/* Conectando o input ao estado 'email' */}
-                <input
-                  type="email"
-                  placeholder="seuemail@site.com"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
+                <input type="email" placeholder="seuemail@site.com" required value={email} onChange={e => setEmail(e.target.value)} />
               </label>
             </div>
 
@@ -130,16 +125,13 @@ function LoginPage() {
                   placeholder="Senha"
                   minLength={8}
                   title="A senha deve ter mais de 8 caracteres, incluindo números e letras maiúsculas e minúsculas."
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={password} onChange={e => setPassword(e.target.value)}
                 />
               </label>
             </div>
 
             {/* Espaço para exibir mensagens de erro */}
-            {error && (
-              <p className="text-red-500 text-sm text-center mt-2">{error}</p>
-            )}
+            {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
 
             <button
               type="submit"

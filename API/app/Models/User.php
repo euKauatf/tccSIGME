@@ -25,6 +25,7 @@ class User extends Authenticatable
         'password',
         'matricula',
         'cpf',
+        'tipo',
     ];
 
     /**
@@ -48,5 +49,21 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function isAdm(): bool
+    {
+        return $this->tipo === 'adm';
+    }
+    
+        /**
+     * Relacionamento muitos-para-muitos com o modelo User.
+     *
+     * @return BelongsToMany
+     */
+    public function eventos(): BelongsToMany{
+        return $this->belongsToMany(Eventos::class, 'inscricoes', 'evento_id', 'user_id')
+            -withPivot('status')
+            ->withTimestamps();
     }
 }

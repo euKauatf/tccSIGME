@@ -32,4 +32,14 @@ class Evento extends Model
         'horario_inicio' => 'datetime',
         'horario_termino' => 'datetime',
     ];
+    /**
+     * Relacionamento muitos-para-muitos com o modelo User.
+     *
+     * @return BelongsToMany
+     */
+    public function alunos(): BelongsToMany{
+        return $this->belongsToMany(User::class, 'inscricoes', 'evento_id', 'user_id')
+            -withPivot('status')
+            ->withTimestamps();
+    }
 }
