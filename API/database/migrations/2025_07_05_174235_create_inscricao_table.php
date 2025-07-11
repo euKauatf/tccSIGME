@@ -13,17 +13,20 @@ return new class extends Migration
 
     public function up(): void
     {
-        Schema::create('inscricao', function (Blueprint $table) {
+        Schema::create('inscricoes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('evento_id')->constrained()->onDelete('cascade');
-            $table->enum('status', ['sorteado', 'em espera', 'anulado'])->default('inscrito');
+
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('event_id')->constrained('event')->onDelete('cascade');
+            
+            $table->string('status')->default('pendente'); 
+
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('inscricao');
+        Schema::dropIfExists('inscricoes');
     }
 };

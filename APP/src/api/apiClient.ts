@@ -23,4 +23,12 @@ apiClient.interceptors.request.use(config => {
     return Promise.reject(error);
 });
 
+export const getEvents = () => {
+    return apiClient.get('/events');
+};
+
+export const createEvent = (eventData) => {
+    return apiClient.post('/events', eventData);
+};
+
 export default apiClient;

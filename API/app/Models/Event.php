@@ -6,18 +6,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Evento extends Model
+class Event extends Model
 {
     use HasFactory;
 
     /**
      * @var array<int, string>
      */
+    protected $table = 'event';
+    
     //lista de atributos que podem ser preenchidos em massa
     protected $fillable = [
         'tema',
         'palestrante',
         'vagas_max',
+        'data',
         'horario_inicio',
         'horario_termino',
         'descricao',
@@ -29,6 +32,7 @@ class Evento extends Model
      */
     //diz que os horarios sao do tipo datetime
     protected $casts = [
+        'data' => 'datetime',
         'horario_inicio' => 'datetime',
         'horario_termino' => 'datetime',
     ];
@@ -39,7 +43,7 @@ class Evento extends Model
      */
     public function alunos(): BelongsToMany{
         return $this->belongsToMany(User::class, 'inscricoes', 'evento_id', 'user_id')
-            -withPivot('status')
+            ->withPivot('status')
             ->withTimestamps();
     }
 }

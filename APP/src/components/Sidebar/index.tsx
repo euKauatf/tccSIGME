@@ -52,7 +52,7 @@ function Sidebar({ isOpen, user, onLogout }: SidebarProps) {
         </NavLink>
 
         {/* Funções para os organizadores da expocanp */}
-        {user?.email == "admin@gmail.com" ? (
+        {user?.tipo ==  'adm' ? (
           <>
           <NavLink to="/students" className={({ isActive }) =>
               `${linkClasses} ${isActive ? activeLinkClasses : ""}`

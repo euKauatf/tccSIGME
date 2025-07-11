@@ -11,6 +11,7 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "axios": "^1.10.0",
     "daisyui": "^5.0.43",
     "lucide": "^0.513.0",
     "lucide-react": "^0.513.0",

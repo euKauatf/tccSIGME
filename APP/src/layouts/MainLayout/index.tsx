@@ -10,6 +10,7 @@ import apiClient from "../../api/apiClient";
 
 // -=-=-=-=-=-=-=- Tipos de Dados -=-=-=-=-=-=-=- //
 import type { User } from "../../types";
+import type { Event } from "../../types";
 
 // Função que retorna o HTML da página
 function MainLayout() {

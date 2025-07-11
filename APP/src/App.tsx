@@ -9,7 +9,8 @@ import EventsPage from "./pages/events"; // Events
 import ProfilePage from "./pages/profile"; // Profile
 import StudentsPage from "./pages/students";
 import MainLayout from "./layouts/MainLayout"; // Layout principal do site né pai
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import FormEvent from "./components/Forms/FormEvent";
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- //
 
@@ -25,6 +26,7 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="home" element={<HomePage />} />
           <Route path="events" element={<EventsPage />} />
+          <Route path="events/add" element={<FormEvent />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route path="students" element={<StudentsPage />} />
         </Route>
