@@ -1,8 +1,71 @@
 // import { useUser } from "../../hooks/useUser"; // Importa o hook que criamos no MainLayout
+import { useState, useEffect } from "react";
+import apiClient from "../../api/apiClient";
+import type { Event } from "../../types";
 import "./style.css";
+import { Link } from "react-router-dom";
 
 function EventsPage() {
     //const { user } = useUser();
+    const [events, setEvents] = useState<Event[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError ] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchEvents = async () => {
+            try {
+                setIsLoading(true);
+                const response = await apiClient.get("/event");
+                setEvents(response.data);
+            } catch (err) {
+                console.error("Erro ao buscar eventos:", err);
+                setError("Não foi possível carregar os eventos.");
+            } finally {
+                setIsLoading(false);
+            }
+        }
+
+        fetchEvents();
+    }, []);
+
+    const handleModify = (eventId: number) => {
+        console.log(`Modificar evento com ID: ${eventId}`);
+        // Aqui viria a lógica para navegar para uma página de edição, por exemplo:
+        // navigate(`/events/edit/${eventId}`);
+      };
+    
+      const handleDelete = (eventId: number) => {
+        console.log(`Excluir evento com ID: ${eventId}`);
+        // Aqui viria a lógica para chamar a API e deletar o evento
+      };
+
+    const renderEventList = () => { 
+        if (isLoading) {
+            return <p className="text-center p-8">Carregando eventos</p>
+        }
+
+        if (error) {
+            return <p className="text-center p-8 text-red-500">{error}</p>
+        }
+
+        if (events.length === 0) {
+            return <p className="text-center p-8">Nenhum evento registrado no momento.</p>
+        }
+
+        return (
+            <ul className="flex flex-col gap-y-2 pb-6">
+                {events.map((event) => (
+                    <li key={event.id} className="flex items-center justify-between p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                        <span className="font-bold text-gray-800">{event.tema}</span>
+                        <div className="flex gap-x-2">
+                            <button onClick={() => handleModify(event.id)} className="btn btn-sm btn-warning">Modificar</button>
+                            <button onClick={() => handleDelete(event.id)} className="btn btn-sm btn-error">Excluir</button>
+                        </div>
+                    </li>
+                ))}
+            </ul>
+        )
+    }
 
     return (
         // -=-=-=-=-=-=-=-=-=-=-=- Divisão principal do site -=-=-=-=-=-=-=-=-=--=-=-=-=-=-
@@ -23,42 +86,11 @@ function EventsPage() {
                     {/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */}
 
                     {/* -=-=-=-=-=-=-=-=-=-=-=- Lista de eventos -=-=-=-=-=-=-=-=-=--=-=-=-=-=- */}
-                    <ul className="flex flex-col gap-y-[1px] pb-6">     
+                    {renderEventList()}
 
-                        <li className="flex items-center justify-between p-4 bg-white rounded-lg shadow">
-                            <span className="font-bold text-gray-800">Evento 1</span>
-                            <div className="flex gap-x-1 pl-30">
-                                <button className="btn btn-warning">Modificar</button>
-                                <button className="btn btn-error">Excluir</button>
-                            </div>
-                        </li>
-
-                        <li className="flex items-center justify-between p-4 bg-white rounded-lg shadow">
-                            <span className="font-bold text-gray-800">Evento 2</span>
-                            <div className="flex gap-x-1 pl-30">
-                                <button className="btn btn-warning">Modificar</button>
-                                <button className="btn btn-error">Excluir</button>
-                            </div>
-                        </li>
-                        
-                        <li className="flex items-center justify-between p-4 bg-white rounded-lg shadow">
-                            <span className="font-bold text-gray-800">Evento 3</span>
-                            <div className="flex gap-x-1 pl-30">
-                                <button className="btn btn-warning">Modificar</button>
-                                <button className="btn btn-error">Excluir</button>
-                            </div>
-                        </li>
-
-                        <li className="flex items-center justify-between p-4 bg-white rounded-lg shadow">
-                            <span className="font-bold text-gray-800">Evento 4</span>
-                            <div className="flex gap-x-1 pl-30">
-                                <button className="btn btn-warning">Modificar</button>
-                                <button className="btn btn-error">Excluir</button>
-                            </div>
-                        </li>
-                    </ul>
-
-                    <button className="btn btn-active btn-info mb-6">Adicionar Evento</button>
+                    <Link to="/events/add" className="btn btn-active btn-info mb-6 text-center">
+                        Adicionar Evento
+                    </Link>
                     {/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */}
                 </div>
                 {/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */}

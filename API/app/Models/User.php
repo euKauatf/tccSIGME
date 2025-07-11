@@ -62,7 +62,7 @@ class User extends Authenticatable
      * @return BelongsToMany
      */
     public function eventos(): BelongsToMany{
-        return $this->belongsToMany(Eventos::class, 'inscricoes', 'evento_id', 'user_id')
+        return $this->belongsToMany(Events::class, 'inscricoes', 'evento_id', 'user_id')
             -withPivot('status')
             ->withTimestamps();
     }
