@@ -23,12 +23,10 @@ apiClient.interceptors.request.use(config => {
     return Promise.reject(error);
 });
 
-export const getEvents = () => {
-    return apiClient.get('/events');
-};
-
-export const createEvent = (eventData) => {
-    return apiClient.post('/events', eventData);
-};
+export const getEvents = () => apiClient.get('/event');
+export const getEventById = (id) => apiClient.get(`/event/${id}`);
+export const createEvent = (eventData) => apiClient.post('/event', eventData);
+export const updateEvent = (id, eventData) => apiClient.put(`/event/${id}`, eventData);
+export const deleteEvent = (id) => apiClient.delete(`/event/${id}`);
 
 export default apiClient;

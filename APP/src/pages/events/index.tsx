@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import apiClient from "../../api/apiClient";
 import type { Event } from "../../types";
 import "./style.css";
+import { deleteEvent } from "../../api/apiClient";
 import { Link } from "react-router-dom";
 
 function EventsPage() {
@@ -34,10 +35,18 @@ function EventsPage() {
         // navigate(`/events/edit/${eventId}`);
       };
     
-      const handleDelete = (eventId: number) => {
-        console.log(`Excluir evento com ID: ${eventId}`);
-        // Aqui viria a lógica para chamar a API e deletar o evento
-      };
+    const handleDelete = async (eventId: number) => {
+            try {
+                await deleteEvent(eventId);
+                // Atualiza a lista na tela removendo o evento excluído
+                setEvents(prevEvents => prevEvents.filter(event => event.id !== eventId));
+                alert('Evento excluído com sucesso!');
+            } catch (err) {
+                console.error('Erro ao excluir evento:', err);
+                alert('Não foi possível excluir o evento.');
+            }
+    };
+
 
     const renderEventList = () => { 
         if (isLoading) {
