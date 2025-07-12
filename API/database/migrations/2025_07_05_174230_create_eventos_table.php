@@ -9,10 +9,9 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-// Dentro do arquivo ..._create_eventos_table.php
-
     public function up(): void
     {
+        // Cria a tabela com o nome 'event' (singular)
         Schema::create('event', function (Blueprint $table) {
             $table->id();
             $table->string('tema');
@@ -26,9 +25,12 @@ return new class extends Migration
         });
     }
 
-    // E preencha o método down() para poder reverter
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::dropIfExists('eventos');
+        // CORRIGIDO: Garante que o método down apaga a tabela correta ('event')
+        Schema::dropIfExists('event');
     }
 };
