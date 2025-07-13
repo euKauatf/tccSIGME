@@ -1,3 +1,5 @@
+export type DiaDaSemana = "Segunda" | "Terça" | "Quarta" | "Quinta" | "Sexta";
+
 export interface User {
   id: number;
   name: string;
@@ -14,17 +16,9 @@ export interface Event {
     tema: string;
     palestrante: string;
     vagas_max: number;
-    data: string;
+    data: DiaDaSemana;
     horario_inicio: string;
     horario_termino: string;
     descricao: string;
     local: string;
 }
-
-/*'tema',
-        'palestrante',
-        'vagas_max',
-        'horario_inicio',
-        'horario_termino',
-        'descricao',
-        'local',*/
