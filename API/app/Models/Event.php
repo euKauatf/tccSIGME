@@ -8,42 +8,39 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Event extends Model
 {
-    use HasFactory;
+  use HasFactory;
 
-    /**
-     * @var array<int, string>
-     */
-    protected $table = 'event';
-    
-    //lista de atributos que podem ser preenchidos em massa
-    protected $fillable = [
-        'tema',
-        'palestrante',
-        'vagas_max',
-        'data',
-        'horario_inicio',
-        'horario_termino',
-        'descricao',
-        'local',
-    ];
+  /**
+   * @var array<int, string>
+   */
+  protected $table = 'events';
 
-    /**
-     * @var array<string, string>
-     */
-    //diz que os horarios sao do tipo datetime
-    protected $casts = [
-        'data' => 'datetime',
-        'horario_inicio' => 'datetime',
-        'horario_termino' => 'datetime',
-    ];
-    /**
-     * Relacionamento muitos-para-muitos com o modelo User.
-     *
-     * @return BelongsToMany
-     */
-    public function alunos(): BelongsToMany{
-        return $this->belongsToMany(User::class, 'inscricoes', 'evento_id', 'user_id')
-            ->withPivot('status')
-            ->withTimestamps();
-    }
+  protected $fillable = [
+    'tema',
+    'palestrante',
+    'vagas_max',
+    'data',
+    'horario_inicio',
+    'horario_termino',
+    'descricao',
+    'local',
+  ];
+
+  /**
+   * @var array<string, string>
+   */
+  protected $casts = [
+    'data' => 'string',
+    'horario_inicio' => 'datetime:H:i',
+    'horario_termino' => 'datetime:H:i',
+  ];
+  /**
+   * @return BelongsToMany
+   */
+  public function alunos(): BelongsToMany
+  {
+    return $this->belongsToMany(User::class, 'inscricoes', 'events_id', 'user_id')
+      ->withPivot('status')
+      ->withTimestamps();
+  }
 }

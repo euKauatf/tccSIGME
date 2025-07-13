@@ -1,4 +1,4 @@
-import { AlignJustify } from "lucide-react"; // Importa o icone do hamburguer
+import { AlignJustify } from "lucide-react";
 import "./style.css";
 
 interface NavbarProps {
@@ -15,9 +15,8 @@ function Navbar({ onHamburgerClick, isSidebarOpen }: NavbarProps) {
           onClick={onHamburgerClick}
         >
           <AlignJustify
-            className={`w-8 h-8 scale-125 transform transition-colors duration-200 ${
-              isSidebarOpen ? "text-emerald-900" : "text-white"
-            }`}
+            className={`w-8 h-8 scale-125 transform transition-colors duration-200 ${isSidebarOpen ? "text-emerald-900" : "text-white"
+              }`}
           />
         </div>
         <div>

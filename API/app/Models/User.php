@@ -2,68 +2,59 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens; // 1. ESTA LINHA IMPORTA O PACOTE DE HABILIDADES DO SANCTUM
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
-    // 2. ESTA LINHA "USA" O PACOTE DE HABILIDADES, DANDO AO USER O "SUPERPODER" DE CRIAR TOKENS
-    use HasApiTokens, HasFactory, Notifiable;
+  use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    // 3. GARANTA QUE SEUS CAMPOS PERSONALIZADOS ESTÃO AQUI
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'matricula',
-        'cpf',
-        'tipo',
+  /**
+   * @var array<int, string>
+   */
+  protected $fillable = [
+    'name',
+    'email',
+    'password',
+    'matricula',
+    'cpf',
+    'tipo',
+  ];
+
+  /**
+   * @var array<int, string>
+   */
+  protected $hidden = [
+    'password',
+    'remember_token',
+  ];
+
+  /**
+   * @return array<string, string>
+   */
+  protected function casts(): array
+  {
+    return [
+      'email_verified_at' => 'datetime',
+      'password' => 'hashed',
     ];
+  }
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+  public function isAdm(): bool
+  {
+    return $this->tipo === 'adm';
+  }
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
-
-    public function isAdm(): bool
-    {
-        return $this->tipo === 'adm';
-    }
-    
-        /**
-     * Relacionamento muitos-para-muitos com o modelo User.
-     *
-     * @return BelongsToMany
-     */
-    public function eventos(): BelongsToMany{
-        return $this->belongsToMany(Events::class, 'inscricoes', 'evento_id', 'user_id')
-            -withPivot('status')
-            ->withTimestamps();
-    }
+  /**
+   * @return BelongsToMany
+   */
+  public function eventos(): BelongsToMany
+  {
+    return $this->belongsToMany(Event::class, 'inscricoes', 'events_id', 'user_id')
+      ->withPivot('status')
+      ->withTimestamps();
+  }
 }

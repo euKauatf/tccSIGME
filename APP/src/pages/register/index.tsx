@@ -1,13 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
 import "./style.css";
-// --- INÍCIO DAS ALTERAÇÕES LÓGICAS ---
 import { useState } from "react";
-import apiClient from "../../api/apiClient"; // Verifique se o caminho está correto
+import apiClient from "../../api/apiClient";
 
 function RegisterPage() {
   const navigate = useNavigate();
 
-  // Estados para guardar os dados de cada campo do formulário
   const [name, setName] = useState('');
   const [matricula, setMatricula] = useState('');
   const [cpf, setCpf] = useState('');
@@ -16,19 +14,16 @@ function RegisterPage() {
   const [password_confirmation, setPasswordConfirmation] = useState('');
   const [error, setError] = useState('');
 
-  // Função para lidar com o submit do formulário de registro
   const handleRegister = async (event: React.FormEvent) => {
-    event.preventDefault(); // Previne o recarregamento da página
-    setError(''); // Limpa erros antigos
+    event.preventDefault();
+    setError('');
 
-    // Validação simples no frontend para senhas
     if (password !== password_confirmation) {
-        setError("As senhas não coincidem.");
-        return;
+      setError("As senhas não coincidem.");
+      return;
     }
 
     try {
-      // Envia os dados dos estados para a API no backend
       await apiClient.post('/register', {
         name,
         matricula,
@@ -39,43 +34,34 @@ function RegisterPage() {
       });
 
       alert('Registro realizado com sucesso! Por favor, faça o login.');
-      // Redireciona o usuário para a página de login após o registro
       navigate("/");
 
     } catch (err: any) {
-        console.error('Erro no registro:', err);
-        // Pega os erros de validação do Laravel e os exibe
-        if (err.response && err.response.data && err.response.data.errors) {
-            const errorMessages = Object.values(err.response.data.errors).flat();
-            setError(errorMessages.join(' '));
-        } else {
-            setError('Ocorreu um erro no registro. Verifique os dados.');
-        }
+      console.error('Erro no registro:', err);
+      if (err.response && err.response.data && err.response.data.errors) {
+        const errorMessages = Object.values(err.response.data.errors).flat();
+        setError(errorMessages.join(' '));
+      } else {
+        setError('Ocorreu um erro no registro. Verifique os dados.');
+      }
     }
   };
-  // --- FIM DAS ALTERAÇÕES LÓGICAS ---
 
   return (
     <div className="flex flex-col h-screen font-san">
-      {/* -=-=-=-=-=-=-=-=-=-=-=-=- Área Centralizada do Conteúdo -=-=-=-=-=-=-=-=-=-=-=-=- */}
       <div className="flex flex-grow items-center justify-center">
-        {/* -=-=-=-=-=-=-=-=-=-=-=- Card de Registro -=-=-=-=-=-=-=-=-=-=-=- */}
         <div className="w-[387px] min-h-[580px] bg-white rounded-[20px] glass px-6 py-4 flex flex-col items-center justify-between">
-          {/* -=-=-=-=-=-=-=-=-=-=-=- Cabeçalho do Card -=-=-=-=-=-=-=-=-=-=-=- */}
           <div className="text-center">
             <h1 className="text-4xl font-bold text-emerald-800">SIGME</h1>
             <h2 className="text-2xl text-emerald-600 leading-tight mt-1">
               Sistema Integrado de Gestão e Matrículas da Expocanp
             </h2>
           </div>
-          {/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */}
 
-          {/* -=-=-=-=-=-=-=-=-=-=-=- Formulário de Registro -=-=-=-=-=-=-=-=-=-=-=- */}
           <form
             className="w-full flex flex-col gap-3 mt-4"
             onSubmit={handleRegister}
           >
-            {/* Campo de Nome Completo (Necessário para o backend) */}
             <div>
               <p className="text-sm mb-1">Digite o seu nome completo</p>
               <label className="input validator">
@@ -84,7 +70,6 @@ function RegisterPage() {
               </label>
             </div>
 
-            {/* Campo de Matrícula */}
             <div>
               <p className="text-sm mb-1">Digite a sua matrícula</p>
               <label className="input validator">
@@ -102,7 +87,6 @@ function RegisterPage() {
               </label>
             </div>
 
-            {/* Campo de CPF */}
             <div>
               <p className="text-sm mb-1">Digite o seu CPF</p>
               <label className="input validator">
@@ -127,7 +111,6 @@ function RegisterPage() {
               </label>
             </div>
 
-            {/* Campo de E-mail */}
             <div>
               <p className="text-sm mb-1">Digite o seu E-Mail</p>
               <label className="input validator">
@@ -151,7 +134,6 @@ function RegisterPage() {
               </label>
             </div>
 
-            {/* Campo de Senha */}
             <div>
               <p className="text-sm mb-1">Digite a sua senha</p>
               <label className="input validator">
@@ -187,8 +169,7 @@ function RegisterPage() {
                 />
               </label>
             </div>
-            
-            {/* Campo de Confirmação de Senha (Necessário para o backend) */}
+
             <div>
               <p className="text-sm mb-1">Confirme a sua senha</p>
               <label className="input validator">
@@ -197,7 +178,6 @@ function RegisterPage() {
               </label>
             </div>
 
-            {/* Espaço para exibir mensagens de erro */}
             {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
 
             <button
@@ -207,9 +187,7 @@ function RegisterPage() {
               Registrar
             </button>
           </form>
-          {/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */}
 
-          {/* -=-=-=-=-=-=-=-=-=-=-=- Rodapé do Card -=-=-=-=-=-=-=-=-=-=-=- */}
           <div className="text-center text-sm mt-2">
             <a href="#" className="text-emerald-800 underline block">
               Esqueceu sua senha?
@@ -221,10 +199,8 @@ function RegisterPage() {
               </Link>
             </span>
           </div>
-          {/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */}
         </div>
       </div>
-      {/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=- */}
     </div>
   );
 }

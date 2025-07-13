@@ -1,44 +1,33 @@
-// -=-=-=-=-=-=-=-=-=-=-=-=-=- Importações -=-=-=-=-=-=-=-=-=-=-=-=-=- //
 import { Link, useNavigate } from "react-router-dom";
 import "./style.css";
-import { useState } from "react"; //hook do react que permite usar estados
-import apiClient from "../../api/apiClient"; //importa o cliente da api, pro arquivo se comunicar com o backend
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- //
+import { useState } from "react";
+import apiClient from "../../api/apiClient";
 
 function LoginPage() {
-  const navigate = useNavigate(); //hook do react que permite navegacao entre paginas
+  const navigate = useNavigate();
 
-  //estados para guardar o email, a senha e mensagens de erro, vazio pq o usuario ainda nao digitou nada
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  //função para lidar com o submit do formulário de login
-  const handleLogin = async (event: React.FormEvent) => { //async pq espera resposta da api
-    event.preventDefault(); //previne o recarregamento da página
-    setError(''); //limpa erros anteriores
+  const handleLogin = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setError('');
 
     try {
-      //envia os dados dos estados para a API no backend
-      const response = await apiClient.post('/login', { //o await faz o codigo espearar a resposta da api, e ela chama o endpoint /login
+      const response = await apiClient.post('/login', {
         email,
         password,
       });
 
-      //se o login for bem sucedido, pega o token da resposta
       const token = response.data.access_token;
-      const user = response.data.user;
 
-      //guarda o token no navegador para futuras requisições
       localStorage.setItem("authToken", token);
 
-      //redireciona o usuário para a página principal
       navigate("/home");
 
-    } catch (err: any) { //se o login falhar, captura o erro (checa isso tudo no network do navegador se precisar)
+    } catch (err: any) {
       console.error("Erro no login:", err);
-      //define uma mensagem de erro generica para ser exibida ao usuário
       if (err.response && err.response.status === 401) {
         setError("Email ou senha inválidos.");
       } else {
@@ -46,29 +35,22 @@ function LoginPage() {
       }
     }
   };
-  //pra ca baixo e o site
 
   return (
     <div className="flex flex-col h-screen font-san">
-      {/* -=-=-=-=-=-=-=-=-=-=-=-=- Área Centralizada do Conteúdo -=-=-=-=-=-=-=-=-=-=-=-=- */}
       <div className="flex flex-grow items-center justify-center">
-        {/* -=-=-=-=-=-=-=-=-=-=-=- Card de Login -=-=-=-=-=-=-=-=-=-=-=- */}
         <div className="w-[387px] h-[446px] bg-white rounded-[20px] glass px-6 py-4 flex flex-col items-center justify-between">
-          {/* -=-=-=-=-=-=-=-=-=-=-=- Cabeçalho do Card -=-=-=-=-=-=-=-=-=-=-=- */}
           <div className="text-center">
             <h1 className="text-4xl font-bold text-emerald-800">SIGME</h1>
             <h2 className="text-2xl text-emerald-600 leading-tight mt-1">
               Sistema Integrado de Gestão e Matrículas da Expocanp
             </h2>
           </div>
-          {/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */}
 
-          {/* -=-=-=-=-=-=-=-=-=-=-=- Formulário de Login -=-=-=-=-=-=-=-=-=-=-=- */}
           <form
             className="w-full flex flex-col gap-3 mt-4"
             onSubmit={handleLogin}
           >
-            {/* Campo de E-mail */}
             <div>
               <p className="text-sm mb-1">Digite o seu E-Mail</p>
               <label className="input validator">
@@ -88,12 +70,10 @@ function LoginPage() {
                     <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                   </g>
                 </svg>
-                {/* Conectando o input ao estado 'email' */}
                 <input type="email" placeholder="seuemail@site.com" required value={email} onChange={e => setEmail(e.target.value)} />
               </label>
             </div>
 
-            {/* Campo de Senha */}
             <div>
               <p className="text-sm mb-1">Digite a sua senha</p>
               <label className="input validator">
@@ -118,7 +98,6 @@ function LoginPage() {
                     ></circle>
                   </g>
                 </svg>
-                {/* Conectando o input ao estado 'password' */}
                 <input
                   type="password"
                   required
@@ -130,7 +109,6 @@ function LoginPage() {
               </label>
             </div>
 
-            {/* Espaço para exibir mensagens de erro */}
             {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
 
             <button
@@ -140,9 +118,7 @@ function LoginPage() {
               Logar
             </button>
           </form>
-          {/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */}
 
-          {/* -=-=-=-=-=-=-=-=-=-=-=- Rodapé do Card -=-=-=-=-=-=-=-=-=-=-=- */}
           <div className="text-center text-sm mt-2">
             <a href="#" className="text-emerald-800 underline block">
               Esqueceu sua senha?
@@ -154,10 +130,8 @@ function LoginPage() {
               </Link>
             </span>
           </div>
-          {/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */}
         </div>
       </div>
-      {/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=- */}
     </div>
   );
 }
