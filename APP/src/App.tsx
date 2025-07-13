@@ -4,11 +4,11 @@ import HomePage from "./pages/home"; // Home
 import RegisterPage from "./pages/register"; // Register
 import EventsPage from "./pages/events"; // Events
 import ProfilePage from "./pages/profile"; // Profile
-import StudentsPage from "./pages/students";
+import StudentsPage from "./pages/students"; // Students
 import MainLayout from "./layouts/MainLayout"; // Layout principal do site né pai
-import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
-import FormEvent from "./components/Forms/FormEvent";
-import EditEventPage from "./pages/events/edit.tsx";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute"; // Protege as rotas
+import FormEvent from "./components/Forms/FormEvent"; // Formulário de eventos
+import EditEventPage from "./pages/events/edit.tsx"; // editar evento
 
 
 function App() {
