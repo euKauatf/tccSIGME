@@ -22,11 +22,17 @@ apiClient.interceptors.request.use(config => {
     return Promise.reject(error);
 });
 
+
+
+
 // FUNÇÕES PARA FAZER REQUISIÇÕES HTTP
+export const getUser = () => apiClient.get('/user');
 export const getEvents = () => apiClient.get('/event');
 export const getEventById = (id: number) => apiClient.get(`/event/${id}`);
 export const createEvent = (eventData: Partial<EventData>) => apiClient.post('/event', eventData);
 export const updateEvent = (id:number, eventData: Partial<EventData>) => apiClient.put(`/event/${id}`, eventData);
 export const deleteEvent = (id:number) => apiClient.delete(`/event/${id}`);
+export const subscribeToEvent = (eventId: number) => apiClient.post(`/event/${eventId}/subscribe`);
+
 
 export default apiClient;

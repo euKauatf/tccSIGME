@@ -18,5 +18,5 @@ Route::middleware('auth:sanctum')->group(function () {
   })->middleware('auth:sanctum');
 });
 
-Route::post('/events/{event}/subscribe', [InscricaoController::class, 'store'])
+Route::post('/event/{event}/subscribe', [InscricaoController::class, 'store'])
   ->middleware('auth:sanctum');

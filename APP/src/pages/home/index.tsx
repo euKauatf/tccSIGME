@@ -3,6 +3,7 @@ import "./style.css";
 
 function HomePage() {
   const { user } = useUser();
+  const isAdmin = user?.tipo === 'adm';
 
   return (
     <div className="main font-sans flex flex-col items-center justify-center">
@@ -10,7 +11,7 @@ function HomePage() {
         Bem-vindo(a) ao SIGME,<br />{user?.name}!
       </h1>
 
-      {user?.tipo === 'adm' ? (
+      {isAdmin ? (
         <>
           <div className="gap-6 flex flex-row justify-between w-full">
             <div className="flex flex-col pl-28 gap-6">
