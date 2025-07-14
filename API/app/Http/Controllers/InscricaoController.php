@@ -28,4 +28,4 @@ class InscricaoController extends Controller
       'event' => $event
     ], 201);
   }
-}
+} 

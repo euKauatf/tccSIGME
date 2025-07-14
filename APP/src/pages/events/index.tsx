@@ -2,18 +2,11 @@
 
 // IMPORTAÇÕES
 import { useState, useEffect } from "react";
-import apiClient from "../../api/apiClient";
-import type { Event } from "../../types";
+import { getEvents, getUser, deleteEvent, subscribeToEvent } from "../../api/apiClient";
+import type { Event, User } from "../../types";
 import "./style.css";
 import { Link, useNavigate } from "react-router-dom";
 
-// TIPOS
-interface User {
-  id: number;
-  name: string;
-  tipo: string;
-  eventos: Event[];
-}
 
 function EventsPage() {
   // navigate é usado para navegar entre as páginas
@@ -40,8 +33,8 @@ function EventsPage() {
       setIsLoading(true);
       try {
         const [eventsResponse, userResponse] = await Promise.all([
-          apiClient.get("/event"),
-          apiClient.get("/user"),
+          getEvents(), // Pega os eventos do backend
+          getUser(), // Pega o usuário logado do backend
         ]);
         setEvents(eventsResponse.data);
         setUser(userResponse.data);
@@ -67,7 +60,7 @@ function EventsPage() {
       return;
     }
     try {
-      await apiClient.delete(`/event/${eventId}`);
+      await deleteEvent(eventId); // Chama a função deleteEvent do apiClient
       setEvents(prev => prev.filter(event => event.id !== eventId));
       alert('Evento excluído com sucesso!');
     } catch (err) {
@@ -82,14 +75,14 @@ function EventsPage() {
       return;
     }
     try { // Verifica se o usuário já está inscrito no evento
-      await apiClient.post(`/events/${eventId}/subscribe`);
+      await subscribeToEvent(eventId); // Chama a função subscribeToEvent do apiClient
       alert("Inscrição realizada com sucesso!");
 
       const subscribedEvent = events.find(e => e.id === eventId);
       if (subscribedEvent && user) {
         setUser({
           ...user,
-          eventos: [...user.eventos, subscribedEvent],
+          events: [...(user.events || []), subscribedEvent],
         });
       }
     } catch (err) {
@@ -111,7 +104,7 @@ function EventsPage() {
   // Filtra os eventos com base no dia selecionado
   const filteredEvents = events.filter((event) => event.data === selectedDay);
   // Cria um conjunto com os IDs dos eventos inscritos pelo usuário
-  const userSubscribedEventIds = new Set(user?.eventos?.map(e => e.id) ?? []);
+  const userSubscribedEventIds = new Set(user?.events?.map(e => e.id) ?? []);
 
   // PAGINA AKI AUAUAUAUUAUAUAUAU
   return (
