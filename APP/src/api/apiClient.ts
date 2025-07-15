@@ -33,6 +33,6 @@ export const createEvent = (eventData: Partial<EventData>) => apiClient.post('/e
 export const updateEvent = (id:number, eventData: Partial<EventData>) => apiClient.put(`/event/${id}`, eventData);
 export const deleteEvent = (id:number) => apiClient.delete(`/event/${id}`);
 export const subscribeToEvent = (eventId: number) => apiClient.post(`/event/${eventId}/subscribe`);
-
-
+export const unsubscribeFromEvent = (eventId: number) => apiClient.delete(`/event/${eventId}/unsubscribe`);
+export const getAlunos = () => apiClient.get('/alunos');
 export default apiClient;

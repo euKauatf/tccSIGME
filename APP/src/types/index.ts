@@ -9,7 +9,7 @@ export interface User {
   tipo: 'aluno' | 'adm';
   created_at: string;
   updated_at: string;
-  events: Event[];
+  events?: Event[];
 }
 
 export interface Event {

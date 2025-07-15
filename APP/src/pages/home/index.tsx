@@ -2,8 +2,7 @@ import { useUser } from "../../hooks/useUser";
 import "./style.css";
 
 function HomePage() {
-  const { user } = useUser();
-  const isAdmin = user?.tipo === 'adm';
+  const { user, isAdmin } = useUser();
 
   return (
     <div className="main font-sans flex flex-col items-center justify-center">

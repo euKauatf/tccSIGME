@@ -28,4 +28,29 @@ class InscricaoController extends Controller
       'event' => $event
     ], 201);
   }
+
+
+  /**
+   * Cancela a inscrição do usuário no evento.
+   *
+   * @param Request $request
+   * @param Event $event
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function destroy(Request $request, Event $event)
+  {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json(['message' => 'Não autorizado.'], 401);
+        }
+        
+        // Usa detach() para remover a associação.
+        // O método retorna o número de registros removidos.
+        $user->eventos()->detach($event->id);
+
+        return response()->json([
+            'message' => 'Inscrição cancelada com sucesso.'
+        ], 200); // 200 OK
+  }
 } 
