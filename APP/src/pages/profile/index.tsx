@@ -3,7 +3,7 @@ import { useUser } from "../../hooks/useUser";
 import QRCode from "react-qr-code";
 
 function ProfilePage() {
-  const { user } = useUser();
+  const { user, isAdmin } = useUser();
 
   return (
     <div className="w-full h-full flex items-center justify-center">
@@ -26,10 +26,17 @@ function ProfilePage() {
               <p className="text-gray-600">
                 <strong>CPF:</strong> {user?.cpf}
               </p>
+              {/* Mostra o tipo do perfil apenas se for admin, usando operador ternário */}
+              {isAdmin ? (
+                <p className="text-gray-600">
+                  <strong>Tipo:</strong> Administrador
+                </p>
+              ) : null}
             </div>
           </div>
 
-          {user?.matricula && (
+          {/* Mostra o QR Code apenas se NÃO for admin e tiver matrícula, usando operador ternário */}
+          {!isAdmin && user?.matricula ? (
             <div className="mt-8 pt-6 border-t border-emerald-200">
               <h3 className="text-center text-lg font-semibold text-emerald-700 mb-4">
                 Seu QR Code para presenças
@@ -38,7 +45,7 @@ function ProfilePage() {
                 <QRCode value={String(user.matricula)} title={String(user.matricula)} size={256} fgColor="#065f46" bgColor="#FFFFFF" style={{ height: "auto", maxWidth: "100%", width: "100%" }} viewBox={`0 0 256 256`} />
               </div>
             </div>
-          )}
+          ) : null}
         </div>
       </div>
     </div>

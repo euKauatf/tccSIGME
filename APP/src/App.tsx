@@ -6,10 +6,11 @@ import EventsPage from "./pages/events"; // Events
 import ProfilePage from "./pages/profile"; // Profile
 import StudentsPage from "./pages/students"; // Students
 import MainLayout from "./layouts/MainLayout"; // Layout principal do site né pai
-import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute"; // Protege as rotas
 import FormEvent from "./components/Forms/FormEvent"; // Formulário de eventos
 import EditEventPage from "./pages/events/edit.tsx"; // editar evento
 
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute"; // Protege as rotas
+import AdminRoute from "./components/ProtectedRoute/AdminRoute"; // Protege as rotas de admin
 
 function App() {
   return (
@@ -24,7 +25,10 @@ function App() {
           <Route path="events/add" element={<FormEvent />} />
           <Route path="events/edit/:eventId" element={<EditEventPage />} />
           <Route path="profile" element={<ProfilePage />} />
-          <Route path="students" element={<StudentsPage />} />
+          {/* so adm pode ver esses aqui */}
+          <Route element={<AdminRoute />}>
+              <Route path="students" element={<StudentsPage />} />
+          </Route>
         </Route>
       </Route>
     </Routes>

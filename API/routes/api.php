@@ -20,3 +20,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::post('/event/{event}/subscribe', [InscricaoController::class, 'store'])
   ->middleware('auth:sanctum');
+Route::delete('/event/{event}/unsubscribe', [InscricaoController::class, 'destroy'])
+  ->middleware('auth:sanctum');
+
+Route::get('/alunos', [\App\Http\Controllers\UserController::class, 'indexAlunos'])
+  ->middleware('auth:sanctum');

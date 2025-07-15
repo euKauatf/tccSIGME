@@ -2,13 +2,17 @@
 
 // IMPORTAÇÕES
 import { useState, useEffect } from "react";
-import { getEvents, getUser, deleteEvent, subscribeToEvent } from "../../api/apiClient";
+// NOTA: Adicionada a importação de 'unsubscribeFromEvent'
+import { getEvents, getUser, deleteEvent, subscribeToEvent, unsubscribeFromEvent } from "../../api/apiClient";
 import type { Event, User } from "../../types";
 import "./style.css";
 import { Link, useNavigate } from "react-router-dom";
+import { useUser } from "../../hooks/useUser";
 
 
 function EventsPage() {
+  const { isAdmin } = useUser(); // Pega o usuário logado e verifica se é admin
+  
   // navigate é usado para navegar entre as páginas
   const navigate = useNavigate();
   // events é um estado que armazena os eventos
@@ -22,8 +26,6 @@ function EventsPage() {
   // error é um estado que armazena o erro caso ocorra algum
   const [error, setError] = useState<string | null>(null);
 
-  // isAdmin é um estado que indica se o usuário é administrador
-  const isAdmin = user?.tipo === 'adm';
   // diasDaSemana é um array com os dias da semana (se voce nao entende o que significa diasDaSemana, voce nao deveria estar aqui 💞)
   const diasDaSemana = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta"];
 
@@ -91,6 +93,30 @@ function EventsPage() {
     }
   };
 
+  // NOVA FUNÇÃO: handleUnsubscribe é chamada ao clicar em "Remover Inscrição"
+  const handleUnsubscribe = async (eventId: number) => {
+    if (!window.confirm("Tem certeza que deseja remover sua inscrição deste evento?")) {
+      return;
+    }
+    try {
+      // Chame a função da API para cancelar a inscrição.
+      // Lembre-se que ela deve fazer um DELETE para /api/eventos/{eventId}/cancelar
+      await unsubscribeFromEvent(eventId);
+      alert("Inscrição removida com sucesso!");
+
+      // Atualiza o estado local do usuário para refletir a remoção
+      if (user) {
+        setUser({
+          ...user,
+          events: user.events?.filter(e => e.id !== eventId) ?? [],
+        });
+      }
+    } catch (err) {
+      console.error("Erro ao remover inscrição do evento:", err);
+      alert("Não foi possível remover a inscrição.");
+    }
+  };
+
   // Se estiver carregando O (finge que é uma bolinha de carregando), exibe uma mensagem de carregamento
   if (isLoading) {
     return <p className="text-center p-8">Carregando eventos...</p>;
@@ -143,17 +169,32 @@ function EventsPage() {
                       <button onClick={() => handleModify(event.id)} className="btn btn-sm btn-info">Modificar</button>
                       <button onClick={() => handleDelete(event.id)} className="btn btn-sm btn-error">Excluir</button>
                     </div>
-                  ) : ( // Se não é admin, mostra o botão de inscrição só
-                    <button
-                      onClick={() => handleSubscription(event.id)}
-                      disabled={isSubscribed}
-                      className={`w-full py-2 rounded-lg text-white font-bold transition-all ${isSubscribed
-                        ? "bg-gray-400 cursor-not-allowed"
-                        : "bg-emerald-500 hover:bg-emerald-600"
-                        }`}
-                    >
-                      {isSubscribed ? "Inscrito" : "Inscrever-se"}
-                    </button>
+                  ) : ( // LÓGICA DO BOTÃO ATUALIZADA AQUI
+                    <div>
+                      {isSubscribed ? (
+                        <div className="flex flex-col sm:flex-row gap-2">
+                          <button
+                            disabled
+                            className="w-full py-2 rounded-lg text-white font-bold bg-gray-400 cursor-not-allowed"
+                          >
+                            Inscrito
+                          </button>
+                          <button
+                            onClick={() => handleUnsubscribe(event.id)}
+                            className="w-full py-2 rounded-lg text-white font-bold bg-emerald-500 hover:bg-emerald-600 transition-all"
+                          >
+                            Remover Inscrição
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => handleSubscription(event.id)}
+                          className="w-full py-2 rounded-lg text-white font-bold bg-emerald-500 hover:bg-emerald-600 transition-all"
+                        >
+                          Inscrever-se
+                        </button>
+                      )}
+                    </div>
                   )}
                 </div>
               </div>
