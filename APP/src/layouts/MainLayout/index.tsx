@@ -11,7 +11,6 @@ import apiClient from "../../api/apiClient";
 // IMPORTAÇÕES ((agora é os tipo))
 import type { User } from "../../types";
 
-
 function MainLayout() {
   const [isSidebarOpen, setSidebarOpen] = useState(false); // Pra ver se a sidebar está aberta ou fechada
   const navigate = useNavigate(); // Pra poder redirecionar o usuário
