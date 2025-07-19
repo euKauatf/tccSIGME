@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import type { User } from "../../types"; 
+import type { User } from "../../types";
 import { getAlunos } from "../../api/apiClient";
 import "./style.css";
 

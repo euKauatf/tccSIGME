@@ -1,30 +1,36 @@
 // !!! Aki é a página de eventos !!!
 
 // IMPORTAÇÕES
-import { useState, useEffect } from "react";
-// NOTA: Adicionada a importação de 'unsubscribeFromEvent'
-import { getEvents, getUser, deleteEvent, subscribeToEvent, unsubscribeFromEvent } from "../../api/apiClient";
-import type { Event, User } from "../../types";
-import "./style.css";
-import { Link, useNavigate } from "react-router-dom";
-import { useUser } from "../../hooks/useUser";
+import { useState, useEffect, useMemo } from "react"; // Importa o useState, useEffect, useMemo que são funções nativas do React
+import { getEvents, getUser, deleteEvent, subscribeToEvent, unsubscribeFromEvent } from "../../api/apiClient"; // Importa as funções do apiClient
+import type { Event, User } from "../../types"; // Importa os tipos de eventos e usuários
+import "./style.css"; // Estilo 😎
+import { Link, useNavigate, useSearchParams } from "react-router-dom"; // Link, navegação e função pra pegar o parametro passado pelo link
+import { useUser } from "../../hooks/useUser"; // Pra usar os dados do usuário
 
 
 function EventsPage() {
   const { isAdmin } = useUser(); // Pega o usuário logado e verifica se é admin
-  
-  // navigate é usado para navegar entre as páginas
-  const navigate = useNavigate();
-  // events é um estado que armazena os eventos
-  const [events, setEvents] = useState<Event[]>([]);
-  /// user é um estado que armazena o usuário logado
-  const [user, setUser] = useState<User | null>(null);
-  /// selectedDay é um estado que armazena o dia selecionado
-  const [selectedDay, setSelectedDay] = useState("Segunda");
-  // isLoading é um estado que indica se os dados estão sendo carregados
-  const [isLoading, setIsLoading] = useState(true);
-  // error é um estado que armazena o erro caso ocorra algum
-  const [error, setError] = useState<string | null>(null);
+
+  const [events, setEvents] = useState<Event[]>([]); // events é um estado que armazena os eventos
+  const [user, setUser] = useState<User | null>(null); // user é um estado que armazena o usuário logado
+
+  const [selectedDay, setSelectedDay] = useState("Segunda"); // selectedDay é um estado que armazena o dia selecionado
+  const [isLoading, setIsLoading] = useState(true); // isLoading é um estado que indica se os dados estão sendo carregados
+  const [error, setError] = useState<string | null>(null); // error é um estado que armazena o erro caso ocorra algum
+
+  const navigate = useNavigate(); // navigate é usado para navegar entre as páginas
+  const [searchParams] = useSearchParams(); // searchParams é pros parâmetros do link
+
+  const getInitialFilterMode = () => { // Função que retorna o valor inicial do filtro
+    const filter = searchParams.get('filter'); // Pega o filtro do link
+    if (filter === 'pendentes' || filter === 'selecionados') {
+      return filter;
+    }
+    return 'todos'; // Valor padrão
+  };
+
+  const [filterMode, setFilterMode] = useState(getInitialFilterMode);
 
   // diasDaSemana é um array com os dias da semana (se voce nao entende o que significa diasDaSemana, voce nao deveria estar aqui 💞)
   const diasDaSemana = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta"];
@@ -51,13 +57,11 @@ function EventsPage() {
     fetchData();
   }, []);
 
-  // handleModify é uma função que é chamada quando o usuário clica no botão de editar
-  const handleModify = (eventId: number) => {
+  const handleModify = (eventId: number) => { // handleModify é pra editar
     navigate(`/events/edit/${eventId}`);
   };
 
-  // handleDelete é uma função que é chamada quando o usuário clica no botão de excluir
-  const handleDelete = async (eventId: number) => {
+  const handleDelete = async (eventId: number) => { // handleDelete é pra excluir
     if (!window.confirm("Tem certeza que deseja excluir este evento?")) {
       return;
     }
@@ -71,12 +75,11 @@ function EventsPage() {
     }
   };
 
-  // handleSubscription é uma função que é chamada quando o usuário clica no botão de inscrever
-  const handleSubscription = async (eventId: number) => {
-    if (!window.confirm("Confirmar inscrição neste evento?")) {
+  const handleSubscription = async (eventId: number) => { // handleSubscription é pra participar do sorteio
+    if (!window.confirm("Confirmar inscrição neste sorteio?")) {
       return;
     }
-    try { // Verifica se o usuário já está inscrito no evento
+    try { // Verifica se o usuário já está participando do sorteio do evento
       await subscribeToEvent(eventId); // Chama a função subscribeToEvent do apiClient
       alert("Inscrição realizada com sucesso!");
 
@@ -84,53 +87,57 @@ function EventsPage() {
       if (subscribedEvent && user) {
         setUser({
           ...user,
-          events: [...(user.events || []), subscribedEvent],
+          eventos: [...(user.eventos || []), subscribedEvent],
         });
       }
     } catch (err) {
-      console.error("Erro ao se inscrever no evento:", err);
-      alert("Não foi possível realizar a inscrição. Você talvez já esteja inscrito ou não há mais vagas.");
+      console.error("Erro ao se inscrever no sorteio:", err);
+      alert("Não foi possível realizar a inscrição pro sorteio. Talvez você já esteja inscrito!");
     }
   };
 
-  // NOVA FUNÇÃO: handleUnsubscribe é chamada ao clicar em "Remover Inscrição"
-  const handleUnsubscribe = async (eventId: number) => {
+  const handleUnsubscribe = async (eventId: number) => { // handleUnsubscribe é pra cancelar a inscrição do sorteio
     if (!window.confirm("Tem certeza que deseja remover sua inscrição deste evento?")) {
       return;
     }
     try {
-      // Chame a função da API para cancelar a inscrição.
-      // Lembre-se que ela deve fazer um DELETE para /api/eventos/{eventId}/cancelar
       await unsubscribeFromEvent(eventId);
       alert("Inscrição removida com sucesso!");
 
-      // Atualiza o estado local do usuário para refletir a remoção
-      if (user) {
+      if (user) { // Atualiza o estado local do usuário para refletir a remoção
         setUser({
           ...user,
-          events: user.events?.filter(e => e.id !== eventId) ?? [],
+          eventos: user.eventos?.filter(e => e.id !== eventId) ?? [],
         });
       }
     } catch (err) {
-      console.error("Erro ao remover inscrição do evento:", err);
+      console.error("Erro ao remover inscrição do sorteio:", err);
       alert("Não foi possível remover a inscrição.");
     }
   };
 
-  // Se estiver carregando O (finge que é uma bolinha de carregando), exibe uma mensagem de carregamento
+  const displayEvents = useMemo(() => { // displayEvents é um array com os eventos que serão exibidos na tela
+    let sourceEvents: Event[] = [];
+
+    if (filterMode === 'pendentes') {
+      sourceEvents = user?.eventos ?? [];
+    } else { // 'todos'
+      sourceEvents = events;
+    }
+
+    // O filtro de dia é aplicado no final
+    return sourceEvents.filter((event) => event.data === selectedDay);
+  }, [events, user?.eventos, filterMode, selectedDay]); // Recalcula quando um desses mudar
+
   if (isLoading) {
     return <p className="text-center p-8">Carregando eventos...</p>;
   }
 
-  // Se ocorreu algum erro, exibe uma mensagem de erro
   if (error) {
     return <p className="text-center p-8 text-red-500">{error}</p>;
   }
 
-  // Filtra os eventos com base no dia selecionado
-  const filteredEvents = events.filter((event) => event.data === selectedDay);
-  // Cria um conjunto com os IDs dos eventos inscritos pelo usuário
-  const userSubscribedEventIds = new Set(user?.events?.map(e => e.id) ?? []);
+  const userSubscribedEventIds = new Set(user?.eventos?.map(e => e.id) ?? []); // Eventos que o usuário está inscrito
 
   // PAGINA AKI AUAUAUAUUAUAUAUAU
   return (
@@ -138,6 +145,20 @@ function EventsPage() {
       <h1 className="text-5xl font-bold text-center text-emerald-800 py-3"> { /* Título da página */}
         Programação da Expocanp
       </h1>
+
+      {isAdmin ? null : (
+        <div className="flex justify-center gap-2 my-6"> { /* Botões de filtro de eventos inscrições e tal */}
+          <button onClick={() => setFilterMode('todos')} className={`px-4 py-2 rounded-lg font-semibold transition-colors shadow-lg ${filterMode === 'todos' ? 'bg-emerald-600 text-white' : 'bg-white text-emerald-700 hover:bg-emerald-100'}`}>
+            Todos
+          </button>
+          <button onClick={() => setFilterMode('pendentes')} className={`px-4 py-2 rounded-lg font-semibold transition-colors shadow-lg ${filterMode === 'pendentes' ? 'bg-emerald-600 text-white' : 'bg-white text-emerald-700 hover:bg-emerald-100'}`}>
+            Pendentes
+          </button>
+          <button onClick={() => setFilterMode('selecionados')} className={`px-4 py-2 rounded-lg font-semibold transition-colors shadow-lg ${filterMode === 'selecionados' ? 'bg-emerald-600 text-white' : 'bg-white text-emerald-700 hover:bg-emerald-100'}`}>
+            Selecionados
+          </button>
+        </div>
+      )}
 
       <div className="flex justify-center gap-2 my-6"> { /* Botões de seleção de dia */}
         {diasDaSemana.map((dia) => (
@@ -148,9 +169,9 @@ function EventsPage() {
       </div>
 
       { /* Mostra os eventos filtrados */}
-      {filteredEvents.length > 0 ? (
+      {displayEvents.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredEvents.map((event) => {
+          {displayEvents.map((event) => {
             const isSubscribed = userSubscribedEventIds.has(event.id);
 
             return (
@@ -169,29 +190,20 @@ function EventsPage() {
                       <button onClick={() => handleModify(event.id)} className="btn btn-sm btn-info">Modificar</button>
                       <button onClick={() => handleDelete(event.id)} className="btn btn-sm btn-error">Excluir</button>
                     </div>
-                  ) : ( // LÓGICA DO BOTÃO ATUALIZADA AQUI
+                  ) : (
                     <div>
                       {isSubscribed ? (
                         <div className="flex flex-col sm:flex-row gap-2">
-                          <button
-                            disabled
-                            className="w-full py-2 rounded-lg text-white font-bold bg-gray-400 cursor-not-allowed"
-                          >
-                            Inscrito
+                          <button disabled className="w-full py-2 rounded-lg text-white font-bold bg-gray-400 cursor-not-allowed">
+                            Pendente
                           </button>
-                          <button
-                            onClick={() => handleUnsubscribe(event.id)}
-                            className="w-full py-2 rounded-lg text-white font-bold bg-emerald-500 hover:bg-emerald-600 transition-all"
-                          >
-                            Remover Inscrição
+                          <button onClick={() => handleUnsubscribe(event.id)} className="w-full py-2 rounded-lg text-white font-bold bg-emerald-500 hover:bg-emerald-600 transition-all">
+                            Sair do sorteio
                           </button>
                         </div>
                       ) : (
-                        <button
-                          onClick={() => handleSubscription(event.id)}
-                          className="w-full py-2 rounded-lg text-white font-bold bg-emerald-500 hover:bg-emerald-600 transition-all"
-                        >
-                          Inscrever-se
+                        <button onClick={() => handleSubscription(event.id)} className="w-full py-2 rounded-lg text-white font-bold bg-emerald-500 hover:bg-emerald-600 transition-all">
+                          Participar
                         </button>
                       )}
                     </div>
@@ -201,7 +213,7 @@ function EventsPage() {
             );
           })}
         </div>
-      ) : ( // Se não há eventos para o dia selecionado, mostra uma mensagem
+      ) : (
         <p className="text-center p-8 text-gray-500">Nenhum evento agendado para este dia.</p>
       )}
 

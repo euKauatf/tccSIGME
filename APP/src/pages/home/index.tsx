@@ -1,9 +1,66 @@
+// !!! Página inicial do site, quando você já tá logado !!!
+
+// IMPORTAÇÕES
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useUser } from "../../hooks/useUser";
+import apiClient from "../../api/apiClient";
+import type { Event } from "../../types";
 import "./style.css";
 
-function HomePage() {
-  const { user, isAdmin } = useUser();
+interface User { // Interface do usuário 
+  id: number;
+  name: string;
+  tipo: string;
+  eventos: Event[];
+}
 
+function HomePage() {
+  const { user, isAdmin } = useUser(); // Pega o usuário logado e verifica se é admin
+  const [, setAllEvents] = useState<Event[]>([]); // Estado que armazena todos os eventos (funciona só com a , sla pq)
+  const [, setLocalUser] = useState<User | null>(null); // Estado que armazena o usuário logado (também só sa a , xd)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [eventsResponse, userResponse] = await Promise.all([
+          apiClient.get("/event"),
+          apiClient.get("/user"),
+        ]);
+
+        setAllEvents(eventsResponse.data);
+        setLocalUser(userResponse.data);
+
+      } catch (err) {
+        console.error("Erro ao buscar dados:", err);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const ordemDosDias = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta"]; // Array com os dias da semana
+  const diasJs = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"]; // Array com os dias totais da semana
+  const hojeIndex = new Date().getDay(); // Pega o dia da semana atual
+  const nomeHoje = diasJs[hojeIndex]; // Pega o nome do dia da semana atual
+  const indiceHojeNaSemana = ordemDosDias.indexOf(nomeHoje); // Pega o índice do dia da semana atual na semana
+  const TotalEventosInscritos = user?.eventos ? user.eventos.length : 0; // Pega o total de eventos inscritos
+
+  const proximosEventosSelecionados = user?.eventos // Pega os 3 próximos eventos selecionados do usuário
+    ? user.eventos
+      .filter(e => {
+        const indiceEvento = ordemDosDias.indexOf(e.data);
+        return indiceHojeNaSemana !== -2 && indiceEvento >= indiceHojeNaSemana; // MUDA PRA -1 PRA ACERTAR O CÓDIGO
+      })
+      .sort((a, b) => {
+        const indiceA = ordemDosDias.indexOf(a.data);
+        const indiceB = ordemDosDias.indexOf(b.data);
+        if (indiceA !== indiceB) return indiceA - indiceB;
+        return a.horario_inicio.localeCompare(b.horario_inicio);
+      })
+      .slice(0, 3)
+    : [];
+
+  // Site rsrsrs
   return (
     <div className="main font-sans flex flex-col items-center justify-center">
       <h1 className="text-5xl font-bold text-center text-emerald-800 py-3">
@@ -53,21 +110,32 @@ function HomePage() {
             <div className="flex flex-col pl-28 gap-6">
               <div className="flex flex-col glass rounded-[20px] min-h-[170px] mb-30 px-6 bg-emerald-50">
                 <h2 className="text-[36px] text-emerald-600 py-3 text-center">
-                  Atividades Selecionadas
+                  Sorteios Inscritos
                 </h2>
-                <p>Você ainda não está em uma atividade.</p>
-                <p className="linkpage font-bold text-zinc-950 btn-link">
-                  <a href="#">Escolha aqui quais serão!</a>
-                </p>
+                {TotalEventosInscritos > 0 ? (
+                  <>
+                    <p>Você está concorrendo a <span className="font-bold">{TotalEventosInscritos}</span> sorteios!</p>
+                    <p className="linkpage font-bold text-zinc-950 btn-link">
+                      <a href="/events?filter=pendentes">Veja aqui quais são!</a>
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p>Você ainda não está concorrendo a nenhum sorteio de atividade.</p>
+                    <p className="linkpage font-bold text-zinc-950 btn-link">
+                      <a href="/events">Escolha aqui quais serão!</a>
+                    </p>
+                  </>
+                )}
               </div>
 
               <div className="flex flex-col glass rounded-[20px] min-h-[170px] px-6 bg-emerald-50">
                 <h2 className="text-[36px] text-emerald-600 py-3 text-center">
-                  Inscrições
+                  Atividades Inscritas
                 </h2>
-                <p>Entre e descubra qual será a proxima atividade!</p>
+                <p>Você está inscrito em <span className="font-bold">0</span> atividades!</p>
                 <p className="linkpage font-bold text-zinc-950 btn-link">
-                  <a href="#">Escolha aqui quais serão!</a>
+                  <a href="/events?filter=selecionados">Clique para ver as atividades que participará!</a>
                 </p>
               </div>
             </div>
@@ -77,17 +145,32 @@ function HomePage() {
                 <h2 className="text-[36px] text-emerald-600 py-3 text-center">
                   Próximas Atividades
                 </h2>
-                <p>Você ainda não está em uma atividade.</p>
-                <p className="linkpage font-bold text-zinc-950 btn-link">
-                  <a href="#">Escolha aqui quais serão!</a>
+
+                {proximosEventosSelecionados.length > 0 ? (
+                  <ul className="w-full space-y-2 flex-grow">
+                    {proximosEventosSelecionados.map(evento => (
+                      <li key={evento.id} className="text-center glass bg-emerald-50 p-3 rounded-lg shadow-sm">
+                        <div className="font-bold text-emerald-800">{evento.tema}</div>
+                        <div className="text-sm font-bold text-gray-950">{evento.data} às {evento.horario_inicio}</div>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <div className="flex-grow flex items-center justify-center">
+                    <p className="text-gray-600 text-center">Você não tem atividades agendadas.</p>
+                  </div>
+                )}
+
+                <p className="linkpage font-bold text-zinc-950 btn-link mt-auto py-4 text-center">
+                  <Link to="/events">Ver todas as atividades</Link>
                 </p>
               </div>
             </div>
           </div>
         </>
-      )}
-
-    </div>
+      )
+      }
+    </div >
   );
 }
 

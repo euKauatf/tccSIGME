@@ -25,10 +25,12 @@ function App() {
           <Route path="events/add" element={<FormEvent />} />
           <Route path="events/edit/:eventId" element={<EditEventPage />} />
           <Route path="profile" element={<ProfilePage />} />
+
           {/* so adm pode ver esses aqui */}
           <Route element={<AdminRoute />}>
-              <Route path="students" element={<StudentsPage />} />
+            <Route path="students" element={<StudentsPage />} />
           </Route>
+
         </Route>
       </Route>
     </Routes>
