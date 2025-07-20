@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\InscricaoController;
+use App\Http\Controllers\AuditLogController;
+
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -24,4 +26,9 @@ Route::delete('/event/{event}/unsubscribe', [InscricaoController::class, 'destro
   ->middleware('auth:sanctum');
 
 Route::get('/alunos', [\App\Http\Controllers\UserController::class, 'indexAlunos'])
+  ->middleware('auth:sanctum');
+
+Route::get('/audit-logs', [AuditLogController::class, 'index'])
+  ->middleware('auth:sanctum');
+Route::delete('/audit-logs/clear', [AuditLogController::class, 'clearLogs'])
   ->middleware('auth:sanctum');

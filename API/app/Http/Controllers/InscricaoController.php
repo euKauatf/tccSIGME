@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Services\AuditLogger;
 
 class InscricaoController extends Controller
 {
@@ -22,6 +23,9 @@ class InscricaoController extends Controller
     }
 
     $user->eventos()->attach($event->id, ['status' => 'inscrito']);
+
+    // Registra a ação de inscrição no log de auditoria.
+    AuditLogger::log($user, 'inscreveu-se', $event);
 
     return response()->json([
       'message' => 'Inscrição realizada com sucesso!',
@@ -48,6 +52,9 @@ class InscricaoController extends Controller
         // Usa detach() para remover a associação.
         // O método retorna o número de registros removidos.
         $user->eventos()->detach($event->id);
+
+        // Registra a ação de cancelamento de inscrição no log de auditoria.
+        AuditLogger::log($user, 'cancelou inscrição', $event);
 
         return response()->json([
             'message' => 'Inscrição cancelada com sucesso.'

@@ -17,10 +17,9 @@ class UserController extends Controller
     public function indexAlunos(){
         $alunos = User::where('tipo', 'aluno')
             ->with(['eventos' => function ($query) {
-                          // Selecionamos apenas os campos que queremos dos eventos
-                          $query->select('events.id', 'events.tema');
-                      }])
-            ->select('name', 'email', 'matricula')
+                $query->select('events.id', 'events.tema', 'events.data');
+            }])
+            ->select('id', 'name', 'email', 'matricula')
             ->orderBy('name', 'asc')
             ->get();
             
