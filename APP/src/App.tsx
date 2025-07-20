@@ -8,6 +8,7 @@ import StudentsPage from "./pages/students"; // Students
 import MainLayout from "./layouts/MainLayout"; // Layout principal do site né pai
 import FormEvent from "./components/Forms/FormEvent"; // Formulário de eventos
 import EditEventPage from "./pages/events/edit.tsx"; // editar evento
+import AuditLogsPage from "./pages/auditLogs"; // Página de logs de auditoria
 
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute"; // Protege as rotas
 import AdminRoute from "./components/ProtectedRoute/AdminRoute"; // Protege as rotas de admin
@@ -28,6 +29,7 @@ function App() {
 
           {/* so adm pode ver esses aqui */}
           <Route element={<AdminRoute />}>
+            <Route path="logs" element={<AuditLogsPage />} />
             <Route path="students" element={<StudentsPage />} />
           </Route>
 

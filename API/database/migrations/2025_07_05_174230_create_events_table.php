@@ -16,7 +16,7 @@ return new class extends Migration
       $table->string('data');
       $table->time('horario_inicio');
       $table->time('horario_termino');
-      $table->text('descricao')->nullable();;
+      $table->text('descricao');
       $table->string('local');
       $table->timestamps();
     });
