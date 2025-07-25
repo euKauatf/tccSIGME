@@ -9,11 +9,16 @@ class AuditLogController extends Controller
 {
     public function index()
     {
+        // z
         $logs = AuditLog::with(['user', 'auditable'])->latest()->paginate(25);
         return response()->json($logs);
     }
+    
     public function clearLogs()
     {
+        if (Auth::user()->tipo !== 'admin') {
+            return response()->json(['message' => 'Acesso negado.'], 403);
+        }
         // O método truncate() é a forma mais eficiente de apagar todas as
         // linhas de uma tabela.
         AuditLog::truncate();

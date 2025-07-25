@@ -8,28 +8,18 @@ import apiClient from "../../api/apiClient";
 import type { Event } from "../../types";
 import "./style.css";
 
-interface User { // Interface do usuário 
-  id: number;
-  name: string;
-  tipo: string;
-  eventos: Event[];
-}
-
 function HomePage() {
   const { user, isAdmin } = useUser(); // Pega o usuário logado e verifica se é admin
   const [, setAllEvents] = useState<Event[]>([]); // Estado que armazena todos os eventos (funciona só com a , sla pq)
-  const [, setLocalUser] = useState<User | null>(null); // Estado que armazena o usuário logado (também só sa a , xd)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [eventsResponse, userResponse] = await Promise.all([
+        const [eventsResponse] = await Promise.all([
           apiClient.get("/event"),
-          apiClient.get("/user"),
         ]);
 
         setAllEvents(eventsResponse.data);
-        setLocalUser(userResponse.data);
 
       } catch (err) {
         console.error("Erro ao buscar dados:", err);

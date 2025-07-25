@@ -37,7 +37,7 @@ class Event extends Model
   /**
    * @return BelongsToMany
    */
-  public function alunos(): BelongsToMany
+  public function users(): BelongsToMany
   {
     return $this->belongsToMany(User::class, 'inscricoes', 'events_id', 'user_id')
       ->withPivot('status')
