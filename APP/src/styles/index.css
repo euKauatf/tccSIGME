@@ -1,0 +1,19 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+@import "tailwindcss";
+@import "tailwindcss/utilities";
+@plugin "daisyui" {
+  themes: light --default dark;
+}
+
+body,
+html {
+  @apply font-sans;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.glass {
+  box-shadow: 0px 10px 30px rgba(0, 214, 111, 0.253);
+}

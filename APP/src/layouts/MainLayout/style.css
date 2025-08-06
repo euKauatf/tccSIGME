@@ -1,0 +1,24 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background-color: #f0f2f5;
+}
+
+.app-container {
+  position: relative;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.main-content {
+  transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
+
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.main-content.shifted {
+  margin-left: 16rem;
+  width: calc(100% - 16rem);
+}
