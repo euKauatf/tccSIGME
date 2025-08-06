@@ -8,7 +8,6 @@ import "./style.css"; // Estilo 😎
 import { Link, useNavigate, useSearchParams } from "react-router-dom"; // Link, navegação e função pra pegar o parametro passado pelo link
 import { useUser } from "../../hooks/useUser"; // Pra usar os dados do usuário
 
-
 function EventsPage() {
   const { isAdmin } = useUser(); // Pega o usuário logado e verifica se é admin
 
