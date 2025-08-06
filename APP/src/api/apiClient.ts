@@ -37,6 +37,8 @@ export const unsubscribeFromEvent = (eventId: number) => apiClient.delete(`/even
 export const getAlunos = () => apiClient.get('/alunos');
 export const getAuditLogs = () => apiClient.get('/audit-logs');
 export const clearAuditLogs = async () => { return apiClient.delete('/audit-logs/clear'); };
+export const getSorteio = () => {return apiClient.post('/sorteio');};
+export const getSorteioClear = () => {return apiClient.post('/sorteio/clear');};
 
 
 export default apiClient;

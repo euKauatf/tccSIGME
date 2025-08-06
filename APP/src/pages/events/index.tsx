@@ -2,7 +2,7 @@
 
 // IMPORTAÇÕES
 import { useState, useEffect, useMemo } from "react"; // Importa o useState, useEffect, useMemo que são funções nativas do React
-import { getEvents, getUser, deleteEvent, subscribeToEvent, unsubscribeFromEvent } from "../../api/apiClient"; // Importa as funções do apiClient
+import { getEvents, getUser, deleteEvent, subscribeToEvent, unsubscribeFromEvent, getSorteio, getSorteioClear } from "../../api/apiClient"; // Importa as funções do apiClient
 import type { Event, User } from "../../types"; // Importa os tipos de eventos e usuários
 import "./style.css"; // Estilo 😎
 import { Link, useNavigate, useSearchParams } from "react-router-dom"; // Link, navegação e função pra pegar o parametro passado pelo link
@@ -137,6 +137,32 @@ function EventsPage() {
   }
 
   const userSubscribedEventIds = new Set(user?.eventos?.map(e => e.id) ?? []); // Eventos que o usuário está inscrito
+  
+  const handleSorteio = async () => {//função que vai chamar a api do sorteio de alunos
+  if (!window.confirm("Deseja realizar o sorteio geral agora?")) return;
+  try {
+      const response = await getSorteio();
+      alert("Sorteio realizado!");
+      console.log(response.data);
+      } 
+    catch (error) {
+    alert("O sorteio não foi realizado");
+    console.error(error);
+    }
+  };
+  const handleSorteioClear = async () => {//função que vai chamar a api do sorteio de alunos
+  if (!window.confirm("Deseja realizar a limpeza do sorteio?")) return;
+  try {
+      const response = await getSorteioClear();
+      alert("Limpeza realizada!");
+      console.log(response.data);
+      } 
+    catch (error) {
+    alert("A limpeza não foi realizada");
+    console.error(error);
+    }
+  };
+
 
   // PAGINA AKI AUAUAUAUUAUAUAUAU
   return (
@@ -216,12 +242,14 @@ function EventsPage() {
         <p className="text-center p-8 text-gray-500">Nenhum evento agendado para este dia.</p>
       )}
 
-      {/* Botão de adicionar evento, só é mostrado para admins */}
+      {/* Botão de adicionar evento e de fazer o sorteio geral, só é mostrado para admins */}
       {isAdmin && (
         <div className="flex justify-center mt-8">
           <Link to="/events/add" className="btn btn-lg btn-success text-white">
             Adicionar Novo Evento
           </Link>
+          <button onClick={handleSorteio} className="btn btn-sm btn-warning text-white">Sortear</button>
+          <button onClick={handleSorteioClear} className="btn btn-sm btn-warning text-white">Limpar Sorteio</button>
         </div>
       )}
     </div>

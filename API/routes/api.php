@@ -32,3 +32,9 @@ Route::get('/audit-logs', [AuditLogController::class, 'index'])
   ->middleware('auth:sanctum');
 Route::delete('/audit-logs/clear', [AuditLogController::class, 'clearLogs'])
   ->middleware('auth:sanctum');
+
+Route::post('/sorteio', [SorteioController::class, 'realizarSorteio'])
+  ->middleware('auth:sanctum');
+
+Route::post('/sorteio/clear', [SorteioController::class, 'clearSorteio'])
+  ->middleware('auth:sanctum');
