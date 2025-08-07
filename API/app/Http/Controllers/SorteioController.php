@@ -22,7 +22,7 @@ class SorteioController extends Controller
 
         foreach ($eventos as $evento) {//nesse foreach vai ir de evento em evento
             $inscritos = $evento->users;
-            $vagasDisponiveis = $evento->vagas_max - $evento->users()->wherePivot('status', 'efetivado')->count();//essa variável vai ver quantas são as vagas disponíveis desse evento 
+            $vagasDisponiveis = $evento->vagas_max - $evento->users()->wherePivot('status', 'selecionado')->count();//essa variável vai ver quantas são as vagas disponíveis desse evento 
 
             if ($vagasDisponiveis <= 0 || $inscritos->isEmpty()) {//verifica se o evento ainda tem vagas disponíveis ou se não tem ngm inscrito
                 
@@ -44,13 +44,13 @@ class SorteioController extends Controller
             $selecionados = $inscritos->shuffle()->take($vagasDisponiveis);//sorteia os usuários aleatoriamente e pega apenas até o número de vagas
 
             foreach ($selecionados as $user) {
-                $evento->users()->updateExistingPivot($user->id, ['status' => 'efetivado']);//vai efetivar esses usuários selecionados
-                AuditLogger::log($user, 'foi efetivado', $evento);//manda um log falando qm foi efetivado
+                $evento->users()->updateExistingPivot($user->id, ['status' => 'selecionado']);//vai efetivar esses usuários selecionados
+                AuditLogger::log($user, 'foi selecionado', $evento);//manda um log falando qm foi efetivado
             }
 
             $resultado[] = [
                 'evento' => $evento->tema,
-                'efetivados' => $selecionados->pluck('name')//vai armazenar qm ficou efetivado em qual palestra
+                'selecionados' => $selecionados->pluck('name')//vai armazenar qm ficou efetivado em qual palestra
             ];
 
              $naoSelecionados = $inscritos->diff($selecionados);//vai pegar os usuáiros q não foram chamados pro evento
@@ -61,6 +61,7 @@ class SorteioController extends Controller
                 AuditLogger::log($user, 'foi cancelado', $evento);//manda um log falando qm foi cancelado
             }
         }
+        
 
         return response()->json([//no final de tudo vai responder com esse json 
             'mensagem' => 'Sorteio finalizado.',
@@ -72,7 +73,7 @@ class SorteioController extends Controller
     //função q vai dar um clear no sorteio inteiro
     public function clearSorteio(){
         $eventos = Event::with(['users' => function ($query) {//pega todos os eventos q tem usuários efetivados e cancelados
-            $query->wherePivotIn('status', ['efetivado', 'cancelado']);
+            $query->wherePivotIn('status', ['selecionado', 'cancelado']);
         }])->get();
 
         foreach($eventos as $evento){

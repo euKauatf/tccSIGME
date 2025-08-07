@@ -16,7 +16,7 @@ class AuditLogController extends Controller
 
   public function clearLogs()
   {
-    if (Auth::user()->tipo !== 'admin') {
+    if (Auth::user()->tipo !== 'adm') {
       return response()->json(['message' => 'Acesso negado.'], 403);
     }
     // O método truncate() é a forma mais eficiente de apagar todas as
