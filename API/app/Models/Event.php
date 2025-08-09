@@ -18,6 +18,8 @@ class Event extends Model
   protected $fillable = [
     'tema',
     'palestrante',
+    'email_palestrante',
+    'telefone_palestrante',
     'vagas_max',
     'data',
     'horario_inicio',

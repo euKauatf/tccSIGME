@@ -74,19 +74,30 @@ function EventsPage() {
     }
   };
 
-  const handleSubscription = async (eventId: number) => { // handleSubscription é pra participar do sorteio
+  // Em APP/srcs/pages/Events/index.tsx
+
+  const handleSubscription = async (eventId: number) => {
     if (!window.confirm("Confirmar inscrição neste sorteio?")) {
       return;
     }
-    try { // Verifica se o usuário já está participando do sorteio do evento
-      await subscribeToEvent(eventId); // Chama a função subscribeToEvent do apiClient
+    try {
+      await subscribeToEvent(eventId);
       alert("Inscrição realizada com sucesso!");
 
       const subscribedEvent = events.find(e => e.id === eventId);
       if (subscribedEvent && user) {
+        // CORREÇÃO: Crie um novo objeto de evento com a propriedade 'pivot'
+        const newSubscribedEventWithPivot = {
+          ...subscribedEvent,
+          pivot: {
+            status: 'inscrito' as const // Adiciona o status 'inscrito'
+          }
+        };
+
+        // Atualize o estado do usuário com o evento formatado corretamente
         setUser({
           ...user,
-          eventos: [...(user.eventos || []), subscribedEvent],
+          eventos: [...(user.eventos || []), newSubscribedEventWithPivot],
         });
       }
     } catch (err) {
@@ -116,17 +127,23 @@ function EventsPage() {
   };
 
   const displayEvents = useMemo(() => { // displayEvents é um array com os eventos que serão exibidos na tela
-    let sourceEvents: Event[] = [];
+    let sourceEvents: Event[] = []; // A lógica agora começa aqui
 
-    if (filterMode === 'pendentes') {
-      sourceEvents = user?.eventos ?? [];
+    if (filterMode === 'selecionados') {
+      // Mostra apenas eventos onde o usuário foi 'selecionado'
+      sourceEvents = user?.eventos?.filter(e => e.pivot?.status === 'selecionado') ?? [];
+    } else if (filterMode === 'pendentes') {
+      // Mostra apenas eventos onde o status ainda é 'inscrito' (aguardando sorteio)
+      sourceEvents = user?.eventos?.filter(e => e.pivot?.status === 'inscrito') ?? [];
     } else { // 'todos'
+      // Mostra todos os eventos do sistema
       sourceEvents = events;
     }
 
-    // O filtro de dia é aplicado no final
+    // Aplica o filtro de dia da semana no resultado final
     return sourceEvents.filter((event) => event.data === selectedDay);
-  }, [events, user?.eventos, filterMode, selectedDay]); // Recalcula quando um desses mudar
+
+  }, [events, user?.eventos, filterMode, selectedDay]);
 
   if (isLoading) {
     return <p className="text-center p-8">Carregando eventos...</p>;
@@ -137,29 +154,29 @@ function EventsPage() {
   }
 
   const userSubscribedEventIds = new Set(user?.eventos?.map(e => e.id) ?? []); // Eventos que o usuário está inscrito
-  
+
   const handleSorteio = async () => {//função que vai chamar a api do sorteio de alunos
-  if (!window.confirm("Deseja realizar o sorteio geral agora?")) return;
-  try {
+    if (!window.confirm("Deseja realizar o sorteio geral agora?")) return;
+    try {
       const response = await getSorteio();
       alert("Sorteio realizado!");
       console.log(response.data);
-      } 
+    }
     catch (error) {
-    alert("O sorteio não foi realizado");
-    console.error(error);
+      alert("O sorteio não foi realizado");
+      console.error(error);
     }
   };
   const handleSorteioClear = async () => {//função que vai chamar a api do sorteio de alunos
-  if (!window.confirm("Deseja realizar a limpeza do sorteio?")) return;
-  try {
+    if (!window.confirm("Deseja realizar a limpeza do sorteio?")) return;
+    try {
       const response = await getSorteioClear();
       alert("Limpeza realizada!");
       console.log(response.data);
-      } 
+    }
     catch (error) {
-    alert("A limpeza não foi realizada");
-    console.error(error);
+      alert("A limpeza não foi realizada");
+      console.error(error);
     }
   };
 

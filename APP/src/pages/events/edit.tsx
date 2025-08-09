@@ -6,6 +6,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import apiClient from "../../api/apiClient";
 import type { Event } from "../../types";
 import "./style.css";
+import { IMaskInput } from 'react-imask';
 
 // TIPOS
 type EventFormData = Omit<Event, "id" | "created_at" | "updated_at">;
@@ -113,6 +114,17 @@ function EditEventPage() {
                 className="mt-1 block w-full input input-bordered" required />
             </div>
 
+            <div> {/* Editar email */}
+              <label htmlFor="email_palestrante" className="block text-sm font-medium text-gray-700">Email</label>
+              <input type="text" id="email_palestrante" name="email_palestrante" value={formData.email_palestrante || ''} onChange={handleChange}
+                className="mt-1 block w-full input input-bordered" required />
+            </div>
+
+            <div> {/* Editar telefone */}
+              <label htmlFor="telefone_palestrante" className="block text-sm font-medium text-gray-700">Telefone do Palestrante</label>
+              <IMaskInput mask="(00) 00000-0000" id="telefone_palestrante" name="telefone_palestrante" value={formData.telefone_palestrante || ''} placeholder="(00) 00000-0000" className="input input-bordered w-full" required onAccept={(value) => { handleChange({ target: { name: 'telefone_palestrante', value: value, }, } as React.ChangeEvent<HTMLInputElement>); }} />
+            </div>
+
             <div> {/* Editar local */}
               <label htmlFor="local" className="block text-sm font-medium text-gray-700">Local</label>
               <input type="text" id="local" name="local" value={formData.local || ''} onChange={handleChange}
@@ -121,13 +133,13 @@ function EditEventPage() {
 
             <div> {/* Editar hora de início */}
               <label htmlFor="horario_inicio" className="block text-sm font-medium text-gray-700">Horário de Início</label>
-              <input type="text" id="horario_inicio" name="horario_inicio" value={formData.horario_inicio || ''} onChange={handleChange}
+              <input type="time" id="horario_inicio" name="horario_inicio" value={formData.horario_inicio || ''} onChange={handleChange}
                 className="mt-1 block w-full input input-bordered" required />
             </div>
 
             <div> {/* Editar hora de término */}
               <label htmlFor="horario_termino" className="block text-sm font-medium text-gray-700">Horário de Término</label>
-              <input type="text" id="horario_termino" name="horario_termino" value={formData.horario_termino || ''} onChange={handleChange}
+              <input type="time" id="horario_termino" name="horario_termino" value={formData.horario_termino || ''} onChange={handleChange}
                 className="mt-1 block w-full input input-bordered" required />
             </div>
 

@@ -34,6 +34,7 @@ function HomePage() {
   const nomeHoje = diasJs[hojeIndex]; // Pega o nome do dia da semana atual
   const indiceHojeNaSemana = ordemDosDias.indexOf(nomeHoje); // Pega o índice do dia da semana atual na semana
   const TotalEventosInscritos = user?.eventos ? user.eventos.length : 0; // Pega o total de eventos inscritos
+  const TotalEventosSelecionados = user?.eventos ? user.eventos.filter(e => e.pivot?.status === "selecionado").length : 0; // Pega o total de eventos selecionados
 
   const proximosEventosSelecionados = user?.eventos // Pega os 3 próximos eventos selecionados do usuário
     ? user.eventos
@@ -121,9 +122,9 @@ function HomePage() {
 
               <div className="flex flex-col glass rounded-[20px] min-h-[170px] px-6 bg-emerald-50">
                 <h2 className="text-[36px] text-emerald-600 py-3 text-center">
-                  Atividades Inscritas
+                  Atividades Selecionadas
                 </h2>
-                <p>Você está inscrito em <span className="font-bold">0</span> atividades!</p>
+                <p>Você está selecionado em <span className="font-bold">{TotalEventosSelecionados}</span> atividades!</p>
                 <p className="linkpage font-bold text-zinc-950 btn-link">
                   <a href="/events?filter=selecionados">Clique para ver as atividades que participará!</a>
                 </p>

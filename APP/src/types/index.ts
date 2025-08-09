@@ -13,15 +13,20 @@ export interface User {
 }
 
 export interface Event {
-    id: number;
-    tema: string;
-    palestrante: string;
-    vagas_max: number;
-    data: DiaDaSemana;
-    horario_inicio: string;
-    horario_termino: string;
-    descricao: string;
-    local: string;
+  id: number;
+  tema: string;
+  palestrante: string;
+  email_palestrante: string;
+  telefone_palestrante: string;
+  vagas_max: number;
+  data: DiaDaSemana;
+  horario_inicio: string;
+  horario_termino: string;
+  descricao: string;
+  local: string;
+  pivot?: { // A propriedade pivot é opcional
+    status: 'inscrito' | 'selecionado' | 'nao-selecionado';
+  };
 }
 
 export interface AuditLog {

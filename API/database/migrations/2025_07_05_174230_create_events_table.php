@@ -12,6 +12,8 @@ return new class extends Migration
       $table->id();
       $table->string('tema');
       $table->string('palestrante');
+      $table->string('email_palestrante');
+      $table->string('telefone_palestrante');
       $table->integer('vagas_max');
       $table->string('data');
       $table->time('horario_inicio');

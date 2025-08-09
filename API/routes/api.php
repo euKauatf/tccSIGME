@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\InscricaoController;
+use App\Http\Controllers\SorteioController;
 use App\Http\Controllers\AuditLogController;
 
 
