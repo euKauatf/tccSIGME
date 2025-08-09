@@ -26,7 +26,7 @@ class EventController extends Controller
       'local' => 'required|string',
       'descricao' => 'required|string',
     ]);
-    $validatedData['horario_termino'] = $validatedData['horario_inicio'];
+    //$validatedData['horario_termino'] = $validatedData['horario_inicio'];
 
     $event = Event::create($validatedData);
 
@@ -47,7 +47,7 @@ class EventController extends Controller
       'telefone_palestrante' => 'required|string|max:20',
       'vagas_max' => 'sometimes|required|numeric',
       'horario_inicio' => 'sometimes|required|date_format:H:i',
-      'horario_termino' => 'sometimes|required|date_format:H:i|after_or_equal:horario_inicio',
+      'horario_termino' => 'sometimes|required|date_format:H:i|after:horario_inicio',
       'descricao' => 'sometimes|required|string',
       'local' => 'sometimes|required|string',
     ]);

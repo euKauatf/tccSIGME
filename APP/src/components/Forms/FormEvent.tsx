@@ -120,15 +120,7 @@ function FormEvent() {
 
             <div> {/* Horário de término (Preciso mudar o tipo do input) */}
               <label htmlFor="horario_termino" className="block text-sm font-medium text-gray-700">Horário de Término</label>
-              <input
-                id="horario_termino"
-                name="horario_termino"
-                value={formData.horario_termino}
-                onChange={handleChange}
-                type="time"
-                className="input input-bordered w-full"
-                required
-              />
+              <input id="horario_termino" name="horario_termino" value={formData.horario_termino} onChange={handleChange} type="time" className="input input-bordered w-full" required />
             </div>
 
             <div> {/* Descrição do evento */}
