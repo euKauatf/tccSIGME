@@ -32,6 +32,7 @@ class SorteioController extends Controller
             AuditLogger::log($inscrito->user, 'foi cancelado', $evento); //manda um log falando qm foi cancelado
           }
         }
+        
 
         $resultado[] = [
           'evento' => $evento->tema,

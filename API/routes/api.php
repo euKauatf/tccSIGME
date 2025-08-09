@@ -8,6 +8,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\InscricaoController;
 use App\Http\Controllers\SorteioController;
 use App\Http\Controllers\AuditLogController;
+use App\Http\Controllers\SorteioController;
 
 
 Route::post('/register', [AuthController::class, 'register']);
