@@ -43,21 +43,21 @@ class InscricaoController extends Controller
    */
   public function destroy(Request $request, Event $event)
   {
-        $user = Auth::user();
+    $user = Auth::user();
 
-        if (!$user) {
-            return response()->json(['message' => 'Não autorizado.'], 401);
-        }
-        
-        // Usa detach() para remover a associação.
-        // O método retorna o número de registros removidos.
-        $user->eventos()->detach($event->id);
+    if (!$user) {
+      return response()->json(['message' => 'Não autorizado.'], 401);
+    }
 
-        // Registra a ação de cancelamento de inscrição no log de auditoria.
-        AuditLogger::log($user, 'cancelou inscrição', $event);
+    // Usa detach() para remover a associação.
+    // O método retorna o número de registros removidos.
+    $user->eventos()->detach($event->id);
 
-        return response()->json([
-            'message' => 'Inscrição cancelada com sucesso.'
-        ], 200); // 200 OK
+    // Registra a ação de cancelamento de inscrição no log de auditoria.
+    AuditLogger::log($user, 'cancelou inscrição', $event);
+
+    return response()->json([
+      'message' => 'Inscrição cancelada com sucesso.'
+    ], 200); // 200 OK
   }
-} 
+}

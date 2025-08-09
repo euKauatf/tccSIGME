@@ -4,12 +4,15 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { IMaskInput } from 'react-imask';
 
 function FormEvent() {
   const [formData, setFormData] = useState({ // Pra salvar as paradinha tudo do formulário pra um evento novo
     tema: "",
     vagas_max: "",
     palestrante: "",
+    email_palestrante: "",
+    telefone_palestrante: "",
     local: "",
     data: "",
     horario_inicio: "",
@@ -36,6 +39,10 @@ function FormEvent() {
       ...formData,
       vagas_max: Number(formData.vagas_max),
     };
+
+    if (eventData.horario_inicio > eventData.horario_termino) {
+      alert("O horário de inicio deve ser menor que o horário de termino.");
+    }
 
     try {
       await axios.post("http://127.0.0.1:8000/api/event", eventData);
@@ -74,9 +81,19 @@ function FormEvent() {
               <input name="vagas_max" value={formData.vagas_max} onChange={handleChange} type="number" placeholder="Quantidade de Vagas" className="input input-bordered w-full" required />
             </div>
 
-            <div> {/* Data do evento */}
+            <div> {/* Palestrante do evento */}
               <label htmlFor="palestrante" className="block text-sm font-medium text-gray-700">Palestrante</label>
               <input name="palestrante" value={formData.palestrante} onChange={handleChange} type="text" placeholder="Palestrante" className="input input-bordered w-full" required />
+            </div>
+
+            <div> {/* Email do palestrante */}
+              <label htmlFor="email_palestrante" className="block text-sm font-medium text-gray-700">Email do Palestrante</label>
+              <input name="email_palestrante" value={formData.email_palestrante} onChange={handleChange} type="text" placeholder="Email" className="input input-bordered w-full" required />
+            </div>
+
+            <div> {/* Telefone do palestrante */}
+              <label htmlFor="telefone_palestrante" className="block text-sm font-medium text-gray-700">Telefone do Palestrante</label>
+              <IMaskInput mask="(00) 00000-0000" name="telefone_palestrante" value={formData.telefone_palestrante} placeholder="(00) 00000-0000" className="input input-bordered w-full" required onAccept={(value) => { setFormData(prevState => ({ ...prevState, telefone_palestrante: value as string, })); }} />
             </div>
 
             <div> {/* Local do evento */}
@@ -98,7 +115,7 @@ function FormEvent() {
 
             <div> {/* Horário de início */}
               <label htmlFor="horario_inicio" className="block text-sm font-medium text-gray-700">Horário</label>
-              <input name="horario_inicio" value={formData.horario_inicio} onChange={handleChange} placeholder="00:00" type="text" className="input input-bordered w-full" required />
+              <input name="horario_inicio" value={formData.horario_inicio} onChange={handleChange} placeholder="00:00" type="time" className="input input-bordered w-full" required />
             </div>
 
             <div> {/* Horário de término (Preciso mudar o tipo do input) */}
