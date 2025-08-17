@@ -19,49 +19,60 @@ class SorteioController extends Controller
     }])->get();
 
     $resultado = []; //vai servir pro log dps
+    $horariosOcupados = []; //vai servir pra verificação dos horários (pro aluno não ser sorteado pra 2 num mesmo tempo)
 
     foreach ($eventos as $evento) { //nesse foreach vai ir de evento em evento
-      $inscritos = $evento->users;
-      $vagasDisponiveis = $evento->vagas_max - $evento->users()->wherePivot('status', 'selecionado')->count(); //essa variável vai ver quantas são as vagas disponíveis desse evento 
+      $inscritos = $evento->users()->wherePivot('status', 'inscrito')->get()->shuffle();
+      $vagasOcupadas = $evento->users()->wherePivot('status', 'selecionado')->count();
+      $vagasDisponiveis = $evento->vagas_max - $vagasOcupadas;
 
       if ($vagasDisponiveis <= 0 || $inscritos->isEmpty()) { //verifica se o evento ainda tem vagas disponíveis ou se não tem ngm inscrito
-
-        if (!$inscritos->isEmpty()) { //verifica se o evento está apenas com as vagas totalmente preenchidas e não sem alunos inscritos
-          foreach ($inscritos as $inscrito) { //vai transformar o status de inscrição desses usuários não chamados para "cancelado"
-            $evento->users()->updateExistingPivot($inscrito->id, ['status' => 'cancelado']);
-            AuditLogger::log($inscrito->user, 'foi cancelado', $evento); //manda um log falando qm foi cancelado
-          }
-        }
-        
-
-        $resultado[] = [
+        $resultadoFinal[] = [
           'evento' => $evento->tema,
-          'mensagem' => 'Sem vagas disponíveis ou sem inscritos.'
+          'mensagem' => $vagasDisponiveis <= 0 ? 'Sem vagas disponíveis.' : 'Sem inscritos para sortear.',
+          'selecionados' => []
         ];
-        continue;
+        continue; // Pula para o próximo evento no loop
       }
 
+      $selecionadosNesteEvento = collect(); // Cria uma coleção vazia para os selecionados deste evento.
 
-      $selecionados = $inscritos->shuffle()->take($vagasDisponiveis); //sorteia os usuários aleatoriamente e pega apenas até o número de vagas
+      foreach ($inscritos as $inscrito) {
+        // Verifica se o aluno já foi selecionado para outro evento no mesmo dia e horário
+        if ($selecionadosNesteEvento->count() >= $vagasDisponiveis) {
+          break;
+        }
 
-      foreach ($selecionados as $user) {
-        $evento->users()->updateExistingPivot($user->id, ['status' => 'selecionado']); //vai efetivar esses usuários selecionados
-        AuditLogger::log($user, 'foi selecionado', $evento); //manda um log falando qm foi selecionado
+        $horarioJaOcupado = isset($horariosOcupados[$inscrito->id][$evento->data]) &&
+          in_array($evento->horario_inicio, $horariosOcupados[$inscrito->id][$evento->data]);
+        if (!$horarioJaOcupado) {
+          // Adiciona o usuário à lista de selecionados deste evento.
+          $selecionadosNesteEvento->push($inscrito);
+
+          // Marca o horário como ocupado para este usuário.
+          $horariosOcupados[$inscrito->id][$evento->data][] = $evento->horario_inicio;
+        }
       }
 
-      $resultado[] = [
+      foreach ($selecionadosNesteEvento as $selecionado) {
+        $evento->users()->updateExistingPivot($selecionado->id, ['status' => 'selecionado']);
+        // AuditLogger::log($selecionado, 'foi selecionado', $evento);
+      }
+
+      $resultadoFinal[] = [
         'evento' => $evento->tema,
-        'selecionados' => $selecionados->pluck('name') //vai armazenar qm ficou selecionado em qual palestra
+        'selecionados' => $selecionadosNesteEvento->pluck('name')
       ];
 
-      $naoSelecionados = $inscritos->diff($selecionados); //vai pegar os usuáiros q não foram chamados pro evento
+      $naoSelecionados = $inscritos->diff($selecionadosNesteEvento);
 
-
-      foreach ($naoSelecionados as $user) { //vai transformar o status de inscrição desse usuários não chamados para "cancelado"
-        $evento->users()->updateExistingPivot($user->id, ['status' => 'cancelado']);
-        AuditLogger::log($user, 'foi cancelado', $evento); //manda um log falando qm foi cancelado
+      foreach ($naoSelecionados as $naoSelecionado) { //vai transformar o status de inscrição desse usuários não chamados para "cancelado"
+        $evento->users()->updateExistingPivot($naoSelecionado->id, ['status' => 'cancelado']);
+        AuditLogger::log($naoSelecionado, 'foi cancelado', $evento); //manda um log falando qm foi cancelado
       }
     }
+
+
 
     return response()->json([ //no final de tudo vai responder com esse json 
       'mensagem' => 'Sorteio finalizado.',
@@ -69,9 +80,8 @@ class SorteioController extends Controller
     ]);
   }
 
-
   //função q vai dar um clear no sorteio inteiro
-  public function clearSorteio()
+  public function clearSorteio(): JsonResponse
   {
     $eventos = Event::with(['users' => function ($query) { //pega todos os eventos q tem usuários selecionados e cancelados
       $query->wherePivotIn('status', ['selecionado', 'cancelado']);
