@@ -183,13 +183,13 @@ function EventsPage() {
 
   // PAGINA AKI AUAUAUAUUAUAUAUAU
   return (
-    <div className="main font-sans w-full p-4"> { /* Parte princicpal da página */}
-      <h1 className="text-5xl font-bold text-center text-emerald-800 py-3"> { /* Título da página */}
+    <div className="main font-sans w-full min-h-screen p-4 sm:p-6 lg:p-8"> { /* Parte princicpal da página */}
+      <h1 className="text-5xl md:text-5xl font-bold text-center text-emerald-800 py-3"> { /* Título da página */}
         Programação da Expocanp
       </h1>
 
       {isAdmin ? null : (
-        <div className="flex justify-center gap-2 my-6"> { /* Botões de filtro de eventos inscrições e tal */}
+        <div className="flex flex-wrap justify-center gap-2 my-6 w-full"> { /* Botões de filtro de eventos inscrições e tal */}
           <button onClick={() => setFilterMode('todos')} className={`px-4 py-2 rounded-lg font-semibold transition-colors shadow-lg ${filterMode === 'todos' ? 'bg-emerald-600 text-white' : 'bg-white text-emerald-700 hover:bg-emerald-100'}`}>
             Todos
           </button>
@@ -202,7 +202,7 @@ function EventsPage() {
         </div>
       )}
 
-      <div className="flex justify-center gap-2 my-6"> { /* Botões de seleção de dia */}
+      <div className="flex flex-wrap justify-center gap-2 my-6 w-full"> { /* Botões de seleção de dia */}
         {diasDaSemana.map((dia) => (
           <button key={dia} onClick={() => setSelectedDay(dia)} className={`px-4 py-2 rounded-lg font-semibold transition-colors ${selectedDay === dia ? "bg-emerald-600 text-white shadow-lg" : "bg-white text-emerald-700 hover:bg-emerald-100"}`}>
             {dia}-feira
@@ -236,10 +236,10 @@ function EventsPage() {
                     <div>
                       {isSubscribed ? (
                         <div className="flex flex-col sm:flex-row gap-2">
-                          <button disabled className="w-full py-2 rounded-lg text-white font-bold bg-gray-400 cursor-not-allowed">
+                          <button disabled className="w-full sm:w-auto flex-grow py-2 rounded-lg text-white font-bold bg-gray-400 cursor-not-allowed">
                             Pendente
                           </button>
-                          <button onClick={() => handleUnsubscribe(event.id)} className="w-full py-2 rounded-lg text-white font-bold bg-emerald-500 hover:bg-emerald-600 transition-all">
+                          <button onClick={() => handleUnsubscribe(event.id)} className="w-full sm:w-auto flex-grow py-2 rounded-lg text-white font-bold bg-emerald-500 hover:bg-emerald-600 transition-all">
                             Sair do sorteio
                           </button>
                         </div>
@@ -261,13 +261,18 @@ function EventsPage() {
 
       {/* Botão de adicionar evento e de fazer o sorteio geral, só é mostrado para admins */}
       {isAdmin && (
-        <div className="flex justify-center mt-8">
-          <Link to="/events/add" className="btn btn-lg btn-success text-white">
-            Adicionar Novo Evento
-          </Link>
-          <button onClick={handleSorteio} className="btn btn-sm btn-warning text-white">Sortear</button>
-          <button onClick={handleSorteioClear} className="btn btn-sm btn-warning text-white">Limpar Sorteio</button>
-        </div>
+        <>
+          <div className="flex justify-center mt-8">
+            <Link to="/events/add" className="btn btn-lg btn-success text-white">
+              Adicionar Novo Evento
+            </Link>
+          </div>
+
+          <div className="flex flex-row justify-center gap-4 my-14">
+            <button onClick={handleSorteio} className="btn btn-sm btn-warning text-white">Sortear</button>
+            <button onClick={handleSorteioClear} className="btn btn-sm btn-warning text-white">Limpar Sorteio</button>
+          </div>
+        </>
       )}
     </div>
   );
