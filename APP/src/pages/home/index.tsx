@@ -53,14 +53,48 @@ function HomePage() {
 
   // Site rsrsrs
   return (
-    <div className="main font-sans flex flex-col items-center justify-center">
-      <h1 className="text-5xl font-bold text-center text-emerald-800 py-3">
+    <div className="main font-sans flex flex-col items-center justify-start min-h-screen p-4 sm:p-6 lg:p-0">
+      <h1 className="text-4xl md:text-5xl font-bold text-center text-emerald-800 py-3 lg:py-6">
         Bem-vindo(a) ao SIGME,<br />{user?.name}!
       </h1>
 
+      {/*Versão pra mobile */}
       {isAdmin ? (
-        <>
-          <div className="gap-6 flex flex-row justify-between w-full">
+        <div className="w-full mt-6">
+          <div className="flex flex-col items-center gap-4 lg:hidden">
+            <div className="flex flex-col glass rounded-[20px] p-6 bg-emerald-50 w-full max-w-md">
+              <h2 className="text-2xl text-emerald-600 py-3 text-center">
+                Atividades
+              </h2>
+              <p>Local para adicionar/mudar todas as atividades registradas.</p>
+              <p className="linkpage font-bold text-zinc-950 btn-link">
+                <a href="/events">Clique aqui para acessar!</a>
+              </p>
+            </div>
+
+            <div className="flex flex-col glass rounded-[20px] p-6 bg-emerald-50 w-full max-w-md">
+              <h2 className="text-2xl text-emerald-600 py-3 text-center">
+                Inscrições
+              </h2>
+              <p>Local para gerenciar as inscrições dos alunos.</p>
+              <p className="linkpage font-bold text-zinc-950 btn-link mt-2">
+                <a href="#">Clique para acessar as inscrições!</a>
+              </p>
+            </div>
+
+            <div className="flex flex-col glass rounded-[20px] p-6 bg-emerald-50 w-full max-w-md">
+              <h2 className="text-2xl text-emerald-600 py-3 text-center">
+                Próximas Atividades
+              </h2>
+              <p>Veja aqui quais serão as próximas atividades!</p>
+              <p className="linkpage font-bold text-zinc-950 btn-link mt-2">
+                <a href="#">Ainda não há atividades no sistema.</a>
+              </p>
+            </div>
+          </div>
+
+          {/*Versão para desktop*/}
+          <div className="hidden lg:flex gap-6 flex-row justify-between w-full">
             <div className="flex flex-col pl-28 gap-6">
               <div className="flex flex-col glass rounded-[20px] min-h-[170px] mb-30 px-6 bg-emerald-50">
                 <h2 className="text-[36px] text-emerald-600 py-3 text-center">
@@ -71,7 +105,6 @@ function HomePage() {
                   <a href="/events">Clique aqui para acessar!</a>
                 </p>
               </div>
-
               <div className="flex flex-col glass rounded-[20px] min-h-[170px] px-6 bg-emerald-50">
                 <h2 className="text-[36px] text-emerald-600 py-3 text-center">
                   Inscrições
@@ -94,10 +127,71 @@ function HomePage() {
               </div>
             </div>
           </div>
-        </>
+        </div>
       ) : (
-        <>
-          <div className="gap-6 flex flex-row justify-between w-full">
+        // Versão pra mobile
+        <div className="w-full mt-6">
+          <div className="flex flex-col items-center gap-4 lg:hidden">
+            <div className="flex flex-col glass rounded-[20px] p-6 bg-emerald-50 w-full max-w-md">
+              <h2 className="text-2xl text-emerald-600 py-3 text-center">
+                Sorteios Inscritos
+              </h2>
+              {TotalEventosInscritos > 0 ? (
+                <>
+                  <p>Você está concorrendo a <span className="font-bold">{TotalEventosInscritos}</span> sorteios!</p>
+                  <p className="linkpage font-bold text-zinc-950 btn-link mt-2">
+                    <a href="/events?filter=pendentes">Veja aqui quais são!</a>
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p>Você ainda não está concorrendo a nenhum sorteio de atividade.</p>
+                  <p className="linkpage font-bold text-zinc-950 btn-link mt-2">
+                    <a href="/events">Escolha aqui quais serão!</a>
+                  </p>
+                </>
+              )}
+            </div>
+
+            <div className="flex flex-col glass rounded-[20px] p-6 bg-emerald-50 w-full max-w-md">
+              <h2 className="text-2xl text-emerald-600 py-3 text-center">
+                Atividades Selecionadas
+              </h2>
+              <p>Você está selecionado em <span className="font-bold">{TotalEventosSelecionados}</span> atividades!</p>
+              <p className="linkpage font-bold text-zinc-950 btn-link mt-2">
+                <a href="/events?filter=selecionados">Clique para ver as atividades que participará!</a>
+              </p>
+            </div>
+
+            <div className="flex flex-col glass rounded-[20px] p-6 bg-emerald-50 w-full max-w-md">
+              <h2 className="text-2xl text-emerald-600 py-3 text-center">
+                Próximas Atividades
+              </h2>
+
+              {proximosEventosSelecionados.length > 0 ? (
+                <ul className="w-full space-y-2 flex-grow">
+                  {proximosEventosSelecionados.map(evento => (
+                    <li key={evento.id} className="text-center glass bg-emerald-50 p-3 rounded-lg shadow-sm">
+                      <div className="font-bold text-emerald-800">{evento.tema}</div>
+                      <div className="text-sm font-bold text-gray-950">{evento.data} às {evento.horario_inicio}</div>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <div className="flex-grow flex items-center justify-center">
+                  <p className="text-gray-600 text-center">Você não tem atividades agendadas.</p>
+                </div>
+              )}
+
+              <p className="linkpage font-bold text-zinc-950 btn-link mt-auto py-4 text-center">
+                <Link to="/events">Ver todas as atividades</Link>
+              </p>
+            </div>
+          </div>
+
+
+          {/*Versão pra desktop */}
+          <div className="hidden lg:flex gap-6 flex-row justify-between w-full">
             <div className="flex flex-col pl-28 gap-6">
               <div className="flex flex-col glass rounded-[20px] min-h-[170px] mb-30 px-6 bg-emerald-50">
                 <h2 className="text-[36px] text-emerald-600 py-3 text-center">
@@ -119,7 +213,6 @@ function HomePage() {
                   </>
                 )}
               </div>
-
               <div className="flex flex-col glass rounded-[20px] min-h-[170px] px-6 bg-emerald-50">
                 <h2 className="text-[36px] text-emerald-600 py-3 text-center">
                   Atividades Selecionadas
@@ -130,13 +223,11 @@ function HomePage() {
                 </p>
               </div>
             </div>
-
             <div className="flex pr-28 gap-6">
               <div className="flex flex-col glass rounded-[20px] min-h-[170px] px-6 bg-emerald-50">
                 <h2 className="text-[36px] text-emerald-600 py-3 text-center">
                   Próximas Atividades
                 </h2>
-
                 {proximosEventosSelecionados.length > 0 ? (
                   <ul className="w-full space-y-2 flex-grow">
                     {proximosEventosSelecionados.map(evento => (
@@ -151,14 +242,13 @@ function HomePage() {
                     <p className="text-gray-600 text-center">Você não tem atividades agendadas.</p>
                   </div>
                 )}
-
                 <p className="linkpage font-bold text-zinc-950 btn-link mt-auto py-4 text-center">
                   <Link to="/events">Ver todas as atividades</Link>
                 </p>
               </div>
             </div>
           </div>
-        </>
+        </div>
       )
       }
     </div >
