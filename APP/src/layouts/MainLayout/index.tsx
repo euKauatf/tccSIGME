@@ -13,6 +13,16 @@ function MainLayout() {
   const [isSidebarOpen, setSidebarOpen] = useState(false); // Pra ver se a sidebar está aberta ou fechada
   const navigate = useNavigate(); // Pra poder redirecionar o usuário
   const [user, setUser] = useState<User | null>(null); // Pra pegar o usuário (ê ê)
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+
+  // Mudar o tema
+  const setLightTheme = () => setTheme("light");
+  const setDarkTheme = () => setTheme("dark");
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
 
   // Pegar o usuário e ver se ele está logado ou não
   useEffect(() => {
@@ -41,19 +51,24 @@ function MainLayout() {
   // Abrir/Fechar a sidebar
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
+    setIsSidebarVisible(!isSidebarVisible);
   };
 
   // Renderizar o layout (po esse aqui vo explicar nao mo preguiça vocês que explodam aí)
   return (
-    <div className="app-container">
-      <Sidebar isOpen={isSidebarOpen} user={user} onLogout={handleLogout} />
+    <div className="app-container bg-base-200 min-h-screen">
+      <Sidebar isOpen={isSidebarOpen} user={user} onLogout={handleLogout} currentTheme={theme} setLightTheme={setLightTheme} setDarkTheme={setDarkTheme} />
       <main className={`main-content ${isSidebarOpen ? "shifted" : ""}`}>
         <Navbar
           onHamburgerClick={toggleSidebar}
           isSidebarOpen={isSidebarOpen}
         />
         <Outlet context={{ user }} />
-      </main> 
+      </main>
+
+      {isSidebarVisible && window.innerWidth <= 768 && (
+        <div className="backdrop" onClick={toggleSidebar}></div>
+      )}
     </div>
   );
 }

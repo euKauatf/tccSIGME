@@ -21,7 +21,7 @@ function AuditLogPage() {
       })
       .finally(() => setIsLoading(false));
   };
-  
+
   // Roda a busca de logs quando o componente é montado
   useEffect(() => {
     fetchLogs();
@@ -57,14 +57,14 @@ function AuditLogPage() {
   if (isLoading) {
     return <p className="text-center p-8 text-xl">Carregando logs de auditoria...</p>;
   }
-  
+
   if (error) {
     return <p className="text-center p-8 text-xl text-red-500">{error}</p>;
   }
 
   return (
     <div className="main font-sans w-full p-4 flex flex-col items-center">
-      <div className="w-full max-w-5xl flex justify-between items-center px-4">
+      <div className="w-full divp max-w-5xl flex justify-between items-center px-4">
         <h1 className="text-4xl md:text-5xl font-bold text-center text-emerald-800 py-3">
           Log de Auditoria
         </h1>
@@ -74,11 +74,11 @@ function AuditLogPage() {
       </div>
 
       <div className="w-full max-w-5xl mt-6">
-        <div className="bg-white rounded-lg shadow-lg p-4 md:p-6">
+        <div className="bg-white divp rounded-lg shadow-lg p-4 md:p-6">
           {logs.length > 0 ? (
             <ul className="space-y-3">
               {logs.map((log) => (
-                <li key={log.id} className="p-3 bg-gray-50 rounded-md border border-gray-200">
+                <li key={log.id} className="p-3 bg-gray-50 divp rounded-md border border-gray-200">
                   <p>
                     <span className="font-bold text-emerald-600">{log.user?.name || 'Usuário Deletado'}</span>
                     <span className="text-gray-700"> {formatAction(log.action)} </span>

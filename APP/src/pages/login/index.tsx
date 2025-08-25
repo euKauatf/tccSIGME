@@ -39,7 +39,7 @@ function LoginPage() {
   return (
     <div className="flex flex-col h-screen font-san">
       <div className="flex flex-grow items-center justify-center">
-        <div className="w-[387px] h-[446px] bg-white rounded-[20px] glass px-6 py-4 flex flex-col items-center justify-between">
+        <div className="w-[387px] h-[446px] bg-white rounded-[20px] divp px-6 py-4 flex flex-col items-center justify-between">
           <div className="text-center">
             <h1 className="text-4xl font-bold text-emerald-800">SIGME</h1>
             <h2 className="text-2xl text-emerald-600 leading-tight mt-1">
