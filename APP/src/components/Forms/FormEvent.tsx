@@ -1,8 +1,8 @@
 // !!! Formulário para criar um evento novo !!!
 
 // IMPORTAÇÕES
-import { useState } from "react";
-import axios from "axios";
+import { useState, useEffect } from "react";
+import axios, { isAxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 import { IMaskInput } from 'react-imask';
 
@@ -20,7 +20,18 @@ function FormEvent() {
     descricao: "",
   });
 
+  const [errorMessage, setErrorMessage] = useState<string | null>(null); // Para armazenar mensagens de erro
+
   const navigate = useNavigate(); // Importa o useNavigate para redirecionar para a página de eventos
+
+  useEffect(() => { // Se existir uma mensagem de erro, role a página para o topo
+    if (errorMessage) {
+      window.scrollTo({
+        top: 0, // Rola para a coordenada 0 (topo)
+        behavior: 'smooth' // Faz a rolagem ser de levs
+      });
+    }
+  }, [errorMessage]);
 
   // Pega os dados do formulário e salva no estado
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -40,20 +51,36 @@ function FormEvent() {
       vagas_max: Number(formData.vagas_max),
     };
 
-    if (eventData.horario_inicio > eventData.horario_termino) {
-      alert("O horário de inicio deve ser menor que o horário de termino.");
+    if (eventData.horario_inicio >= eventData.horario_termino) { // Verifica se o horário de início é maior ou igual ao horário de término
+      setErrorMessage("O horário de início deve ser anterior ao horário de término.");
+      return; // Para a execução para não enviar dados inválidos
     }
 
     try {
       await axios.post("http://127.0.0.1:8000/api/event", eventData);
-      alert("Evento criado com sucesso!");
-      navigate("/events");
+      navigate("/events", {
+        state: { message: "Evento criado com sucesso!" }
+      });
     } catch (error) {
-      if (error instanceof Error) {
-        console.error('Ocorreu um erro:', error.message);
-      } else {
-        console.error('Um erro inesperado ocorreu:', error);
+      // Lógica de tratamento de erro aprimorada
+      let message = 'Ocorreu um erro inesperado. Tente novamente mais tarde.';
+
+      if (isAxiosError(error) && error.response) {
+        const responseData = error.response.data;
+
+        // 1. Prioridade: Trata erros de validação do Laravel (campos específicos)
+        if (responseData.errors) {
+          // Pega a primeira mensagem de erro do primeiro campo que falhou
+          const firstErrorKey = Object.keys(responseData.errors)[0];
+          message = responseData.errors[firstErrorKey][0];
+        }
+        // 2. Se não for erro de validação, trata a mensagem customizada (conflito, etc.)
+        else if (responseData.message) {
+          message = responseData.message;
+        }
       }
+
+      setErrorMessage(message);
     }
   };
 
@@ -61,9 +88,18 @@ function FormEvent() {
   return (
     <div className="w-full flex items-center justify-center p-4"> {/* Div principal que centraliza o formulário */}
       <div className="w-full max-w-2xl"> {/* Div que contém o formulário */}
-        {/* Cardzinho bonitinho pei pei pei aqui abaixo */}
-        <div className="flex flex-col glass rounded-[20px] p-6 sm:p-8 bg-emerald-50 shadow-lg min-h-[170px]">
 
+        {errorMessage && (
+          <div role="alert" className="alert alert-error mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>{errorMessage}</span>
+          </div>
+        )}
+
+        {/* Cardzinho bonitinho pei pei pei aqui abaixo */}
+        <div className="flex flex-col divp rounded-[20px] p-6 sm:p-8 bg-emerald-50 shadow-lg min-h-[170px]">
           <h1 className="text-3xl font-bold text-center text-emerald-600 py-3">
             Criar Evento
           </h1>

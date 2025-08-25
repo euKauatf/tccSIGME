@@ -90,7 +90,7 @@ function EditEventPage() {
   return (
     <div className="w-full flex items-center justify-center p-4"> {/* div principal */}
       <div className="w-full max-w-2xl"> {/* div interna */}
-        <div className="flex flex-col glass rounded-[20px] p-6 sm:p-8 bg-emerald-50 shadow-lg min-h-[170px]"> {/* div bonitinha */}
+        <div className="flex flex-col divp rounded-[20px] p-6 sm:p-8 bg-emerald-50 shadow-lg min-h-[170px]"> {/* div bonitinha */}
           <h1 className="text-3xl font-bold text-center text-emerald-600 py-3"> {/* título */}
             Editar Evento
           </h1>

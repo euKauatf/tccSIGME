@@ -15,44 +15,41 @@ class EventController extends Controller
 
   public function store(Request $request)
   {
-    $validatedData = $request->validate([
-      'tema' => [ // Virou uma regra personalizada
-        'required',
-        'string',
-        'max:255',
-        Rule::unique('events')->where(function ($query) use ($request) { // Funciona: retorna true ou false de acordo com a regra personalizada
-          return $query->where('data', $request->data)
-            ->where('horario_inicio', $request->horario_inicio);
-        }),
-      ],
-      'palestrante' => [
-        'required',
-        'string',
-        'max:255',
-        Rule::unique('events')->where(function ($query) use ($request) {
-          return $query->where('data', $request->data)
-            ->where('horario_inicio', $request->horario_inicio);
-        }),
-      ],
-      'email_palestrante' => 'required|string|max:255',
-      'telefone_palestrante' => 'required|string|max:20',
-      'vagas_max' => 'required|numeric|gt:4',
-      'data' => 'required|string|in:Segunda,Terça,Quarta,Quinta,Sexta',
-      'horario_inicio' => 'required|date_format:H:i',
-      'horario_termino' => 'required|date_format:H:i|after_or_equal:horario_inicio',
-      'local' => [
-        'required',
-        'string',
-        Rule::unique('events')->where(function ($query) use ($request) {
-          return $query->where('data', $request->data)
-            ->where('horario_inicio', $request->horario_inicio);
-        }),
-      ],
-      'descricao' => 'required|string',
-    ]);
-    //$validatedData['horario_termino'] = $validatedData['horario_inicio'];
 
-    $event = Event::create($validatedData);
+    $uniqueRule = Rule::unique('events')->where(function ($query) use ($request) {
+      return $query->where('data', $request->data)
+        ->where(function ($q) use ($request) {
+          $q->where('horario_inicio', '<', $request->horario_termino)
+            ->where('horario_termino', '>', $request->horario_inicio);
+        });
+    });
+
+    $request->validate(
+      // Regras de validação
+      [
+        'tema' => 'required|string|max:255',
+        'vagas_max' => 'required|numeric|gt:4',
+        'data' => 'required|string|in:Segunda,Terça,Quarta,Quinta,Sexta',
+        'horario_inicio' => 'required|date_format:H:i',
+        'horario_termino' => 'required|date_format:H:i|after:horario_inicio',
+        'descricao' => 'required|string',
+        'email_palestrante' => 'required|email|max:255',
+        'telefone_palestrante' => 'required|string|max:20',
+
+        // Regras que podem ter conflito
+        'palestrante' => ['required', 'string', 'max:255', $uniqueRule],
+        'local' => ['required', 'string', $uniqueRule],
+      ],
+      // Mensagens customizadas
+      [
+        'palestrante.unique' => 'Este palestrante já está ocupado em um evento no momento.',
+        'local.unique' => 'Este local já está reservado em um evento no momento.',
+        'horario_termino.after' => 'O horário de término deve ser após o horário de início.',
+        'vagas_max.gt' => 'O número de vagas deve ser de, no mínimo, 5.',
+      ]
+    );
+
+    $event = Event::create($request->all());
 
     return response()->json($event, 201);
   }

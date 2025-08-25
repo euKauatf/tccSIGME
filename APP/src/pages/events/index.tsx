@@ -5,6 +5,7 @@ import { useState, useEffect, useMemo } from "react"; // Importa o useState, use
 import { getEvents, getUser, deleteEvent, subscribeToEvent, unsubscribeFromEvent, getSorteio, getSorteioClear } from "../../api/apiClient"; // Importa as funções do apiClient
 import type { Event, User } from "../../types"; // Importa os tipos de eventos e usuários
 import "./style.css"; // Estilo 😎
+import { useLocation } from "react-router-dom"; // Importa o useLocation pra poder pegar o flash do formulário
 import { Link, useNavigate, useSearchParams } from "react-router-dom"; // Link, navegação e função pra pegar o parametro passado pelo link
 import { useUser } from "../../hooks/useUser"; // Pra usar os dados do usuário
 
@@ -12,6 +13,8 @@ function EventsPage() {
   const { isAdmin } = useUser(); // Pega o usuário logado e verifica se é admin
 
   const [events, setEvents] = useState<Event[]>([]); // events é um estado que armazena os eventos
+  const [flashMessage, setFlashMessage] = useState<string | null>(null);
+  const location = useLocation();
   const [user, setUser] = useState<User | null>(null); // user é um estado que armazena o usuário logado
 
   const [selectedDay, setSelectedDay] = useState("Segunda"); // selectedDay é um estado que armazena o dia selecionado
@@ -36,6 +39,12 @@ function EventsPage() {
 
   // useEffect é usado para executar uma função quando o componente é montado
   useEffect(() => {
+    if (location.state?.message) {
+      setFlashMessage(location.state.message);
+      // Limpa o state da localização para que a mensagem não reapareça se o usuário atualizar a página
+      window.history.replaceState({}, document.title);
+    }
+
     const fetchData = async () => {
       setIsLoading(true);
       try {
@@ -54,7 +63,7 @@ function EventsPage() {
     };
 
     fetchData();
-  }, []);
+  }, [location]);
 
   const handleModify = (eventId: number) => { // handleModify é pra editar
     navigate(`/events/edit/${eventId}`);
@@ -184,19 +193,27 @@ function EventsPage() {
   // PAGINA AKI AUAUAUAUUAUAUAUAU
   return (
     <div className="main font-sans w-full min-h-screen p-4 sm:p-6 lg:p-8"> { /* Parte princicpal da página */}
+
+      {flashMessage && (
+        <div role="alert" className="alert alert-success mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          <span>{flashMessage}</span>
+        </div>
+      )}
+
       <h1 className="text-5xl md:text-5xl font-bold text-center text-emerald-800 py-3"> { /* Título da página */}
         Programação da Expocanp
       </h1>
 
       {isAdmin ? null : (
         <div className="flex flex-wrap justify-center gap-2 my-6 w-full"> { /* Botões de filtro de eventos inscrições e tal */}
-          <button onClick={() => setFilterMode('todos')} className={`px-4 py-2 rounded-lg font-semibold transition-colors shadow-lg ${filterMode === 'todos' ? 'bg-emerald-600 text-white' : 'bg-white text-emerald-700 hover:bg-emerald-100'}`}>
+          <button onClick={() => setFilterMode('todos')} className={`px-4 py-2 rounded-lg divpEB font-semibold transition-colors shadow-lg ${filterMode === 'todos' ? 'bg-emerald-600 text-white' : 'bg-white text-emerald-700 hover:bg-emerald-100'}`}>
             Todos
           </button>
-          <button onClick={() => setFilterMode('pendentes')} className={`px-4 py-2 rounded-lg font-semibold transition-colors shadow-lg ${filterMode === 'pendentes' ? 'bg-emerald-600 text-white' : 'bg-white text-emerald-700 hover:bg-emerald-100'}`}>
+          <button onClick={() => setFilterMode('pendentes')} className={`px-4 py-2 rounded-lg divpEB font-semibold transition-colors shadow-lg ${filterMode === 'pendentes' ? 'bg-emerald-600 text-white' : 'bg-white text-emerald-700 hover:bg-emerald-100'}`}>
             Pendentes
           </button>
-          <button onClick={() => setFilterMode('selecionados')} className={`px-4 py-2 rounded-lg font-semibold transition-colors shadow-lg ${filterMode === 'selecionados' ? 'bg-emerald-600 text-white' : 'bg-white text-emerald-700 hover:bg-emerald-100'}`}>
+          <button onClick={() => setFilterMode('selecionados')} className={`px-4 py-2 rounded-lg divpEB font-semibold transition-colors shadow-lg ${filterMode === 'selecionados' ? 'bg-emerald-600 text-white' : 'bg-white text-emerald-700 hover:bg-emerald-100'}`}>
             Selecionados
           </button>
         </div>
@@ -204,7 +221,7 @@ function EventsPage() {
 
       <div className="flex flex-wrap justify-center gap-2 my-6 w-full"> { /* Botões de seleção de dia */}
         {diasDaSemana.map((dia) => (
-          <button key={dia} onClick={() => setSelectedDay(dia)} className={`px-4 py-2 rounded-lg font-semibold transition-colors ${selectedDay === dia ? "bg-emerald-600 text-white shadow-lg" : "bg-white text-emerald-700 hover:bg-emerald-100"}`}>
+          <button key={dia} onClick={() => setSelectedDay(dia)} className={`px-4 py-2 divpEB rounded-lg font-semibold transition-colors ${selectedDay === dia ? "bg-emerald-600 text-white shadow-lg" : "bg-white text-emerald-700 hover:bg-emerald-100"}`}>
             {dia}-feira
           </button>
         ))}
@@ -217,10 +234,10 @@ function EventsPage() {
             const isSubscribed = userSubscribedEventIds.has(event.id);
 
             return (
-              <div key={event.id} className="bg-emerald-50 rounded-2xl shadow-lg p-6 flex flex-col justify-between">
+              <div key={event.id} className="bg-emerald-50 divpE rounded-2xl shadow-lg p-6 flex flex-col justify-between">
 
                 <div>
-                  <h3 className="text-2xl font-bold text-emerald-700">{event.tema}</h3>
+                  <h2 className="text-2xl font-bold text-emerald-700">{event.tema}</h2>
                   <p className="font-semibold text-gray-600 mt-2">{event.horario_inicio}</p>
                   <p className="font-semibold text-gray-600">Local: {event.local}</p>
                   <p className="text-gray-700 mt-4">{event.descricao}</p>

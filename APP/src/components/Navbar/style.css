@@ -5,3 +5,7 @@
 .navbarStyle {
   height: 40px;
 }
+
+html[data-theme="dark"] .navbarStyle {
+  background-color: #0a352f;
+}

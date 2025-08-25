@@ -1,7 +1,7 @@
 // Em: src/pages/StudentsPage/index.jsx
 
 import { useState, useEffect } from "react";
-import type { User } from "../../types"; 
+import type { User } from "../../types";
 import { getAlunos } from "../../api/apiClient";
 import "./style.css";
 
@@ -54,7 +54,7 @@ function StudentsPage() {
       </h1>
 
       <div className="w-full max-w-4xl mt-6">
-        <div className="flex flex-col glass rounded-[20px] p-6 bg-emerald-50 shadow-lg">
+        <div className="flex flex-col divp rounded-[20px] p-6 bg-emerald-50 shadow-lg">
           <h2 className="text-3xl md:text-4xl text-emerald-600 py-3 text-center">
             Lista de Alunos
           </h2>
@@ -62,7 +62,7 @@ function StudentsPage() {
           {students.length > 0 ? (
             <ul className="flex flex-col gap-y-2 pb-6">
               {students.map((student) => (
-                <li key={student.id} className="bg-white rounded-lg shadow-md transition-shadow hover:shadow-lg">
+                <li key={student.id} className="bg-white divp rounded-lg shadow-md transition-shadow hover:shadow-lg">
                   {/* --- Informações principais do aluno --- */}
                   <div className="flex flex-col sm:flex-row items-center justify-between p-4">
                     <div>
@@ -75,7 +75,7 @@ function StudentsPage() {
                       </p>
                     </div>
                     <div className="mt-4 sm:mt-0">
-                      <button 
+                      <button
                         onClick={() => handleToggleEvents(student.id)}
                         className="btn btn-sm bg-emerald-500 hover:bg-emerald-600 text-white"
                       >

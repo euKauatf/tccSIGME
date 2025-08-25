@@ -8,7 +8,7 @@ function ProfilePage() {
   return (
     <div className="w-full h-full flex items-center justify-center">
       <div className="w-full max-w-2xl">
-        <div className="flex flex-col glass rounded-[20px] mt-6 p-6 sm:p-8 bg-emerald-50 shadow-lg">
+        <div className="flex flex-col divp rounded-[20px] mt-6 p-6 sm:p-8 bg-emerald-50 shadow-lg">
           <div className="flex flex-col md:flex-row items-center gap-6">
             <div className="flex-shrink-0">
               <img src="/images/icon.svg" alt="Avatar" className="w-32 h-32 md:w-40 md:h-40 rounded-full ring-4 ring-emerald-600 object-cover" />

@@ -11,13 +11,16 @@ interface SidebarProps {
   isOpen: boolean;
   user: User | null;
   onLogout: () => void;
+  currentTheme: string;
+  setLightTheme: () => void;
+  setDarkTheme: () => void;
 }
 
 // Classes dos links (Pra poder mudar a cor do link quando está ativo)
 const linkClasses = "flex items-center gap-x-4 p-3 rounded-lg text-emerald-200 transition-all duration-200 ease-in-out hover:bg-emerald-700 hover:text-white hover:pl-4";
 const activeLinkClasses = "bg-emerald-900/50 text-white font-semibold shadow-inner";
 
-function Sidebar({ isOpen, user, onLogout }: SidebarProps) {
+function Sidebar({ isOpen, user, onLogout, currentTheme, setLightTheme, setDarkTheme }: SidebarProps) {
   // Componente que renderiza o sidebar
   return (
     <aside className={`sidebar bg-emerald-800 text-white w-64 p-5 flex flex-col shadow-xl ${isOpen ? "open" : ""}`}> {/* Muda a corzinha do hamborgue */}
@@ -60,6 +63,26 @@ function Sidebar({ isOpen, user, onLogout }: SidebarProps) {
           <></>
         )}
       </nav>
+      <div className="p-4 flex justify-center items-center gap-4">
+        {/* Botão para Modo Claro (Sol) */}
+        <button
+          onClick={setLightTheme}
+          className={`btn btn-ghost btn-circle ${currentTheme === 'light' ? 'btn-active' : ''}`}
+          aria-label="Mudar para tema claro"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5" /><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" /></svg>
+        </button>
+
+        {/* Botão para Modo Escuro (Lua) */}
+        <button
+          onClick={setDarkTheme}
+          className={`btn btn-ghost btn-circle ${currentTheme === 'dark' ? 'btn-active' : ''}`}
+          aria-label="Mudar para tema escuro"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+      </div>
+
       {/* Butão pra sair da conta */}
       <div className="mt-auto pt-5">
         <button onClick={onLogout} className={`${linkClasses} w-full text-left`}>
