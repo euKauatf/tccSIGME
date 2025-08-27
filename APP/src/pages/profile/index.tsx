@@ -20,18 +20,21 @@ function ProfilePage() {
               <p className="mt-2 text-gray-600">
                 <strong>Email:</strong> {user?.email}
               </p>
+              {/* Mostra o tipo do perfil apenas se for admin, usando operador ternário */}
+              {isAdmin ? (
+                <p className="text-gray-600">
+                  <strong>Tipo:</strong> Administrador
+                </p>
+              ) : (
+              <>
               <p className="text-gray-600">
                 <strong>Matrícula:</strong> {user?.matricula}
               </p>
               <p className="text-gray-600">
                 <strong>CPF:</strong> {user?.cpf}
               </p>
-              {/* Mostra o tipo do perfil apenas se for admin, usando operador ternário */}
-              {isAdmin ? (
-                <p className="text-gray-600">
-                  <strong>Tipo:</strong> Administrador
-                </p>
-              ) : null}
+              </>
+              )}
             </div>
           </div>
 

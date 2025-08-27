@@ -8,6 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class AuditLogger
 {
+    /**
+     * Registra uma ação de auditoria.
+     * 
+     * @param User $user
+     * @param string $action
+     * @param Model|null $auditable
+     * @param array $details
+     * @return void
+     */
     public static function log(User $user, string $action, Model $auditable = null, array $details = [])
     {
         AuditLog::create([
