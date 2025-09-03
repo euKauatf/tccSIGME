@@ -251,14 +251,14 @@ function EventsPage() {
                   <h2 className="text-2xl font-bold text-emerald-700">{event.tema}</h2>
                   <p className="mt-2 font-semibold text-gray-600">{event.horario_inicio}</p>
                   <p className="font-semibold text-gray-600">Local: {event.local}</p>
-                  <p className="mt-4 text-gray-700 line-clamp-3">{event.descricao}</p>
+                  <p className="mt-4 text-gray-700 truncate">{event.descricao}</p>
                 </div>
 
                 <div className="mt-6">
                   {isAdmin ? (
                     <div className="flex justify-end gap-2">
-                      <button onClick={() => handleModify(event.id)} className="btn btn-sm btn-info">Modificar</button>
-                      <button onClick={() => handleDelete(event.id)} className="btn btn-sm btn-error">Excluir</button>
+                      <button onClick={(e) => { e.stopPropagation(); handleModify(event.id); }} className="btn btn-sm btn-info">Modificar</button>
+                      <button onClick={(e) => { e.stopPropagation(); handleDelete(event.id); }} className="btn btn-sm btn-error">Excluir</button>
                     </div>
                   ) : (
                     <div>
@@ -267,12 +267,12 @@ function EventsPage() {
                           <button disabled className="flex-grow w-full py-2 font-bold text-white bg-gray-400 rounded-lg cursor-not-allowed sm:w-auto">
                             Pendente
                           </button>
-                          <button onClick={() => handleUnsubscribe(event.id)} className="flex-grow w-full py-2 font-bold text-white transition-all rounded-lg sm:w-auto bg-emerald-500 hover:bg-emerald-600">
+                          <button onClick={(e) => { e.stopPropagation(); handleUnsubscribe(event.id); }} className="flex-grow w-full py-2 font-bold text-white transition-all rounded-lg sm:w-auto bg-emerald-500 hover:bg-emerald-600">
                             Sair do sorteio
                           </button>
                         </div>
                       ) : (
-                        <button onClick={() => handleSubscription(event.id)} className="w-full py-2 font-bold text-white transition-all rounded-lg bg-emerald-500 hover:bg-emerald-600">
+                        <button onClick={(e) => { e.stopPropagation(); handleSubscription(event.id); }} className="w-full py-2 font-bold text-white transition-all rounded-lg bg-emerald-500 hover:bg-emerald-600">
                           Participar
                         </button>
                       )}

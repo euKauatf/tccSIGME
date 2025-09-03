@@ -20,7 +20,7 @@ function EventModal({ event, onClose }: EventModalProps) {
         <p className="py-2"><strong>Vagas Restantes:</strong> {event.vagas_max}</p>
         <p className="py-2"><strong>Local:</strong> {event.local}</p>
         <p className="py-2"><strong>Horário:</strong> {event.horario_inicio} - {event.horario_termino}</p>
-        <p className="py-2"><strong>Descrição:</strong> {event.descricao}</p>
+        <p className="py-2 break-words"><strong>Descrição:</strong> {event.descricao}</p>
         <div className="modal-action">
           <button className="btn" onClick={onClose}>Fechar</button>
         </div>
