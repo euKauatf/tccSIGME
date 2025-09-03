@@ -56,7 +56,7 @@ function MainLayout() {
 
   // Renderizar o layout (po esse aqui vo explicar nao mo preguiça vocês que explodam aí)
   return (
-    <div className="app-container bg-base-200 min-h-screen">
+    <div className="min-h-screen app-container bg-base-200">
       <Sidebar isOpen={isSidebarOpen} user={user} onLogout={handleLogout} currentTheme={theme} setLightTheme={setLightTheme} setDarkTheme={setDarkTheme} />
       <main className={`main-content ${isSidebarOpen ? "shifted" : ""}`}>
         <Navbar

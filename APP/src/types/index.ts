@@ -24,7 +24,8 @@ export interface Event {
   horario_termino: string;
   descricao: string;
   local: string;
-  pivot?: { // A propriedade pivot é opcional
+  users_count?: number;
+  pivot?: {
     status: 'inscrito' | 'selecionado' | 'nao-selecionado';
   };
 }
