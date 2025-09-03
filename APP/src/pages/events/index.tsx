@@ -9,6 +9,8 @@ import { useLocation } from "react-router-dom"; // Importa o useLocation pra pod
 import { Link, useNavigate, useSearchParams } from "react-router-dom"; // Link, navegação e função pra pegar o parametro passado pelo link
 import { useUser } from "../../hooks/useUser"; // Pra usar os dados do usuário
 
+import EventModal from "../../components/modals/EventModal"; // Importa o componente EventModal
+
 function EventsPage() {
   const { isAdmin } = useUser(); // Pega o usuário logado e verifica se é admin
 
@@ -18,6 +20,7 @@ function EventsPage() {
   const [user, setUser] = useState<User | null>(null); // user é um estado que armazena o usuário logado
 
   const [selectedDay, setSelectedDay] = useState("Segunda"); // selectedDay é um estado que armazena o dia selecionado
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [isLoading, setIsLoading] = useState(true); // isLoading é um estado que indica se os dados estão sendo carregados
   const [error, setError] = useState<string | null>(null); // error é um estado que armazena o erro caso ocorra algum
 
@@ -30,6 +33,14 @@ function EventsPage() {
       return filter;
     }
     return 'todos'; // Valor padrão
+  };
+
+  const openModal = (event: Event) => {
+    setSelectedEvent(event);
+  };
+
+  const closeModal = () => {
+    setSelectedEvent(null);
   };
 
   const [filterMode, setFilterMode] = useState(getInitialFilterMode);
@@ -155,11 +166,11 @@ function EventsPage() {
   }, [events, user?.eventos, filterMode, selectedDay]);
 
   if (isLoading) {
-    return <p className="text-center p-8">Carregando eventos...</p>;
+    return <p className="p-8 text-center">Carregando eventos...</p>;
   }
 
   if (error) {
-    return <p className="text-center p-8 text-red-500">{error}</p>;
+    return <p className="p-8 text-center text-red-500">{error}</p>;
   }
 
   const userSubscribedEventIds = new Set(user?.eventos?.map(e => e.id) ?? []); // Eventos que o usuário está inscrito
@@ -192,21 +203,21 @@ function EventsPage() {
 
   // PAGINA AKI AUAUAUAUUAUAUAUAU
   return (
-    <div className="main font-sans w-full min-h-screen p-4 sm:p-6 lg:p-8"> { /* Parte princicpal da página */}
+    <div className="w-full min-h-screen p-4 font-sans main sm:p-6 lg:p-8"> { /* Parte princicpal da página */}
 
       {flashMessage && (
-        <div role="alert" className="alert alert-success mb-4">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <div role="alert" className="mb-4 alert alert-success">
+          <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
           <span>{flashMessage}</span>
         </div>
       )}
 
-      <h1 className="text-5xl md:text-5xl font-bold text-center text-emerald-800 py-3"> { /* Título da página */}
+      <h1 className="py-3 text-5xl font-bold text-center md:text-5xl text-emerald-800"> { /* Título da página */}
         Programação da Expocanp
       </h1>
 
       {isAdmin ? null : (
-        <div className="flex flex-wrap justify-center gap-2 my-6 w-full"> { /* Botões de filtro de eventos inscrições e tal */}
+        <div className="flex flex-wrap justify-center w-full gap-2 my-6"> { /* Botões de filtro de eventos inscrições e tal */}
           <button onClick={() => setFilterMode('todos')} className={`px-4 py-2 rounded-lg divpEB font-semibold transition-colors shadow-lg ${filterMode === 'todos' ? 'bg-emerald-600 text-white' : 'bg-white text-emerald-700 hover:bg-emerald-100'}`}>
             Todos
           </button>
@@ -219,7 +230,7 @@ function EventsPage() {
         </div>
       )}
 
-      <div className="flex flex-wrap justify-center gap-2 my-6 w-full"> { /* Botões de seleção de dia */}
+      <div className="flex flex-wrap justify-center w-full gap-2 my-6"> { /* Botões de seleção de dia */}
         {diasDaSemana.map((dia) => (
           <button key={dia} onClick={() => setSelectedDay(dia)} className={`px-4 py-2 divpEB rounded-lg font-semibold transition-colors ${selectedDay === dia ? "bg-emerald-600 text-white shadow-lg" : "bg-white text-emerald-700 hover:bg-emerald-100"}`}>
             {dia}-feira
@@ -229,18 +240,18 @@ function EventsPage() {
 
       { /* Mostra os eventos filtrados */}
       {displayEvents.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {displayEvents.map((event) => {
             const isSubscribed = userSubscribedEventIds.has(event.id);
 
             return (
-              <div key={event.id} className="bg-emerald-50 divpE rounded-2xl shadow-lg p-6 flex flex-col justify-between">
+              <div key={event.id} onClick={() => openModal(event)} className="flex flex-col justify-between p-6 shadow-lg bg-emerald-50 divpE rounded-2xl eventoD">
 
                 <div>
                   <h2 className="text-2xl font-bold text-emerald-700">{event.tema}</h2>
-                  <p className="font-semibold text-gray-600 mt-2">{event.horario_inicio}</p>
+                  <p className="mt-2 font-semibold text-gray-600">{event.horario_inicio}</p>
                   <p className="font-semibold text-gray-600">Local: {event.local}</p>
-                  <p className="text-gray-700 mt-4">{event.descricao}</p>
+                  <p className="mt-4 text-gray-700 line-clamp-3">{event.descricao}</p>
                 </div>
 
                 <div className="mt-6">
@@ -252,16 +263,16 @@ function EventsPage() {
                   ) : (
                     <div>
                       {isSubscribed ? (
-                        <div className="flex flex-col sm:flex-row gap-2">
-                          <button disabled className="w-full sm:w-auto flex-grow py-2 rounded-lg text-white font-bold bg-gray-400 cursor-not-allowed">
+                        <div className="flex flex-col gap-2 sm:flex-row">
+                          <button disabled className="flex-grow w-full py-2 font-bold text-white bg-gray-400 rounded-lg cursor-not-allowed sm:w-auto">
                             Pendente
                           </button>
-                          <button onClick={() => handleUnsubscribe(event.id)} className="w-full sm:w-auto flex-grow py-2 rounded-lg text-white font-bold bg-emerald-500 hover:bg-emerald-600 transition-all">
+                          <button onClick={() => handleUnsubscribe(event.id)} className="flex-grow w-full py-2 font-bold text-white transition-all rounded-lg sm:w-auto bg-emerald-500 hover:bg-emerald-600">
                             Sair do sorteio
                           </button>
                         </div>
                       ) : (
-                        <button onClick={() => handleSubscription(event.id)} className="w-full py-2 rounded-lg text-white font-bold bg-emerald-500 hover:bg-emerald-600 transition-all">
+                        <button onClick={() => handleSubscription(event.id)} className="w-full py-2 font-bold text-white transition-all rounded-lg bg-emerald-500 hover:bg-emerald-600">
                           Participar
                         </button>
                       )}
@@ -273,24 +284,25 @@ function EventsPage() {
           })}
         </div>
       ) : (
-        <p className="text-center p-8 text-gray-500">Nenhum evento agendado para este dia.</p>
+        <p className="p-8 text-center text-gray-500">Nenhum evento agendado para este dia.</p>
       )}
 
       {/* Botão de adicionar evento e de fazer o sorteio geral, só é mostrado para admins */}
       {isAdmin && (
         <>
           <div className="flex justify-center mt-8">
-            <Link to="/events/add" className="btn btn-lg btn-success text-white">
+            <Link to="/events/add" className="text-white btn btn-lg btn-success">
               Adicionar Novo Evento
             </Link>
           </div>
 
           <div className="flex flex-row justify-center gap-4 my-14">
-            <button onClick={handleSorteio} className="btn btn-sm btn-warning text-white">Sortear</button>
-            <button onClick={handleSorteioClear} className="btn btn-sm btn-warning text-white">Limpar Sorteio</button>
+            <button onClick={handleSorteio} className="text-white btn btn-sm btn-warning">Sortear</button>
+            <button onClick={handleSorteioClear} className="text-white btn btn-sm btn-warning">Limpar Sorteio</button>
           </div>
         </>
       )}
+      <EventModal event={selectedEvent} onClose={closeModal} />
     </div>
   );
 }

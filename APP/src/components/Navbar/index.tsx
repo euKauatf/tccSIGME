@@ -13,9 +13,9 @@ interface NavbarProps {
 function Navbar({ onHamburgerClick, isSidebarOpen }: NavbarProps) {
   // Retorna o componente navbar
   return (
-    <div className="navbarStyle flex justify-between items-center p2 bg-emerald-600 shadow-xl/30 shadow-zinc-800 px-1 py-1"> {/* Navbar */}
+    <div className="flex items-center justify-between px-1 py-1 navbarStyle p2 bg-emerald-600 shadow-xl/30 shadow-zinc-800"> {/* Navbar */}
 
-      <div className="hamburger-menu text-white cursor-pointer p-2" onClick={onHamburgerClick} > {/* Icone pra sidebar */}
+      <div className="p-2 text-white cursor-pointer hamburger-menu" onClick={onHamburgerClick} > {/* Icone pra sidebar */}
         <AlignJustify className={`w-8 h-8 scale-125 transform transition-colors duration-200 ${isSidebarOpen ? "text-emerald-900" : "text-white"}`} />
       </div>
 

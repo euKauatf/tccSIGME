@@ -6,6 +6,13 @@
   themes: light, dark;
 }
 
+.text-ellipsis-3-lines {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+}
+
 body,
 html {
   @apply font-sans;
