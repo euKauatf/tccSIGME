@@ -6,15 +6,28 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Requests\RegisterRequest;
-use App\Http\Requests\LoginRequest;
+use Illuminate\Validation\Rules;
 
 class AuthController extends Controller
 {
-    // Função de registro de usuário
-    public function register(RegisterRequest $request)
+    /**
+     * Registra um novo usuário.
+     */
+    public function register(Request $request)
     {
-        // As validações já foram feitas no RegisterRequest
+        // Validação do RegisterRequest movida para cá.
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'matricula' => ['required', 'string', 'max:255', 'unique:users'],
+            'cpf' => ['required', 'string', 'max:14', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ], [
+            'matricula.unique' => 'Já existe uma conta com essa matrícula.',
+            'cpf.unique' => 'Já existe uma conta com esse CPF.',
+            'email.unique' => 'Já existe uma conta com esse e-mail.',
+        ]);
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -31,14 +44,25 @@ class AuthController extends Controller
         ]);
     }
 
-    // Função de login de usuário
-    public function login(LoginRequest $request)
+    /**
+     * Autentica um usuário existente.
+     */
+    public function login(Request $request)
     {
-        // A validação do login já foi realizada no LoginRequest
+        // Validação do LoginRequest movida para cá.
+        $request->validate([
+            'email' => 'required|email|max:255',
+            'password' => 'required|string',
+        ],[
+            'email.required' => 'O campo e-mail é obrigatório.',
+            'password.required' => 'O campo senha é obrigatório.',
+        ]);
+
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json(['message' => 'Credenciais inválidas'], 401);
         }
 
+        // Mantendo a lógica original do controller.
         $user = User::where('email', $request['email'])->firstOrFail();
 
         $token = $user->createToken('auth_token_for_' . $user->name)->plainTextToken;
@@ -50,7 +74,9 @@ class AuthController extends Controller
         ]);
     }
 
-    // Função de logout do usuário
+    /**
+     * Faz o logout do usuário.
+     */
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
