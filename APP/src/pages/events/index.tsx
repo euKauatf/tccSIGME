@@ -173,7 +173,8 @@ function EventsPage() {
     return <p className="p-8 text-center text-red-500">{error}</p>;
   }
 
-  const userSubscribedEventIds = new Set(user?.eventos?.map(e => e.id) ?? []); // Eventos que o usuário está inscrito
+  const userSubscribedEventIds = new Set(user?.eventos?.map(e => e.pivot?.status === 'inscrito' ? e.id : null) ?? []); // Eventos que o usuário está inscrito
+  const userSelectedEventIds = new Set(user?.eventos?.filter(e => e.pivot?.status === 'selecionado')?.map(e => e.id) ?? []);
 
   const handleSorteio = async () => {//função que vai chamar a api do sorteio de alunos
     if (!window.confirm("Deseja realizar o sorteio geral agora?")) return;
@@ -208,7 +209,7 @@ function EventsPage() {
       {flashMessage && (
         <div role="alert" className="mb-4 alert alert-success">
           <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-          <span>{flashMessage}</span>
+          <span className="font-semibold">{flashMessage}</span>
         </div>
       )}
 
@@ -243,6 +244,7 @@ function EventsPage() {
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {displayEvents.map((event) => {
             const isSubscribed = userSubscribedEventIds.has(event.id);
+            const isSelected = userSelectedEventIds.has(event.id);
 
             return (
               <div key={event.id} onClick={() => openModal(event)} className="flex flex-col justify-between p-6 shadow-lg bg-emerald-50 divpE rounded-2xl eventoD">
@@ -257,7 +259,7 @@ function EventsPage() {
                 <div className="mt-6">
                   {isAdmin ? (
                     <div className="flex justify-end gap-2">
-                      <button onClick={(e) => { e.stopPropagation(); handleModify(event.id); }} className="btn btn-sm btn-info">Modificar</button>
+                      <button onClick={(e) => { e.stopPropagation(); handleModify(event.id); }} className="btn btn-sm btn-success">Modificar</button>
                       <button onClick={(e) => { e.stopPropagation(); handleDelete(event.id); }} className="btn btn-sm btn-error">Excluir</button>
                     </div>
                   ) : (
@@ -272,9 +274,24 @@ function EventsPage() {
                           </button>
                         </div>
                       ) : (
-                        <button onClick={(e) => { e.stopPropagation(); handleSubscription(event.id); }} className="w-full py-2 font-bold text-white transition-all rounded-lg bg-emerald-500 hover:bg-emerald-600">
-                          Participar
-                        </button>
+                        <div>
+                          {isSelected ? (
+                            <div className="flex flex-col gap-2 sm:flex-row">
+                              <button disabled className="flex-grow w-full py-2 font-bold text-white bg-gray-400 rounded-lg cursor-not-allowed sm:w-auto">
+                                Selecionado
+                              </button>
+                              <button onClick={(e) => { e.stopPropagation(); handleUnsubscribe(event.id); }} className="flex-grow w-full py-2 font-bold text-white transition-all rounded-lg sm:w-auto bg-emerald-500 hover:bg-emerald-600">
+                                Sair do evento
+                              </button>
+                            </div>
+                          ) : (
+                            <div>
+                              <button onClick={(e) => { e.stopPropagation(); handleSubscription(event.id); }} className="w-full py-2 font-bold text-white transition-all rounded-lg bg-emerald-500 hover:bg-emerald-600">
+                                Participar
+                              </button>
+                            </div>
+                          )}
+                        </div>
                       )}
                     </div>
                   )}
@@ -291,14 +308,14 @@ function EventsPage() {
       {isAdmin && (
         <>
           <div className="flex justify-center mt-8">
-            <Link to="/events/add" className="text-white btn btn-lg btn-success">
+            <Link to="/events/add" className="text-white bg-emerald-600 btn btn-lg">
               Adicionar Novo Evento
             </Link>
           </div>
 
           <div className="flex flex-row justify-center gap-4 my-14">
-            <button onClick={handleSorteio} className="text-white btn btn-sm btn-warning">Sortear</button>
-            <button onClick={handleSorteioClear} className="text-white btn btn-sm btn-warning">Limpar Sorteio</button>
+            <button onClick={handleSorteio} className="font-bold btn btn-sm btn-error">Sortear</button>
+            <button onClick={handleSorteioClear} className="font-bold btn btn-sm btn-error">Limpar Sorteio</button>
           </div>
         </>
       )}

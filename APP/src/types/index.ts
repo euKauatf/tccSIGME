@@ -24,7 +24,7 @@ export interface Event {
   horario_termino: string;
   descricao: string;
   local: string;
-  users_count?: number;
+  vagas_restantes: number;
   pivot?: {
     status: 'inscrito' | 'selecionado' | 'nao-selecionado';
   };
