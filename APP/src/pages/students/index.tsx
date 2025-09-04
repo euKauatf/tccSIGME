@@ -40,33 +40,33 @@ function StudentsPage() {
   };
 
   if (isLoading) {
-    return <p className="text-center text-xl p-8">Carregando lista de alunos...</p>;
+    return <p className="p-8 text-xl text-center">Carregando lista de alunos...</p>;
   }
 
   if (error) {
-    return <p className="text-center text-xl p-8 text-red-500">{error}</p>;
+    return <p className="p-8 text-xl text-center text-red-500">{error}</p>;
   }
 
   return (
-    <div className="main font-sans w-full p-4 flex flex-col items-center">
-      <h1 className="text-5xl font-bold text-center text-emerald-800 py-3">
+    <div className="flex flex-col items-center w-full p-4 font-sans main">
+      <h1 className="py-3 text-5xl font-bold text-center text-emerald-800">
         Alunos Registrados
       </h1>
 
       <div className="w-full max-w-4xl mt-6">
         <div className="flex flex-col divp rounded-[20px] p-6 bg-emerald-50 shadow-lg">
-          <h2 className="text-3xl md:text-4xl text-emerald-600 py-3 text-center">
+          <h2 className="py-3 text-3xl text-center md:text-4xl text-emerald-600">
             Lista de Alunos
           </h2>
 
           {students.length > 0 ? (
-            <ul className="flex flex-col gap-y-2 pb-6">
+            <ul className="flex flex-col pb-6 gap-y-2">
               {students.map((student) => (
-                <li key={student.id} className="bg-white divp rounded-lg shadow-md transition-shadow hover:shadow-lg">
+                <li key={student.id} className="transition-shadow bg-white rounded-lg shadow-md divp hover:shadow-lg">
                   {/* --- Informações principais do aluno --- */}
-                  <div className="flex flex-col sm:flex-row items-center justify-between p-4">
+                  <div className="flex flex-col items-center justify-between p-4 sm:flex-row">
                     <div>
-                      <p className="font-bold text-lg text-gray-800">{student.name}</p>
+                      <p className="text-lg font-bold text-gray-800">{student.name}</p>
                       <p className="text-sm text-gray-600">
                         <strong>Matrícula:</strong> {student.matricula}
                       </p>
@@ -77,7 +77,7 @@ function StudentsPage() {
                     <div className="mt-4 sm:mt-0">
                       <button
                         onClick={() => handleToggleEvents(student.id)}
-                        className="btn btn-sm bg-emerald-500 hover:bg-emerald-600 text-white"
+                        className="text-white btn btn-sm bg-emerald-500 hover:bg-emerald-600"
                       >
                         {expandedStudentId === student.id ? "Ocultar Palestras" : "Ver Palestras"}
                       </button>
@@ -86,18 +86,18 @@ function StudentsPage() {
 
                   {/* --- Painel expansível com as palestras --- */}
                   {expandedStudentId === student.id && (
-                    <div className="px-4 pb-4 pt-2 border-t border-gray-200">
-                      <h4 className="font-bold text-emerald-700 mb-2">Palestras Inscritas:</h4>
+                    <div className="px-4 pt-2 pb-4 border-t">
+                      <h4 className="mb-2 font-bold text-emerald-700">Palestras Inscritas:</h4>
                       {student.eventos && student.eventos.length > 0 ? (
                         <ul className="space-y-2">
                           {student.eventos.map(event => (
-                            <li key={event.id} className="p-2 bg-emerald-50 rounded-md text-sm text-gray-800">
+                            <li key={event.id} className="p-2 text-sm text-gray-800 rounded-md">
                               {event.tema}
                             </li>
                           ))}
                         </ul>
                       ) : (
-                        <p className="text-gray-500 text-sm">Este aluno não está inscrito em nenhuma palestra.</p>
+                        <p className="text-sm text-gray-500">Este aluno não está inscrito em nenhuma palestra.</p>
                       )}
                     </div>
                   )}
@@ -105,7 +105,7 @@ function StudentsPage() {
               ))}
             </ul>
           ) : (
-            <p className="text-center text-gray-500 py-8">Nenhum aluno encontrado.</p>
+            <p className="py-8 text-center text-gray-500">Nenhum aluno encontrado.</p>
           )}
         </div>
       </div>

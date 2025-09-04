@@ -28,6 +28,8 @@ class Event extends Model
     'local',
   ];
 
+  protected $appends = ['vagas_restantes'];
+
   /**
    * @var array<string, string>
    */
@@ -44,5 +46,10 @@ class Event extends Model
     return $this->belongsToMany(User::class, 'inscricoes', 'events_id', 'user_id')
       ->withPivot('status')
       ->withTimestamps();
+  }
+
+  public function getVagasRestantesAttribute()
+  {
+    return $this->vagas_max - $this->users()->wherePivot('status', 'selecionado')->count();
   }
 }

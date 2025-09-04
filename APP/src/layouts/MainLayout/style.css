@@ -85,6 +85,10 @@ html[data-theme="dark"] p {
   color: #ffffff;
 }
 
+html[data-theme="dark"] li {
+  color: #ffffff;
+}
+
 html[data-theme="dark"] label {
   color: #ffffff;
 }
