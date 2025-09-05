@@ -1,5 +1,7 @@
 // IMPORTAÇÕES
 import type { Event } from "../../../types";
+import { exportPdf } from "../../../api/apiClient";
+import { useUser } from "../../../hooks/useUser";
 
 // PROPS DO COMPONENTE
 interface EventModalProps {
@@ -8,9 +10,21 @@ interface EventModalProps {
 }
 
 function EventModal({ event, onClose }: EventModalProps) {
+
+  const { isAdmin } = useUser();
+
   if (!event) {
     return null;
   }
+const handleExportClick = async () => {
+  if (event && event.id) {
+    await exportPdf(event.id);
+  }
+  else {
+    alert("Evento não encontrado.");
+  }
+};
+
 
   return (
     <dialog id="event_modal" className="modal" open>
@@ -23,6 +37,11 @@ function EventModal({ event, onClose }: EventModalProps) {
         <p className="py-2 break-words"><strong>Descrição:</strong> {event.descricao}</p>
         <div className="modal-action">
           <button className="btn" onClick={onClose}>Fechar</button>
+          {isAdmin && (
+          <button className="btn btn-primary" onClick={handleExportClick}>
+              Gerar lista de presença
+          </button>
+          )}
         </div>
       </div>
     </dialog>

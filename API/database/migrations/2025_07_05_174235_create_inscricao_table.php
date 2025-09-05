@@ -13,6 +13,7 @@ return new class extends Migration
       $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
       $table->foreignId('events_id')->constrained('events')->onDelete('cascade');
       $table->string('status')->default('pendente');
+      $table->unsignedInteger('rodada')->nullable();
 
       $table->timestamps();
     });
