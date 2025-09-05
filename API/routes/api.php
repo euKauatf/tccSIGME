@@ -11,7 +11,8 @@ use App\Http\Controllers\AuditLogController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::apiResource('event', EventController::class);
+Route::apiResource('event', EventController::class)
+  ->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->group(function () {
   Route::post('/logout', [AuthController::class, 'logout']);
@@ -38,3 +39,6 @@ Route::post('/sorteio', [SorteioController::class, 'realizarSorteio'])
 
 Route::post('/sorteio/clear', [SorteioController::class, 'clearSorteio'])
   ->middleware('auth:sanctum');
+
+Route::get('/event/{event}/export-pdf', [EventController::class, 'exportPdf'])
+    ->middleware('auth:sanctum');
