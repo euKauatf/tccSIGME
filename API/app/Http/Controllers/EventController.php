@@ -92,3 +92,4 @@ class EventController extends Controller
         return $pdf->download('lista-alunos-' . $event->tema . '.pdf');
     }
 }
+
