@@ -39,6 +39,35 @@ export const getAuditLogs = () => apiClient.get('/audit-logs');
 export const clearAuditLogs = async () => { return apiClient.delete('/audit-logs/clear'); };
 export const getSorteio = () => {return apiClient.post('/sorteio');};
 export const getSorteioClear = () => {return apiClient.post('/sorteio/clear');};
+export const exportPdf = async (eventId: number) => {
+    try {
+        const response = await apiClient.get(`/event/${eventId}/export-pdf`, {
+            responseType: 'blob', // diz pro axios (biblioteca que linka app com api) pra tratar isso como arquivo
+        });
+        
+        // criar o link pra baixar o arquivo com a resposta trazida pelo get la da api
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        
+        // Tenta extrair o nome do arquivo do header da resposta, ou usa um nome padrão -> faz isso ai mesmo
+        const contentDisposition = response.headers['content-disposition'];
+        let fileName = 'lista-presenca.pdf';
+        if (contentDisposition) {
+            const fileNameMatch = contentDisposition.match(/filename="(.+)"/);
+            if (fileNameMatch.length === 2)
+                fileName = fileNameMatch[1];
+        }
+
+        link.setAttribute('download', fileName);
+        document.body.appendChild(link);
+        link.click();
+        link.remove(); // Limpa o link após o download
+    } catch (error) {
+        console.error("Erro ao exportar PDF:", error);
+        alert("Não foi possível gerar a lista de presença.");
+    }
+};
 
 
 export default apiClient;

@@ -54,7 +54,7 @@ class User extends Authenticatable
   public function eventos(): BelongsToMany
   {
     return $this->belongsToMany(Event::class, 'inscricoes', 'user_id', 'events_id')
-      ->withPivot('status')
+      ->withPivot('status', 'rodada')
       ->withTimestamps();
   }
 }

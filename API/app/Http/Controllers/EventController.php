@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon; // É uma boa prática importar o Carbon no topo do arquivo
 
 class EventController extends Controller
 {
@@ -15,7 +17,6 @@ class EventController extends Controller
 
     public function store(Request $request)
     {
-        // Regras do método rules() de EventFormRequest movidas para cá.
         $uniqueRule = Rule::unique('events')->where(function ($query) use ($request) {
             return $query->where('data', $request->data)
                 ->where(function ($q) use ($request) {
@@ -25,11 +26,24 @@ class EventController extends Controller
         });
 
         $validatedData = $request->validate([
-            'tema' => 'required|string|max:255',
+            'tema' => ['required', 'string', 'max:255', $uniqueRule],
             'vagas_max' => 'required|numeric|gt:4',
             'data' => 'required|string|in:Segunda,Terça,Quarta,Quinta,Sexta',
             'horario_inicio' => 'required|date_format:H:i',
-            'horario_termino' => 'required|date_format:H:i|after:horario_inicio',
+            'horario_termino' => [
+                'required',
+                'date_format:H:i',
+                'after:horario_inicio',
+                function ($attribute, $value, $fail) use ($request) {
+                    $inicio = Carbon::createFromFormat('H:i', $request->horario_inicio);
+                    $termino = Carbon::createFromFormat('H:i', $value);
+                    $duracaoMin = 45;
+
+                    if ($inicio->diffInMinutes($termino) < $duracaoMin) {
+                        $fail("O evento deve ter uma duração mínima de {$duracaoMin} minutos.");
+                    }
+                }
+            ],
             'descricao' => 'required|string',
             'email_palestrante' => 'required|email|max:255',
             'telefone_palestrante' => 'required|string|max:20',
@@ -54,7 +68,6 @@ class EventController extends Controller
 
     public function update(Request $request, Event $event)
     {
-        // Regras do método updateRules() de EventFormRequest movidas para cá.
         $uniqueRule = Rule::unique('events')->where(function ($query) use ($request) {
             return $query->where('data', $request->data)
                 ->where('horario_inicio', $request->horario_inicio);
@@ -67,7 +80,22 @@ class EventController extends Controller
             'telefone_palestrante' => 'required|string|max:20',
             'vagas_max' => 'sometimes|required|numeric|gt:4',
             'horario_inicio' => 'sometimes|required|date_format:H:i',
-            'horario_termino' => 'sometimes|required|date_format:H:i|after:horario_inicio',
+            'horario_termino' => [
+                'sometimes',
+                'required',
+                'date_format:H:i',
+                'after:horario_inicio',
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($request->has('horario_inicio')) {
+                        $inicio = Carbon::createFromFormat('H:i', $request->horario_inicio);
+                        $termino = Carbon::createFromFormat('H:i', $value);
+                        $duracaoMin = 45;
+                        if ($inicio->diffInMinutes($termino) < $duracaoMin) {
+                            $fail("O evento deve ter uma duração mínima de {$duracaoMin} minutos.");
+                        }
+                    }
+                }
+            ],
             'descricao' => 'sometimes|required|string',
             'local' => ['sometimes', 'required', 'string', $uniqueRule],
         ], [
@@ -87,5 +115,30 @@ class EventController extends Controller
     {
         $event->delete();
         return response()->json(null, 204);
+    }
+
+    public function exportPdf(Event $event){
+        //pega os alunos selecionados do evento em questao
+        $event->load(['users' => function ($query) {
+            $query->where('status', 'selecionado')->orderBy('name', 'asc');
+        }]);
+
+        //caso nao tenha alunos, nao da pra gerar a lista
+        if ($event->users->isEmpty()) {
+            return response()->json(['message' => 'Não há alunos selecionados neste evento para gerar uma lista.'], 404);
+        }
+
+        /*os dados que ficaram dentro do pdf serao o evento, os alunos e quando gerou (tudo aqui vai pra view blade
+        em resources/views)*/
+        $data = [
+            'event' => $event,
+            'alunos' => $event->users,
+            'dataGeracao' => now()->format('d/m/Y H:i:s')
+        ];
+
+        $pdf = Pdf::loadView('pdf.lista_alunos', $data);
+
+        // CORREÇÃO: Concatenação correta para o nome do arquivo
+        return $pdf->download('lista-alunos-' . $event->tema . '.pdf');
     }
 }
