@@ -52,4 +52,13 @@ class Event extends Model
   {
     return $this->vagas_max - $this->users()->wherePivot('status', 'selecionado')->count();
   }
+
+
+  public function palestrantes(): BelongsToMany
+  {
+    return $this->belongsToMany(User::class, 'responsavel', 'events_id', 'palestrante_id')
+      ->withTimestamps();
+  }
 }
+
+

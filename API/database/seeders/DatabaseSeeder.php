@@ -31,11 +31,11 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('12345678'), 
             'tipo' => 'adm',
         ]);
-        $alunos = User::factory(500)->create();
+        $alunos = User::factory(300)->create();
 
-        $eventos = Event::factory(50)->create();
+        $eventos = Event::factory(35)->create();
 
-        $alunosParaInscrever = $alunos->take(300);
+        $alunosParaInscrever = $alunos->take(100);
 
         $inscricoesParaFazer = [];
 
