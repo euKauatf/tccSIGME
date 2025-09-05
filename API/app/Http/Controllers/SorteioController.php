@@ -34,11 +34,12 @@ class SorteioController extends Controller
           
         if($vagasDisponiveis <= 0){
           foreach ($evento->users as $user) { //pega os usuários que estão nesses eventos
-        $evento->users()->updateExistingPivot($user->id, [
-          'status' => 'cancelado',
-          'rodada' => $novaRodada  //transforma todos esses usuários em "cancelado" pois não tem mais vagas
-        ]);
-      }
+            $evento->users()->updateExistingPivot($user->id, [
+              'status' => 'cancelado',
+              'rodada' => $novaRodada  //transforma todos esses usuários em "cancelado" pois não tem mais vagas
+            ]);
+            AuditLogger::log($user, 'foi cancelado', $evento); 
+          }
         }
         $resultadoFinal[] = [
           'evento' => $evento->tema,
@@ -83,7 +84,10 @@ class SorteioController extends Controller
       $naoSelecionados = $inscritos->diff($selecionadosNesteEvento);
 
       foreach ($naoSelecionados as $naoSelecionado) { //vai transformar o status de inscrição desse usuários não chamados para "cancelado"
-        $evento->users()->updateExistingPivot($naoSelecionado->id, ['status' => 'cancelado']);
+        $evento->users()->updateExistingPivot($naoSelecionado->id, [
+          'status' => 'cancelado',
+          'rodada' => $novaRodada
+        ]);
         AuditLogger::log($naoSelecionado, 'foi cancelado', $evento); //manda um log falando qm foi cancelado
       }
     }
