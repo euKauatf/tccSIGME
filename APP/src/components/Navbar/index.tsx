@@ -20,7 +20,7 @@ function Navbar({ onHamburgerClick, isSidebarOpen }: NavbarProps) {
       </div>
 
       <div> {/* Icone do usuário lá no cantinho (quero ainda colocar pra redirecionar pra página de perfil) */}
-        <img src="./images/icon.svg" alt="pfp" className="w-8 pfp-profile" />
+        <img src="./images/icon.jpg" alt="pfp" className="w-8 pfp-profile" />
       </div>
 
     </div>
