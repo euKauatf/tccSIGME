@@ -1,10 +1,15 @@
 // !!! Formulário para criar um evento novo !!!
 
 // IMPORTAÇÕES
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react"; // <--- A CORREÇÃO ESTÁ AQUI
 import axios, { isAxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 import { IMaskInput } from 'react-imask';
+import { Combobox, Transition } from '@headlessui/react'
+import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
+import { type Palestrante } from "../../types";
+import { getPalestrantes } from "../../api/apiClient";
+
 
 function FormEvent() {
   const [formData, setFormData] = useState({ // Pra salvar as paradinha tudo do formulário pra um evento novo
@@ -23,6 +28,33 @@ function FormEvent() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null); // Para armazenar mensagens de erro
 
   const navigate = useNavigate(); // Importa o useNavigate para redirecionar para a página de eventos
+
+  const [palestrantes, setPalestrantes] = useState<Palestrante[]>([]);
+  const [selectedPalestrante, setSelectedPalestrante] = useState<Palestrante | null>(null);
+  const [query, setQuery] = useState('')
+
+  useEffect(() => {
+    const fetchPalestrantes = async () => {
+      try {
+        const response = await getPalestrantes();
+        setPalestrantes(response.data);
+      } catch (error) {
+        console.error("Erro ao buscar palestrantes:", error);
+      }
+    };
+
+    fetchPalestrantes();
+  }, []);
+
+  const filteredPalestrantes =
+    query === ''
+      ? palestrantes
+      : palestrantes.filter((palestrante) =>
+        palestrante.name
+          .toLowerCase()
+          .replace(/\s+/g, '')
+          .includes(query.toLowerCase().replace(/\s+/g, ''))
+      )
 
   useEffect(() => { // Se existir uma mensagem de erro, role a página para o topo
     if (errorMessage) {
@@ -115,17 +147,97 @@ function FormEvent() {
 
             <div> {/* Palestrante do evento */}
               <label htmlFor="palestrante" className="block text-sm font-medium text-gray-700">Palestrante</label>
-              <input name="palestrante" value={formData.palestrante} onChange={handleChange} type="text" placeholder="Palestrante" className="w-full input input-bordered" required />
+              <Combobox
+                value={selectedPalestrante}
+                onChange={(palestrante: Palestrante | null) => {
+                  setSelectedPalestrante(palestrante);
+                  if (palestrante) {
+                    setFormData((prevState) => ({
+                      ...prevState,
+                      palestrante: palestrante.name,
+                      email_palestrante: palestrante.email,
+                      telefone_palestrante: palestrante.telefone,
+                    }));
+                  }
+                }}
+              >
+                <div className="relative mt-1">
+                  <div>
+                    <Combobox.Input
+                      className="w-full input input-bordered"
+                      value={formData.palestrante}
+                      placeholder="Selecione um palestrante"
+                      onChange={(event) => {
+                        const newQuery = event.target.value;
+                        setQuery(newQuery);
+                        setSelectedPalestrante(null); // Desseleciona ao digitar manualmente
+                        setFormData((prevState) => ({
+                          ...prevState,
+                          palestrante: newQuery,
+                          // Limpa os campos dependentes na alteração manual
+                          email_palestrante: '',
+                          telefone_palestrante: '',
+                        }));
+                      }}
+                    />
+                    <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
+                      <ChevronUpDownIcon
+                        className="w-5 h-5 text-gray-400"
+                        aria-hidden="true"
+                      />
+                    </Combobox.Button>
+                  </div>
+                  <Transition
+                    as={Fragment}
+                    leave="transition ease-in duration-100"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                    afterLeave={() => setQuery('')}
+                  >
+                    <Combobox.Options className="absolute z-10 w-full py-1 mt-1 overflow-auto text-base rounded-md shadow-lg max-h-60 ring-1 ring-black/5 focus:outline-none sm:text-sm">
+                      {filteredPalestrantes.length === 0 && query !== '' ? (
+                        <div className="relative px-4 py-2 text-gray-700 cursor-default select-none">
+                          Nenhum palestrante encontrado.
+                        </div>
+                      ) : (
+                        filteredPalestrantes.map((palestrante) => (
+                          <Combobox.Option
+                            key={palestrante.id}
+                            className={({ active }) =>
+                              `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-teal-600 text-white' : 'text-gray-900'}`
+                            }
+                            value={palestrante}
+                          >
+                            {({ selected, active }) => (
+                              <>
+                                <span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>
+                                  {palestrante.name}
+                                </span>
+                                {selected ? (
+                                  <span className={`absolute inset-y-0 left-0 flex items-center pl-3 ${active ? 'text-white' : 'text-teal-600'}`}>
+                                    <CheckIcon className="w-5 h-5" aria-hidden="true" />
+                                  </span>
+                                ) : null}
+                              </>
+                            )}
+                          </Combobox.Option>
+                        ))
+                      )}
+                    </Combobox.Options>
+                  </Transition>
+                </div>
+              </Combobox>
             </div>
+
 
             <div> {/* Email do palestrante */}
               <label htmlFor="email_palestrante" className="block text-sm font-medium text-gray-700">Email do Palestrante</label>
-              <input name="email_palestrante" value={formData.email_palestrante} onChange={handleChange} type="text" placeholder="Email" className="w-full input input-bordered" required />
+              <input name="email_palestrante" value={formData.email_palestrante} onChange={handleChange} type="text" placeholder="Email" className="w-full input input-bordered" disabled required />
             </div>
 
             <div> {/* Telefone do palestrante */}
               <label htmlFor="telefone_palestrante" className="block text-sm font-medium text-gray-700">Telefone do Palestrante</label>
-              <IMaskInput mask="(00) 00000-0000" name="telefone_palestrante" value={formData.telefone_palestrante} placeholder="(00) 00000-0000" className="w-full input input-bordered" required onAccept={(value) => { setFormData(prevState => ({ ...prevState, telefone_palestrante: value as string, })); }} />
+              <IMaskInput mask="(00) 00000-0000" disabled name="telefone_palestrante" value={formData.telefone_palestrante} placeholder="(00) 00000-0000" className="w-full input input-bordered" required onAccept={(value) => { setFormData(prevState => ({ ...prevState, telefone_palestrante: value as string, })); }} />
             </div>
 
             <div> {/* Local do evento */}
