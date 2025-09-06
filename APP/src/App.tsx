@@ -1,38 +1,47 @@
-import { Routes, Route } from "react-router-dom"; // Importa as rotas do react-router-dom
-import LoginPage from "./pages/login"; // Login
-import HomePage from "./pages/home"; // Home
-import RegisterPage from "./pages/register"; // Register
-import EventsPage from "./pages/events"; // Events
-import ProfilePage from "./pages/profile"; // Profile
-import StudentsPage from "./pages/students"; // Students
-import MainLayout from "./layouts/MainLayout"; // Layout principal do site né pai
-import FormEvent from "./components/Forms/FormEvent"; // Formulário de eventos
-import EditEventPage from "./pages/events/edit.tsx"; // editar evento
-import AuditLogsPage from "./pages/auditLogs"; // Página de logs de auditoria
+import { Routes, Route } from "react-router-dom";
+import LoginPage from "./pages/login";
+import HomePage from "./pages/home";
+import RegisterPage from "./pages/register";
+import EventsPage from "./pages/events";
+import ProfilePage from "./pages/profile";
+import StudentsPage from "./pages/students";
+import MainLayout from "./layouts/MainLayout";
+import FormEvent from "./components/Forms/FormEvent";
+import EditEventPage from "./pages/events/edit";
+import AuditLogsPage from "./pages/auditLogs";
+import ScannerPage from "./pages/scanner";
+import PalestrantesPage from "./pages/palestrantes";
+import FormPalestrantePage from "./components/Forms/FormPalestrantePage";
 
-import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute"; // Protege as rotas
-import AdminRoute from "./components/ProtectedRoute/AdminRoute"; // Protege as rotas de admin
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import AdminRoute from "./components/ProtectedRoute/AdminRoute";
 
 function App() {
   return (
     <Routes>
+      {/* Rotas públicas */}
       <Route path="/" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
 
+      {/* Rotas protegidas com o mesmo aninhamento */}
       <Route element={<ProtectedRoute />}>
         <Route element={<MainLayout />}>
+          {/* Rotas para todos os usuários logados */}
           <Route path="home" element={<HomePage />} />
           <Route path="events" element={<EventsPage />} />
-          <Route path="events/add" element={<FormEvent />} />
-          <Route path="events/edit/:eventId" element={<EditEventPage />} />
           <Route path="profile" element={<ProfilePage />} />
+          <Route path="palestrantes" element={<PalestrantesPage />} />
 
-          {/* so adm pode ver esses aqui */}
+          {/* Rotas que são apenas para administradores */}
           <Route element={<AdminRoute />}>
+            <Route path="events/add" element={<FormEvent />} />
+            <Route path="events/edit/:eventId" element={<EditEventPage />} />
             <Route path="logs" element={<AuditLogsPage />} />
             <Route path="students" element={<StudentsPage />} />
+            <Route path="scanner" element={<ScannerPage />} />
+            <Route path="palestrantes/add" element={<FormPalestrantePage />} />
+            <Route path="palestrantes/edit/:id" element={<FormPalestrantePage />} />
           </Route>
-
         </Route>
       </Route>
     </Routes>
@@ -40,3 +49,4 @@ function App() {
 }
 
 export default App;
+

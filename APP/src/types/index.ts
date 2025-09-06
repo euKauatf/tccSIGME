@@ -26,7 +26,7 @@ export interface Event {
   local: string;
   vagas_restantes: number;
   pivot?: {
-    status: 'inscrito' | 'selecionado' | 'nao-selecionado';
+    status: 'inscrito' | 'contemplado' | 'nao-contemplado';
   };
 }
 
@@ -42,4 +42,11 @@ export interface AuditLog {
     tema: string;
   } | null; // Pode ser nulo se não houver objeto alvo
   created_at: string; // O Laravel envia datas como strings no formato ISO
+}
+
+export interface Palestrante {
+  id: number;
+  name: string;
+  email: string;
+  telefone: string;
 }

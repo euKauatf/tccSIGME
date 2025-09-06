@@ -31,16 +31,16 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('12345678'), 
             'tipo' => 'adm',
         ]);
-        $alunos = User::factory(300)->create();
+        $alunos = User::factory(100)->create();
 
-        $eventos = Event::factory(35)->create();
+        $eventos = Event::factory(10)->create();
 
-        $alunosParaInscrever = $alunos->take(100);
+        /*$alunosParaInscrever = $alunos->take();
 
         $inscricoesParaFazer = [];
 
         foreach ($eventos as $evento) {            
-            foreach($alunosParaInscrever as $aluno){
+            foreach($alunos as $aluno){
                 $inscricoesParaFazer[] = [
                     'user_id' => $aluno->id,
                     'events_id' => $evento->id,
@@ -53,5 +53,7 @@ class DatabaseSeeder extends Seeder
         foreach (array_chunk($inscricoesParaFazer, 1000) as $chunk) {
             DB::table('inscricoes')->insert($chunk);
         }
+        */
     }
+
 }

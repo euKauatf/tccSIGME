@@ -8,6 +8,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\InscricaoController;
 use App\Http\Controllers\SorteioController;
 use App\Http\Controllers\AuditLogController;
+use App\Http\Controllers\PalestranteController; 
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -42,3 +43,14 @@ Route::post('/sorteio/clear', [SorteioController::class, 'clearSorteio'])
 
 Route::get('/event/{event}/export-pdf', [EventController::class, 'exportPdf'])
   ->middleware('auth:sanctum');
+
+Route::post('/inscricao/marcar-presenca', [InscricaoController::class, 'marcarPresenca']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/palestrantes', [PalestranteController::class, 'index']);
+    Route::post('/palestrantes', [PalestranteController::class, 'store']);
+    Route::get('/palestrantes/search', [PalestranteController::class, 'search']);
+    Route::get('/palestrantes/{palestrante}', [PalestranteController::class, 'show']);
+    Route::put('/palestrantes/{palestrante}', [PalestranteController::class, 'update']);
+    Route::delete('/palestrantes/{palestrante}', [PalestranteController::class, 'destroy']);
+});

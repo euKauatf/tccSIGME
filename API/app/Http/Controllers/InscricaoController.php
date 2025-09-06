@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Services\AuditLogger;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\JsonResponse; 
 
 class InscricaoController extends Controller
 {
@@ -65,5 +67,50 @@ class InscricaoController extends Controller
     return response()->json([
       'message' => 'Inscrição cancelada com sucesso.'
     ], 200); // 200 OK
+  }
+
+  /**
+   * Marca a presença de um aluno em um evento via QR Code.
+   * Acessível apenas por administradores.
+   */
+  public function marcarPresenca(Request $request): JsonResponse
+  {
+      /** @var User $admin */
+      $admin = Auth::user();
+      
+      $request->validate([
+          
+          'matricula' => 'required|string|exists:users,matricula',
+          'event_id' => 'required|integer|exists:events,id',
+      ]);
+
+      $aluno = User::where('matricula', $request->input('matricula'))->first();
+      $eventId = $request->input('event_id');
+      
+      $inscricao = DB::table('inscricoes')
+          ->where('user_id', $aluno->id)
+          ->where('events_id', $eventId)
+          ->first();
+
+      if (!$inscricao) {
+          
+          return response()->json(['message' => "Aluno {$aluno->name} não está inscrito neste evento."], 404);
+      }
+
+      if ($inscricao->status === 'presente') {
+          return response()->json(['message' => "Presença de {$aluno->name} já registrada."], 409); 
+      }
+
+      if ($inscricao->status !== 'contemplado') {
+          return response()->json(['message' => "Apenas alunos com status 'contemplado' podem ter a presença marcada. Status atual: {$inscricao->status}"], 403);
+      }
+
+  
+      DB::table('inscricoes')
+          ->where('id', $inscricao->id)
+          ->update(['status' => 'presente']);
+      AuditLogger::log("presença para {$aluno->name} marcada", Event::find($eventId));
+
+      return response()->json(['message' => "Presença de {$aluno->name} confirmada com sucesso!"]);
   }
 }

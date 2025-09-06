@@ -249,7 +249,7 @@ function EventsPage() {
 
     if (filterMode === 'selecionados') {
       // Mostra apenas eventos onde o usuário foi 'selecionado'
-      sourceEvents = user?.eventos?.filter(e => e.pivot?.status === 'selecionado') ?? [];
+      sourceEvents = user?.eventos?.filter(e => e.pivot?.status === 'contemplado') ?? [];
     } else if (filterMode === 'pendentes') {
       // Mostra apenas eventos onde o status ainda é 'inscrito' (aguardando sorteio)
       sourceEvents = user?.eventos?.filter(e => e.pivot?.status === 'inscrito') ?? [];
@@ -277,7 +277,7 @@ function EventsPage() {
   }
 
   const userSubscribedEventIds = new Set(user?.eventos?.map(e => e.pivot?.status === 'inscrito' ? e.id : null) ?? []); // Eventos que o usuário está inscrito
-  const userSelectedEventIds = new Set(user?.eventos?.filter(e => e.pivot?.status === 'selecionado')?.map(e => e.id) ?? []);
+  const userSelectedEventIds = new Set(user?.eventos?.filter(e => e.pivot?.status === 'contemplado')?.map(e => e.id) ?? []);
 
   const handleSorteio = () => {
     setConfirmModalContent({
@@ -290,7 +290,7 @@ function EventsPage() {
   };
 
   const handleConfirmSorteio = async () => {
-    try {
+    try { 
       const response = await getSorteio();
       setInfoModalContent({
         title: 'Sorteio Realizado!',
@@ -429,7 +429,7 @@ function EventsPage() {
                           {isSelected ? (
                             <div className="flex flex-col gap-2 sm:flex-row">
                               <button disabled className="flex-grow w-full py-2 font-bold text-white bg-gray-400 rounded-lg cursor-not-allowed sm:w-auto">
-                                Selecionado
+                                Contemplado
                               </button>
                               <button onClick={(e) => { e.stopPropagation(); handleUnsubscribe(event.id); }} className="flex-grow w-full py-2 font-bold text-white transition-all rounded-lg sm:w-auto bg-emerald-500 hover:bg-emerald-600">
                                 Sair do evento
