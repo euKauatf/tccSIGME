@@ -4,29 +4,36 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\Rule;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Carbon\Carbon; // Importa a classe Carbon
+use Carbon\Carbon;
 
 class EventController extends Controller
 {
-    public function index()
+    /**
+     * Lista todos os eventos.
+     */
+    public function index(): JsonResponse
     {
-        return Event::orderBy('horario_inicio', 'desc')->get();
+        $events = Event::orderBy('data')->orderBy('horario_inicio')->get();
+        return response()->json($events);
     }
 
-    public function store(Request $request)
+    /**
+     * Armazena um novo evento no banco de dados.
+     */
+    public function store(Request $request): JsonResponse
     {
-        $uniqueRule = Rule::unique('events')->where(function ($query) use ($request) {
+        // Regra para verificar conflitos de horário para um palestrante ou local
+        $conflictRule = function ($query) use ($request) {
             return $query->where('data', $request->data)
-                ->where(function ($q) use ($request) {
-                    $q->where('horario_inicio', '<', $request->horario_termino)
-                      ->where('horario_termino', '>', $request->horario_inicio);
-                });
-        });
+                ->where('horario_inicio', '<', $request->horario_termino)
+                ->where('horario_termino', '>', $request->horario_inicio);
+        };
 
         $validatedData = $request->validate([
-            'tema' => ['required', 'string', 'max:255', $uniqueRule],
+            'tema' => 'required|string|max:255',
             'vagas_max' => 'required|numeric|gt:4',
             'data' => 'required|string|in:Segunda,Terça,Quarta,Quinta,Sexta',
             'horario_inicio' => 'required|date_format:H:i',
@@ -35,20 +42,19 @@ class EventController extends Controller
                 function ($attribute, $value, $fail) use ($request) {
                     $inicio = Carbon::createFromFormat('H:i', $request->horario_inicio);
                     $termino = Carbon::createFromFormat('H:i', $value);
-                    $duracaoMin = 45;
-                    if ($inicio->diffInMinutes($termino) < $duracaoMin) {
-                        $fail("O evento deve ter uma duração mínima de {$duracaoMin} minutos.");
+                    if ($inicio->diffInMinutes($termino) < 45) {
+                        $fail("O evento deve ter uma duração mínima de 45 minutos.");
                     }
                 }
             ],
             'descricao' => 'required|string',
+            'palestrante' => ['required', 'string', 'max:255', Rule::unique('events')->where($conflictRule)],
             'email_palestrante' => 'required|email|max:255',
             'telefone_palestrante' => 'required|string|max:20',
-            'palestrante' => ['required', 'string', 'max:255', $uniqueRule],
-            'local' => ['required', 'string', $uniqueRule],
+            'local' => ['required', 'string', Rule::unique('events')->where($conflictRule)],
         ], [
-            'palestrante.unique' => 'Este palestrante já está ocupado em um evento no momento.',
-            'local.unique' => 'Este local já está reservado em um evento no momento.',
+            'palestrante.unique' => 'Este palestrante já está ocupado noutro evento neste horário.',
+            'local.unique' => 'Este local já está reservado para outro evento neste horário.',
             'horario_termino.after' => 'O horário de término deve ser após o horário de início.',
             'vagas_max.gt' => 'O número de vagas deve ser de, no mínimo, 5.',
         ]);
@@ -57,25 +63,58 @@ class EventController extends Controller
         return response()->json($event, 201);
     }
 
-    public function show(Event $event)
+    /**
+     * Exibe um evento específico.
+     */
+    public function show(Event $event): JsonResponse
     {
         return response()->json($event);
     }
 
-    public function update(Request $request, Event $event)
+    /**
+     * Atualiza um evento existente.
+     */
+    public function update(Request $request, Event $event): JsonResponse
     {
-        // ... (código do update)
+        $conflictRule = function ($query) use ($request) {
+            return $query->where('data', $request->data)
+                ->where('horario_inicio', '<', $request->horario_termino)
+                ->where('horario_termino', '>', $request->horario_inicio);
+        };
+
+        $validatedData = $request->validate([
+            'tema' => 'sometimes|required|string|max:255',
+            'vagas_max' => 'sometimes|required|numeric|gt:4',
+            'data' => 'sometimes|required|string|in:Segunda,Terça,Quarta,Quinta,Sexta',
+            'horario_inicio' => 'sometimes|required|date_format:H:i',
+            'horario_termino' => ['sometimes', 'required', 'date_format:H:i', 'after:horario_inicio'],
+            'descricao' => 'sometimes|required|string',
+            'palestrante' => ['sometimes', 'required', 'string', 'max:255', Rule::unique('events')->where($conflictRule)->ignore($event->id)],
+            'email_palestrante' => 'sometimes|required|email|max:255',
+            'telefone_palestrante' => 'sometimes|required|string|max:20',
+            'local' => ['sometimes', 'required', 'string', Rule::unique('events')->where($conflictRule)->ignore($event->id)],
+        ]);
+
+        $event->update($validatedData);
+        return response()->json($event);
     }
 
-    public function destroy(Event $event)
+    /**
+     * Remove um evento do banco de dados.
+     */
+    public function destroy(Event $event): JsonResponse
     {
         $event->delete();
         return response()->json(null, 204);
     }
 
-    public function exportPdf(Event $event){
+    /**
+     * Gera um PDF com a lista de alunos selecionados para o evento.
+     */
+    public function exportPdf(Event $event)
+    {
         $event->load(['users' => function ($query) {
-            $query->where('status', 'selecionado')->orderBy('name', 'asc');
+            $query->wherePivot('status', 'selecionado')->orderBy('name', 'asc');
         }]);
 
         if ($event->users->isEmpty()) {
@@ -89,7 +128,6 @@ class EventController extends Controller
         ];
 
         $pdf = Pdf::loadView('pdf.lista_alunos', $data);
-        return $pdf->download('lista-alunos-' . $event->tema . '.pdf');
+        return $pdf->download('lista-alunos-' . str_replace(' ', '-', $event->tema) . '.pdf');
     }
 }
-

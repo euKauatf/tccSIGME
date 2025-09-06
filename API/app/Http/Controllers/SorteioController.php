@@ -12,14 +12,13 @@ class SorteioController extends Controller
 {
 
   //realiza o sorteio
-
   public function realizarSorteio(): JsonResponse
   {
     $eventos = Event::with(['users' => function ($query) { //pega todos os eventos q tem usuários inscritos
       $query->wherePivot('status', 'inscrito');
     }])->get();
 
-    $resultado = []; //vai servir pro log dps
+    $resultadoFinal = []; // Corrigido para usar a mesma variável em todo o ficheiro
     $horariosOcupados = []; //vai servir pra verificação dos horários (pro aluno não ser sorteado pra 2 num mesmo tempo)
 
     $rodadaAtual = DB::table('inscricoes')->max('rodada') ?? 1;//variável que vai armazenar qual q é a rodada atual
@@ -27,24 +26,25 @@ class SorteioController extends Controller
 
     foreach ($eventos as $evento) { //nesse foreach vai ir de evento em evento
       $inscritos = $evento->users()->wherePivot('status', 'inscrito')->get()->shuffle();
-      $vagasOcupadas = $evento->users()->wherePivot('status', 'selecionado')->count();
+      $vagasOcupadas = $evento->users()->wherePivot('status', 'contemplado')->count();
       $vagasDisponiveis = $evento->vagas_max - $vagasOcupadas;
 
       if ($vagasDisponiveis <= 0 || $inscritos->isEmpty()) { //verifica se o evento ainda tem vagas disponíveis ou se não tem ngm inscrito
-          
+        
         if($vagasDisponiveis <= 0){
           foreach ($evento->users as $user) { //pega os usuários que estão nesses eventos
             $evento->users()->updateExistingPivot($user->id, [
-              'status' => 'cancelado',
-              'rodada' => $novaRodada  //transforma todos esses usuários em "cancelado" pois não tem mais vagas
+              'status' => 'nao contemplado',
+              'rodada' => $novaRodada  //transforma todos esses usuários em "nao contemplado" pois não tem mais vagas
             ]);
-            AuditLogger::log($user, 'foi cancelado', $evento); 
+            // CORRIGIDO: Removido o 'A' extra de 'AAuditLogger'
+             AuditLogger::log($user, "foi nao contemplado na rodada {$novaRodada}", $evento);
           }
         }
         $resultadoFinal[] = [
           'evento' => $evento->tema,
           'mensagem' => $vagasDisponiveis <= 0 ? 'Sem vagas disponíveis.' : 'Sem inscritos para sortear.',
-          'selecionados' => []
+          'contemplados' => []
         ];
         continue; // Pula para o próximo evento no loop
       }
@@ -70,32 +70,32 @@ class SorteioController extends Controller
 
       foreach ($selecionadosNesteEvento as $selecionado) {
         $evento->users()->updateExistingPivot($selecionado->id, [
-          'status' => 'selecionado',
+          'status' => 'contemplado',
           'rodada' => $novaRodada
         ]);
-        // AuditLogger::log($selecionado, 'foi selecionado', $evento);
-      }
+        AuditLogger::log($selecionado, "foi contemplado na rodada {$novaRodada}", $evento);
+      } // CORRIGIDO: Removida uma chave '}' extra que estava aqui
 
       $resultadoFinal[] = [
         'evento' => $evento->tema,
-        'selecionados' => $selecionadosNesteEvento->pluck('name')
+        'contemplados' => $selecionadosNesteEvento->pluck('name')
       ];
 
       $naoSelecionados = $inscritos->diff($selecionadosNesteEvento);
 
-      foreach ($naoSelecionados as $naoSelecionado) { //vai transformar o status de inscrição desse usuários não chamados para "cancelado"
+      foreach ($naoSelecionados as $naoSelecionado) { //vai transformar o status de inscrição desse usuários não chamados para "nao contemplado"
         $evento->users()->updateExistingPivot($naoSelecionado->id, [
-          'status' => 'cancelado',
+          'status' => 'nao contemplado',
           'rodada' => $novaRodada
         ]);
-        AuditLogger::log($naoSelecionado, 'foi cancelado', $evento); //manda um log falando qm foi cancelado
+        AuditLogger::log($naoSelecionado, "nao foi contemplado na rodada {$novaRodada}", $evento);
       }
-    }
+    } // CORRIGIDO: Adicionada a chave '}' que faltava para fechar o loop principal
 
 
     return response()->json([ //no final de tudo vai responder com esse json 
       'mensagem' => 'Sorteio finalizado.',
-      'resultados' => $resultado
+      'resultados' => $resultadoFinal // CORRIGIDO: Retornando a variável correta
     ]);
   }
 
@@ -108,7 +108,7 @@ class SorteioController extends Controller
     
     $eventos = Event::with(['users' => function ($query) use ($rodadaAtual){ //pega todos os eventos q tem usuários selecionados e cancelados apenas da rodada atual
       $query->wherePivot('rodada', $rodadaAtual)
-      ->wherePivotIn('status', ['cancelado', 'selecionado']);
+      ->wherePivotIn('status', ['nao contemplado', 'contemplado']);
     }])->get();
 
     foreach ($eventos as $evento) {
