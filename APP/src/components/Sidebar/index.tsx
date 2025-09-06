@@ -25,8 +25,8 @@ function Sidebar({ isOpen, user, onLogout, currentTheme, setLightTheme, setDarkT
   return (
     <aside className={`sidebar bg-emerald-800 text-white w-64 p-5 flex flex-col shadow-xl ${isOpen ? "open" : ""}`}> {/* Muda a corzinha do hamborgue */}
       {/* Parte do perfil do usuário bonitinha lá em cima */}
-      <Link to="/profile" className="flex items-center gap-x-3 border-b border-emerald-700/80 pb-5 mb-5">
-        <img src="/images/icon.svg" alt="Avatar" className="w-12 h-12 rounded-full ring-2 ring-emerald-600" />
+      <Link to="/profile" className="flex items-center pb-5 mb-5 border-b gap-x-3 border-emerald-700/80">
+        <img src="/images/icon.jpg" alt="Avatar" className="w-12 h-12 rounded-full ring-2 ring-emerald-600" />
         <div>
           <span className="text-lg font-bold text-white">{user?.name}</span>
           <p className="text-xs text-emerald-300">Ver Perfil</p>
@@ -63,7 +63,7 @@ function Sidebar({ isOpen, user, onLogout, currentTheme, setLightTheme, setDarkT
           <></>
         )}
       </nav>
-      <div className="p-4 flex justify-center items-center gap-4">
+      <div className="flex items-center justify-center gap-4 p-4">
         {/* Botão para Modo Claro (Sol) */}
         <button
           onClick={setLightTheme}
@@ -84,7 +84,7 @@ function Sidebar({ isOpen, user, onLogout, currentTheme, setLightTheme, setDarkT
       </div>
 
       {/* Butão pra sair da conta */}
-      <div className="mt-auto pt-5">
+      <div className="pt-5 mt-auto">
         <button onClick={onLogout} className={`${linkClasses} w-full text-left`}>
           <LogOut size={22} className="opacity-80" />
           <span>Sair</span>
