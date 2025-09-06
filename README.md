@@ -21,12 +21,12 @@
 # Rodando na sua máquina:
 ## No computador
 
-    1. Abra o app pgAdmin4 e crie um usuário com nome e senha de sua preferência clicando com o botão direito do mouse em "login/group roles"( clique na aba security para definir a senha e na aba Privileges e selecione as opções "canlogin?" e "superuser?")
-    2. Ainda no pgAdmin4, crie um banco com nome de sua preferencia e selecione o usuári oque vc criou com "owner"(proprietário/dono)
+1. Abra o app pgAdmin4 e crie um usuário com nome e senha de sua preferência clicando com o botão direito do mouse em "login/group roles"( clique na aba security para definir a senha e na aba Privileges e selecione as opções "canlogin?" e "superuser?")
+2. Ainda no pgAdmin4, crie um banco com nome de sua preferencia e selecione o usuári oque vc criou com "owner"(proprietário/dono)
 
 ## Dentro do VSCode(já com o programa clonado)
 
-    1. Clique uma vez em API na parte esquerda e verifique se existe um arquivo chamado .env, caso não exista clique com o botão direito em API e depois clique em new file (novo arquivo) e coloque o nome de ".env". Após isso, edite o arquivo conforme especificações da internet, com opor exemplo:
+1. Clique uma vez em API na parte esquerda e verifique se existe um arquivo chamado .env, caso não exista clique com o botão direito em API e depois clique em new file (novo arquivo) e coloque o nome de ".env". Após isso, edite o arquivo conforme especificações da internet, com opor exemplo:
 
         # .env - Exemplo de Variáveis de Ambiente
 
@@ -45,17 +45,17 @@
         API_KEY=aqui_vai_sua_chave_de_api_secreta
         NODE_ENV=development
         
-    2. utilize ctrl+j para abrir o terminal e cooque a seguinte série de comandos:
+2. utilize ctrl+j para abrir o terminal e cooque a seguinte série de comandos:
         1-cd api
         2-php artisan serve
-    3. após isso clique o simbolo "+" no parte superior direita do terminal para abrir mais um terminal e coloque os seguintes comandos:
+3. após isso clique o simbolo "+" no parte superior direita do terminal para abrir mais um terminal e coloque os seguintes comandos:
         1-cd app
         2-npm run dev
-    4. no terminal que utilizou o comando "cd app" segure ctrl e clique com o botão esquerdo em ciam do link gerado após o comando run dev
+4. no terminal que utilizou o comando "cd app" segure ctrl e clique com o botão esquerdo em ciam do link gerado após o comando run dev
 
 ## No computador -> Criando perfil de Admin
-    1. Após registrar um perfil através do Site, abra o app pgadmin4
-    2. clique no banco de dados criado por você e abra schemas>public>tables
-    3. clique com o botão direito na tabela com o nom "users" e depois "view/edit data">"all rolls" que irá abrir uma tabela no canto inferio direito
-    4. navegando pela tabela procure o usuário que você deseja tranformar em admnistrador
-    5. encontrando o usuário, procure pela coluna "tipo" e troque "aluno" por "adm"
+1. Após registrar um perfil através do Site, abra o app pgadmin4
+2. clique no banco de dados criado por você e abra schemas>public>tables
+3. clique com o botão direito na tabela com o nom "users" e depois "view/edit data">"all rolls" que irá abrir uma tabela no canto inferio direito
+4. navegando pela tabela procure o usuário que você deseja tranformar em admnistrador
+5. encontrando o usuário, procure pela coluna "tipo" e troque "aluno" por "adm"
