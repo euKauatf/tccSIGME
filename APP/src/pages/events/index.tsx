@@ -2,14 +2,18 @@
 
 // IMPORTAÇÕES
 import { useState, useEffect, useMemo } from "react"; // Importa o useState, useEffect, useMemo que são funções nativas do React
-import { getEvents, getUser, deleteEvent, subscribeToEvent, unsubscribeFromEvent, getSorteio, getSorteioClear } from "../../api/apiClient"; // Importa as funções do apiClient
+import { getEvents, getUser, deleteEvent, subscribeToEvent, verifyPassword, unsubscribeFromEvent, getSorteio, getSorteioClear } from "../../api/apiClient"; // Importa as funções do apiClient
+import { isAxiosError } from "axios";
 import type { Event, User } from "../../types"; // Importa os tipos de eventos e usuários
 import "./style.css"; // Estilo 😎
 import { useLocation } from "react-router-dom"; // Importa o useLocation pra poder pegar o flash do formulário
 import { Link, useNavigate, useSearchParams } from "react-router-dom"; // Link, navegação e função pra pegar o parametro passado pelo link
 import { useUser } from "../../hooks/useUser"; // Pra usar os dados do usuário
 
+import PasswordModal from '../../components/modals/PasswordModal'; // Importa o componente PasswordModal
 import EventModal from "../../components/modals/EventModal"; // Importa o componente EventModal
+import InfoModal from '../../components/modals/InfoModal'; // Importa o componente InfoModal
+import ConfirmModal from '../../components/modals/ConfirmModal'; // Importa o componente ConfirmModal
 
 function EventsPage() {
   const { isAdmin } = useUser(); // Pega o usuário logado e verifica se é admin
@@ -19,10 +23,22 @@ function EventsPage() {
   const location = useLocation();
   const [user, setUser] = useState<User | null>(null); // user é um estado que armazena o usuário logado
 
-  const [selectedDay, setSelectedDay] = useState("Segunda"); // selectedDay é um estado que armazena o dia selecionado
+  const [selectedDay, setSelectedDay] = useState("Todos"); // selectedDay é um estado que armazena o dia selecionado
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [isLoading, setIsLoading] = useState(true); // isLoading é um estado que indica se os dados estão sendo carregados
   const [error, setError] = useState<string | null>(null); // error é um estado que armazena o erro caso ocorra algum
+
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+  const [infoModalContent, setInfoModalContent] = useState<InfoModalState>({ title: '', message: '', status: 'info' });
+
+  const [confirmModalContent, setConfirmModalContent] = useState<ConfirmModalState>({
+    isOpen: false,
+    title: '',
+    message: '',
+    buttonType: 'btn-primary',
+    onConfirm: () => { }, // Ação de confirmação vazia por padrão
+  });
 
   const navigate = useNavigate(); // navigate é usado para navegar entre as páginas
   const [searchParams] = useSearchParams(); // searchParams é pros parâmetros do link
@@ -38,6 +54,21 @@ function EventsPage() {
   const openModal = (event: Event) => {
     setSelectedEvent(event);
   };
+
+  type InfoModalState = {
+    title: string;
+    message: string;
+    status: 'info' | 'success' | 'error';
+  };
+
+  type ConfirmModalState = {
+    isOpen: boolean;
+    title: string;
+    message: string;
+    buttonType: 'btn-primary' | 'btn-error' | 'btn-success';
+    onConfirm: () => void; // A função a ser executada na confirmação
+  };
+
 
   const closeModal = () => {
     setSelectedEvent(null);
@@ -80,69 +111,136 @@ function EventsPage() {
     navigate(`/events/edit/${eventId}`);
   };
 
-  const handleDelete = async (eventId: number) => { // handleDelete é pra excluir
-    if (!window.confirm("Tem certeza que deseja excluir este evento?")) {
-      return;
-    }
+  const handleDelete = (eventId: number) => {
+    const eventName = events.find(e => e.id === eventId)?.tema || 'este evento';
+    setConfirmModalContent({
+      isOpen: true,
+      title: `Confirmar Exclusão`,
+      message: `Você tem certeza que deseja excluir o evento "${eventName}"?`,
+      buttonType: 'btn-error',
+      onConfirm: () => handleConfirmDelete(eventId), // Passa a função com o ID
+    });
+  };
+
+
+  const handleConfirmDelete = async (eventId: number) => {
     try {
-      await deleteEvent(eventId); // Chama a função deleteEvent do apiClient
+      await deleteEvent(eventId);
       setEvents(prev => prev.filter(event => event.id !== eventId));
-      alert('Evento excluído com sucesso!');
+
+      setInfoModalContent({ title: 'Sucesso', message: 'O evento foi excluído com sucesso.', status: 'success' });
+      setIsInfoModalOpen(true);
+
     } catch (err) {
       console.error('Erro ao excluir evento:', err);
-      alert('Não foi possível excluir o evento.');
+      setInfoModalContent({ title: 'Erro', message: 'Não foi possível excluir o evento.', status: 'error' });
+      setIsInfoModalOpen(true);
+    } finally {
+      setConfirmModalContent({ ...confirmModalContent, isOpen: false });
     }
   };
 
-  // Em APP/srcs/pages/Events/index.tsx
+  const handleSubscription = (eventId: number) => {
+    const eventName = events.find(e => e.id === eventId)?.tema || 'este evento';
+    setConfirmModalContent({
+      isOpen: true,
+      title: 'Confirmar Inscrição',
+      message: `Você deseja se inscrever no evento "${eventName}"?`,
+      buttonType: 'btn-success',
+      onConfirm: () => handleConfirmSubscription(eventId),
+    });
+  };
 
-  const handleSubscription = async (eventId: number) => {
-    if (!window.confirm("Confirmar inscrição neste sorteio?")) {
-      return;
-    }
+  const handleConfirmSubscription = async (eventId: number) => { // Garanta que ela recebe eventId
     try {
       await subscribeToEvent(eventId);
-      alert("Inscrição realizada com sucesso!");
 
+      // Atualiza o estado local do usuário para refletir a inscrição
       const subscribedEvent = events.find(e => e.id === eventId);
       if (subscribedEvent && user) {
-        // CORREÇÃO: Crie um novo objeto de evento com a propriedade 'pivot'
         const newSubscribedEventWithPivot = {
           ...subscribedEvent,
-          pivot: {
-            status: 'inscrito' as const // Adiciona o status 'inscrito'
-          }
+          pivot: { status: 'inscrito' as const },
         };
-
-        // Atualize o estado do usuário com o evento formatado corretamente
         setUser({
           ...user,
           eventos: [...(user.eventos || []), newSubscribedEventWithPivot],
         });
       }
+
+      // Feedback de sucesso
+      setInfoModalContent({
+        title: 'Inscrição Realizada!',
+        message: 'Sua inscrição foi registrada com sucesso. Aguarde o sorteio.',
+        status: 'success',
+      });
+      setIsInfoModalOpen(true);
+
     } catch (err) {
       console.error("Erro ao se inscrever no sorteio:", err);
-      alert("Não foi possível realizar a inscrição pro sorteio. Talvez você já esteja inscrito!");
+      const errorMessage = isAxiosError(err) && err.response?.data?.message
+        ? err.response.data.message
+        : "Não foi possível realizar a inscrição. Talvez você já esteja inscrito ou o evento esteja lotado.";
+
+      // Feedback de erro
+      setInfoModalContent({
+        title: 'Erro na Inscrição',
+        message: errorMessage,
+        status: 'error',
+      });
+      setIsInfoModalOpen(true);
+    } finally {
+      // Fecha o modal de confirmação
+      setConfirmModalContent({ ...confirmModalContent, isOpen: false });
     }
   };
 
-  const handleUnsubscribe = async (eventId: number) => { // handleUnsubscribe é pra cancelar a inscrição do sorteio
-    if (!window.confirm("Tem certeza que deseja remover sua inscrição deste evento?")) {
-      return;
-    }
+  const handleUnsubscribe = (eventId: number) => {
+    const eventName = user?.eventos?.find(e => e.id === eventId)?.tema || 'este evento';
+
+    setConfirmModalContent({
+      isOpen: true,
+      title: 'Cancelar Inscrição',
+      message: `Tem certeza que deseja remover sua inscrição do evento "${eventName}"?`,
+      buttonType: 'btn-error',
+      // A mágica acontece aqui, conectando o ID à função de confirmação
+      onConfirm: () => handleConfirmUnsubscribe(eventId),
+    });
+  };
+
+  const handleConfirmUnsubscribe = async (eventId: number) => { // Garanta que ela recebe eventId
     try {
       await unsubscribeFromEvent(eventId);
-      alert("Inscrição removida com sucesso!");
 
-      if (user) { // Atualiza o estado local do usuário para refletir a remoção
+      // Atualiza o estado local do usuário para refletir a remoção
+      if (user) {
         setUser({
           ...user,
           eventos: user.eventos?.filter(e => e.id !== eventId) ?? [],
         });
       }
+
+      // Feedback de sucesso com InfoModal
+      setInfoModalContent({
+        title: 'Inscrição Removida',
+        message: 'Sua inscrição foi removida com sucesso.',
+        status: 'success',
+      });
+      setIsInfoModalOpen(true);
+
     } catch (err) {
       console.error("Erro ao remover inscrição do sorteio:", err);
-      alert("Não foi possível remover a inscrição.");
+
+      // Feedback de erro com InfoModal
+      setInfoModalContent({
+        title: 'Erro',
+        message: 'Não foi possível remover a sua inscrição.',
+        status: 'error',
+      });
+      setIsInfoModalOpen(true);
+    } finally {
+      // Fecha o modal de confirmação
+      setConfirmModalContent({ ...confirmModalContent, isOpen: false });
     }
   };
 
@@ -161,6 +259,11 @@ function EventsPage() {
     }
 
     // Aplica o filtro de dia da semana no resultado final
+
+    if (selectedDay === "Todos") {
+      return sourceEvents;
+    }
+
     return sourceEvents.filter((event) => event.data === selectedDay);
 
   }, [events, user?.eventos, filterMode, selectedDay]);
@@ -176,27 +279,67 @@ function EventsPage() {
   const userSubscribedEventIds = new Set(user?.eventos?.map(e => e.pivot?.status === 'inscrito' ? e.id : null) ?? []); // Eventos que o usuário está inscrito
   const userSelectedEventIds = new Set(user?.eventos?.filter(e => e.pivot?.status === 'selecionado')?.map(e => e.id) ?? []);
 
-  const handleSorteio = async () => {//função que vai chamar a api do sorteio de alunos
-    if (!window.confirm("Deseja realizar o sorteio geral agora?")) return;
+  const handleSorteio = () => {
+    setConfirmModalContent({
+      isOpen: true,
+      title: 'Realizar Sorteio Geral',
+      message: 'Deseja realizar o sorteio geral agora? Esta ação selecionará os alunos para os eventos com vagas limitadas e não pode ser desfeita facilmente.',
+      buttonType: 'btn-primary',
+      onConfirm: handleConfirmSorteio,
+    });
+  };
+
+  const handleConfirmSorteio = async () => {
     try {
       const response = await getSorteio();
-      alert("Sorteio realizado!");
+      setInfoModalContent({
+        title: 'Sorteio Realizado!',
+        message: 'O sorteio geral foi concluído com sucesso.',
+        status: 'success'
+      });
+      setIsInfoModalOpen(true); // O reload da página acontece ao fechar este modal
       console.log(response.data);
-    }
-    catch (error) {
-      alert("O sorteio não foi realizado");
+    } catch (error) {
       console.error(error);
+      const errorMessage = isAxiosError(error) && error.response?.data?.message
+        ? error.response.data.message
+        : "O sorteio não foi realizado devido a um erro.";
+      setInfoModalContent({ title: 'Erro no Sorteio', message: errorMessage, status: 'error' });
+      setIsInfoModalOpen(true);
+    } finally {
+      setConfirmModalContent({ ...confirmModalContent, isOpen: false });
     }
   };
-  const handleSorteioClear = async () => {//função que vai chamar a api do sorteio de alunos
-    if (!window.confirm("Deseja realizar a limpeza do sorteio?")) return;
-    try {
-      const response = await getSorteioClear();
-      alert("Limpeza realizada!");
-      console.log(response.data);
+
+  const handleSorteioClear = () => {
+    setIsPasswordModalOpen(true); // A única responsabilidade agora é abrir o modal
+  };
+
+  const handleConfirmClearWithPassword = async (password: string) => {
+    setIsPasswordModalOpen(false); // Fecha o modal imediatamente
+
+    if (!password) {
+      setInfoModalContent({ title: 'Atenção', message: 'A senha é obrigatória para esta ação.', status: 'error' });
+      setIsInfoModalOpen(true);
+      return;
     }
-    catch (error) {
-      alert("A limpeza não foi realizada");
+
+    try {
+      await verifyPassword(password);
+
+      const response = await getSorteioClear();
+      setInfoModalContent({ title: 'Sucesso!', message: 'A limpeza dos dados do sorteio foi realizada com sucesso.', status: 'success' });
+      setIsInfoModalOpen(true);
+      console.log(response.data);
+
+    } catch (error) {
+      const errorMessage = isAxiosError(error) && error.response
+        ? error.response.data.message
+        : "Não foi possível concluir a operação devido a um erro inesperado.";
+
+      setInfoModalContent({ title: 'Falha na Operação', message: errorMessage, status: 'error' });
+      setIsInfoModalOpen(true);
+
       console.error(error);
     }
   };
@@ -232,6 +375,14 @@ function EventsPage() {
       )}
 
       <div className="flex flex-wrap justify-center w-full gap-2 my-6"> { /* Botões de seleção de dia */}
+        <button
+          key="todos-dias" // Chave única
+          onClick={() => setSelectedDay("Todos")} // Define o state como "Todos"
+          className={`px-4 py-2 divpEB rounded-lg font-semibold transition-colors ${selectedDay === "Todos" ? "bg-emerald-600 text-white shadow-lg" : "bg-white text-emerald-700 hover:bg-emerald-100"
+            }`}
+        >
+          Todos os Dias
+        </button>
         {diasDaSemana.map((dia) => (
           <button key={dia} onClick={() => setSelectedDay(dia)} className={`px-4 py-2 divpEB rounded-lg font-semibold transition-colors ${selectedDay === dia ? "bg-emerald-600 text-white shadow-lg" : "bg-white text-emerald-700 hover:bg-emerald-100"}`}>
             {dia}-feira
@@ -320,6 +471,31 @@ function EventsPage() {
         </>
       )}
       <EventModal event={selectedEvent} onClose={closeModal} />
+      <PasswordModal
+        isOpen={isPasswordModalOpen}
+        onClose={() => setIsPasswordModalOpen(false)}
+        onConfirm={handleConfirmClearWithPassword}
+        title="Confirmar Limpeza do Sorteio"
+        message="Esta ação é irreversível e irá apagar todos os alunos inscritos e selecionados da rodada atual. Para continuar, digite sua senha de administrador."
+      />
+      <InfoModal
+        isOpen={isInfoModalOpen}
+        onClose={() => {
+          setIsInfoModalOpen(false);
+        }}
+        title={infoModalContent.title}
+        message={infoModalContent.message}
+        status={infoModalContent.status}
+      />
+      <ConfirmModal
+        isOpen={confirmModalContent.isOpen}
+        onClose={() => setConfirmModalContent({ ...confirmModalContent, isOpen: false })}
+        onConfirm={confirmModalContent.onConfirm} // Simplesmente passa a função do estado
+        title={confirmModalContent.title}
+        message={confirmModalContent.message}
+        confirmButtonText={confirmModalContent.buttonType === 'btn-error' ? "Excluir" : "Confirmar"}
+        confirmButtonType={confirmModalContent.buttonType}
+      />
     </div>
   );
 }

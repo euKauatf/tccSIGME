@@ -69,5 +69,5 @@ export const exportPdf = async (eventId: number) => {
     }
 };
 
-
+export const verifyPassword = (password: string) => apiClient.post('/verify-password', { password });
 export default apiClient;
