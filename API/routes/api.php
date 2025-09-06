@@ -14,6 +14,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::apiResource('event', EventController::class);
 
 Route::middleware('auth:sanctum')->group(function () {
+  Route::post('/verify-password', [AuthController::class, 'verifyPassword']);
   Route::post('/logout', [AuthController::class, 'logout']);
   Route::get('/user', function (Request $request) {
     return $request->user()->load('eventos');
@@ -40,4 +41,4 @@ Route::post('/sorteio/clear', [SorteioController::class, 'clearSorteio'])
   ->middleware('auth:sanctum');
 
 Route::get('/event/{event}/export-pdf', [EventController::class, 'exportPdf'])
-    ->middleware('auth:sanctum');
+  ->middleware('auth:sanctum');
