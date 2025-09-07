@@ -46,10 +46,6 @@ function Sidebar({ isOpen, user, onLogout, currentTheme, setLightTheme, setDarkT
           <CalendarDays size={22} className="opacity-80" />
           <span>Atividades</span>
         </NavLink>
-        <NavLink to="/palestrantes" className={({ isActive }) => `${linkClasses} ${isActive ? activeLinkClasses : ""}`}>
-          <Briefcase size={22} className="opacity-80" />
-          <span>Palestrantes</span>
-        </NavLink>
 
         {/* Se o usuário for adm, mostra os links que tão aqui embaixo*/}
         {user?.tipo == 'adm' ? (
@@ -65,7 +61,11 @@ function Sidebar({ isOpen, user, onLogout, currentTheme, setLightTheme, setDarkT
             <NavLink to="/scanner" className={({ isActive }) => `${linkClasses} ${isActive ? activeLinkClasses : ""}`}>
               <Camera size={22} className="opacity-80" />
               <span>Scanner</span>
-            </NavLink> 
+            </NavLink>
+            <NavLink to="/palestrantes" className={({ isActive }) => `${linkClasses} ${isActive ? activeLinkClasses : ""}`}>
+              <Briefcase size={22} className="opacity-80" />
+              <span>Palestrantes</span>
+            </NavLink>
           </>
         ) : ( // Se não for adm, não é nadakkkkk
           <></>

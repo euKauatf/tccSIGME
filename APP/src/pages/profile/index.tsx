@@ -30,9 +30,6 @@ function ProfilePage() {
                   <p className="text-gray-600">
                     <strong>Matrícula:</strong> {user?.matricula}
                   </p>
-                  <p className="text-gray-600">
-                    <strong>CPF:</strong> {user?.cpf}
-                  </p>
                 </>
               )}
             </div>

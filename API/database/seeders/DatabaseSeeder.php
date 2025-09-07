@@ -10,32 +10,34 @@ use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
-    public function run(): void
-    {
-        set_time_limit(0);
+  /**
+   * Seed the application's database.
+   */
+  public function run(): void
+  {
+    $this->call(UserSeeder::class);
+    /*
+    set_time_limit(0);
 
-        \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
-        User::truncate();
-        Event::truncate();
-        DB::table('inscricoes')->truncate();
-        \Illuminate\Support\Facades\DB::table('inscricoes')->truncate();
-        \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
+    \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
+    User::truncate();
+    Event::truncate();
+    DB::table('inscricoes')->truncate();
+    \Illuminate\Support\Facades\DB::table('inscricoes')->truncate();
+    \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
 
 
-        User::factory()->create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('12345678'), 
-            'tipo' => 'adm',
-        ]);
-        $alunos = User::factory(100)->create();
+    User::factory()->create([
+      'name' => 'Admin User',
+      'email' => 'admin@example.com',
+      'password' => Hash::make('12345678'),
+      'tipo' => 'adm',
+    ]);
+    $alunos = User::factory(100)->create();
 
-        $eventos = Event::factory(10)->create();
+    $eventos = Event::factory(10)->create();
 
-        /*$alunosParaInscrever = $alunos->take();
+    /*$alunosParaInscrever = $alunos->take();
 
         $inscricoesParaFazer = [];
 
@@ -54,6 +56,5 @@ class DatabaseSeeder extends Seeder
             DB::table('inscricoes')->insert($chunk);
         }
         */
-    }
-
+  }
 }
