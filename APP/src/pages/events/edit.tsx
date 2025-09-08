@@ -122,7 +122,7 @@ function EditEventPage() {
 
               <label htmlFor="email_palestrante" className="block text-sm font-medium text-gray-700">Email</label>
 
-              <input type="text" id="email_palestrante" name="email_palestrante" value={formData.email_palestrante || ''} onChange={handleChange}
+              <input type="text" id="email_palestrante" disabled name="email_palestrante" value={formData.email_palestrante || ''} onChange={handleChange}
 
                 className="block w-full mt-1 input input-bordered" required />
 
@@ -131,7 +131,7 @@ function EditEventPage() {
 
               <label htmlFor="telefone_palestrante" className="block text-sm font-medium text-gray-700">Telefone do Palestrante</label>
 
-              <IMaskInput mask="(00) 00000-0000" id="telefone_palestrante" name="telefone_palestrante" value={formData.telefone_palestrante || ''} placeholder="(00) 00000-0000" className="w-full input input-bordered" required onAccept={(value) => { handleChange({ target: { name: 'telefone_palestrante', value: value, }, } as React.ChangeEvent<HTMLInputElement>); }} />
+              <IMaskInput mask="(00) 00000-0000" disabled id="telefone_palestrante" name="telefone_palestrante" value={formData.telefone_palestrante || ''} placeholder="(00) 00000-0000" className="w-full input input-bordered" required onAccept={(value) => { handleChange({ target: { name: 'telefone_palestrante', value: value, }, } as React.ChangeEvent<HTMLInputElement>); }} />
 
             </div>
             <div>

@@ -114,7 +114,7 @@ class EventController extends Controller
     public function exportPdf(Event $event)
     {
         $event->load(['users' => function ($query) {
-            $query->wherePivot('status', 'selecionado')->orderBy('name', 'asc');
+            $query->wherePivot('status', 'contemplado')->orderBy('name', 'asc');
         }]);
 
         if ($event->users->isEmpty()) {
@@ -123,8 +123,7 @@ class EventController extends Controller
 
         $data = [
             'event' => $event,
-            'alunos' => $event->users,
-            'dataGeracao' => now()->format('d/m/Y H:i:s')
+            'alunos' => $event->users,  
         ];
 
         $pdf = Pdf::loadView('pdf.lista_alunos', $data);

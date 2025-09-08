@@ -17,9 +17,6 @@ function ProfilePage() {
               <h2 className="text-4xl font-bold text-emerald-700">
                 {user?.name}
               </h2>
-              <p className="mt-2 text-gray-600">
-                <strong>Email:</strong> {user?.email}
-              </p>
               {/* Mostra o tipo do perfil apenas se for admin, usando operador ternário */}
               {isAdmin ? (
                 <p className="text-gray-600">
