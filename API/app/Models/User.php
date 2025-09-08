@@ -17,11 +17,9 @@ class User extends Authenticatable
    */
   protected $fillable = [
     'name',
-    'email',
-    'password',
     'matricula',
-    'cpf',
     'tipo',
+    'password',
   ];
 
   /**
@@ -38,10 +36,16 @@ class User extends Authenticatable
   protected function casts(): array
   {
     return [
-      'email_verified_at' => 'datetime',
       'password' => 'hashed',
     ];
   }
+
+
+  public function username(): string
+  {
+      return 'matricula';
+  }
+
 
   public function isAdm(): bool
   {

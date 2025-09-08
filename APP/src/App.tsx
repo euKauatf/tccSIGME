@@ -1,7 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/login";
 import HomePage from "./pages/home";
-import RegisterPage from "./pages/register";
 import EventsPage from "./pages/events";
 import ProfilePage from "./pages/profile";
 import StudentsPage from "./pages/students";
@@ -21,7 +20,6 @@ function App() {
     <Routes>
       {/* Rotas públicas */}
       <Route path="/" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
 
       {/* Rotas protegidas com o mesmo aninhamento */}
       <Route element={<ProtectedRoute />}>

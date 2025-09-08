@@ -18,6 +18,9 @@
 
     <h1>Lista de Participantes Sorteados</h1>
     <h2>Evento: {{ $event->tema }}</h2>
+    <h2>Data: {{$event->horario_inicio}} - {{$event->horario_termino}}</h2>
+    <h2>Local: {{$event->local}}</h2>
+    <h2>Palestrante: {{$event->palestrante}}</h2>
 
     <table>
         <thead>

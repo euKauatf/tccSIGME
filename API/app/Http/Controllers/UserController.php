@@ -19,7 +19,7 @@ class UserController extends Controller
             ->with(['eventos' => function ($query) {
                 $query->select('events.id', 'events.tema', 'events.data');
             }])
-            ->select('id', 'name', 'email', 'matricula')
+            ->select('id', 'name', 'matricula')
             ->orderBy('name', 'asc')
             ->get();
             
