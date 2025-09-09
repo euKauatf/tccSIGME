@@ -21,8 +21,6 @@ class AuditLog extends Model
     ];
     
     /**
-     * ✅ A LINHA MAIS IMPORTANTE - Garante a conversão automática para JSON.
-     * É muito provável que esta propriedade esteja faltando no seu arquivo.
      */
     protected $casts = [
         'details' => 'array',

@@ -53,6 +53,10 @@ class Event extends Model
         return $this->belongsTo(Palestrante::class, 'palestrante_id', 'id');
     }
 
+    public function local(): BelongsTo
+        {
+            return $this->belongsTo(Local::class, 'local_id');
+        }
     /**
      * Vagas restantes do evento
      */

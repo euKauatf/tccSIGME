@@ -61,3 +61,15 @@ Route::delete('/palestrantes/{palestrante}', [PalestranteController::class, 'des
 
 // Inscrição pública (sem login)
 Route::post('/inscricao/marcar-presenca', [InscricaoController::class, 'marcarPresenca']);
+
+// Locais
+Route::get('/locais', [\App\Http\Controllers\LocalController::class, 'index'])
+  ->middleware('auth:sanctum');
+Route::post('/locais', [\App\Http\Controllers\LocalController::class, 'store'])
+  ->middleware('auth:sanctum');
+Route::get('/locais/{local}', [\App\Http\Controllers\LocalController::class, 'show'])
+  ->middleware('auth:sanctum');
+Route::put('/locais/{local}', [\App\Http\Controllers\LocalController::class, 'update'])
+  ->middleware('auth:sanctum');
+Route::delete('/locais/{local}', [\App\Http\Controllers\LocalController::class, 'destroy'])
+  ->middleware('auth:sanctum');

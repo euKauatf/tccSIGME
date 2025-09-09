@@ -1,6 +1,6 @@
-  // Em: src/pages/StudentsPage/index.jsx
+// Em: src/pages/StudentsPage/index.jsx
 
-  import { useState, useEffect } from "react";
+  import { useState, useEffect, useMemo } from "react";
   import type { User } from "../../types";
   import { getAlunos } from "../../api/apiClient";
   import "./style.css";
@@ -9,10 +9,21 @@
     const [students, setStudents] = useState<User[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [nameSearch, setNameSearch] = useState("");
 
+    
     // Estado que controla qual painel de aluno está aberto
     const [expandedStudentId, setExpandedStudentId] = useState<number | null>(null);
 
+      const filteredStudents = useMemo(() => {
+    if (!nameSearch) {
+      return students; // Se a busca estiver vazia, retorna todos
+    }
+    return students.filter(student =>
+      student.name.toLowerCase().includes(nameSearch.toLowerCase())
+      );
+    }, [students, nameSearch]); 
+    
     useEffect(() => {
       const fetchStudents = async () => {
         setIsLoading(true);
@@ -58,10 +69,17 @@
             <h2 className="py-3 text-3xl text-center md:text-4xl text-emerald-600">
               Lista de Alunos
             </h2>
+            <input
+              type="text"
+              placeholder="Digite o nome do aluno..."
+              className="input input-bordered w-1/2 my-4 mx-auto"
+              value={nameSearch}
+              onChange={(e) => setNameSearch(e.target.value)}
+            />
 
             {students.length > 0 ? (
               <ul className="flex flex-col pb-6 gap-y-2">
-                {students.map((student) => (
+                {filteredStudents.map((student) => (
                   <li key={student.id} className="transition-shadow bg-white rounded-lg shadow-md divp hover:shadow-lg">
                     {/* --- Informações principais do aluno --- */}
                     <div className="flex flex-col items-center justify-between p-4 sm:flex-row">

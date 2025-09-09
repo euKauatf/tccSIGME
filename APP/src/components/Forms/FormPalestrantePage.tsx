@@ -82,7 +82,6 @@ function FormPalestrantePage() {
     }
 
     return (
-        // ✅ CORREÇÃO: Removido 'min-h-screen' e 'items-center' para alinhar ao topo.
         <div className="flex justify-center w-full p-4 font-sans main sm:p-6 lg:p-8">
             <div className="w-full max-w-2xl">
                 {errorMessage && (

@@ -11,6 +11,8 @@ import AuditLogsPage from "./pages/auditLogs";
 import ScannerPage from "./pages/scanner";
 import PalestrantesPage from "./pages/palestrantes";
 import FormPalestrantePage from "./components/Forms/FormPalestrantePage";
+import LocaisPage from "./pages/locais";
+import FormLocalPage from "./components/Forms/FormLocalPage";
 
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import AdminRoute from "./components/ProtectedRoute/AdminRoute";
@@ -29,6 +31,7 @@ function App() {
           <Route path="events" element={<EventsPage />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route path="palestrantes" element={<PalestrantesPage />} />
+          <Route path="locais" element={<LocaisPage />} />
 
           {/* Rotas que são apenas para administradores */}
           <Route element={<AdminRoute />}>
@@ -39,6 +42,8 @@ function App() {
             <Route path="scanner" element={<ScannerPage />} />
             <Route path="palestrantes/add" element={<FormPalestrantePage />} />
             <Route path="palestrantes/edit/:id" element={<FormPalestrantePage />} />
+            <Route path="locais/add" element={<FormLocalPage />} />
+            <Route path="locais/edit/:id" element={<FormLocalPage />} />
           </Route>
         </Route>
       </Route>
