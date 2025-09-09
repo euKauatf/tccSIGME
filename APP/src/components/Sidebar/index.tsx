@@ -2,7 +2,7 @@
 
 // IMPORTAÇÕES
 import { Link, NavLink } from "react-router-dom";
-import { UserRound, CalendarDays, LogOut, UsersRound, ReceiptText, House, Briefcase, Camera } from "lucide-react";
+import { UserRound, CalendarDays, LogOut, UsersRound, ReceiptText, House, Briefcase, Camera, MapPin} from "lucide-react";
 import type { User } from "../../types";
 import "./style.css";
 
@@ -58,13 +58,17 @@ function Sidebar({ isOpen, user, onLogout, currentTheme, setLightTheme, setDarkT
               <ReceiptText size={22} className="opacity-80" />
               <span>Logs</span>
             </NavLink>
-            <NavLink to="/scanner" className={({ isActive }) => `${linkClasses} ${isActive ? activeLinkClasses : ""}`}>
-              <Camera size={22} className="opacity-80" />
-              <span>Scanner</span>
-            </NavLink>
             <NavLink to="/palestrantes" className={({ isActive }) => `${linkClasses} ${isActive ? activeLinkClasses : ""}`}>
               <Briefcase size={22} className="opacity-80" />
               <span>Palestrantes</span>
+            </NavLink>
+            <NavLink to="/locais" className={({ isActive }) => `${linkClasses} ${isActive ? activeLinkClasses : ""}`}>
+              <MapPin size={22} className="opacity-80" />
+              <span>Locais</span>
+            </NavLink>
+            <NavLink to="/scanner" className={({ isActive }) => `${linkClasses} ${isActive ? activeLinkClasses : ""}`}>
+              <Camera size={22} className="opacity-80" />
+              <span>Scanner</span>
             </NavLink>
           </>
         ) : ( // Se não for adm, não é nadakkkkk

@@ -109,7 +109,7 @@ class InscricaoController extends Controller
       DB::table('inscricoes')
           ->where('id', $inscricao->id)
           ->update(['status' => 'presente']);
-      AuditLogger::log("presença para {$aluno->name} marcada", Event::find($eventId));
+      AuditLogger::log(auth()->user(), 'Presença marcada para o usuário: ' . $user->name . ' no evento: ' . $evento->nome);
 
       return response()->json(['message' => "Presença de {$aluno->name} confirmada com sucesso!"]);
   }

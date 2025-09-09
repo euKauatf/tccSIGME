@@ -48,3 +48,9 @@ export interface Palestrante {
   email: string;
   telefone: string;
 }
+
+export interface Local {
+  id: number;
+  name: string;
+  capacidade: number;
+}

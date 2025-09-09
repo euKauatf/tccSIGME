@@ -51,6 +51,15 @@ export const createPalestrante = (palestranteData: any) => apiClient.post('/pale
 export const updatePalestrante = (id: number, palestranteData: any) => apiClient.put(`/palestrantes/${id}`, palestranteData);
 export const deletePalestrante = (id: number) => apiClient.delete(`/palestrantes/${id}`);
 export const searchPalestrantes = (term: string) => apiClient.get(`/palestrantes/search?term=${term}`);
+
+export const getLocais = () => apiClient.get('/locais');
+export const getLocalById = (id: number) => apiClient.get(`/locais/${id}`);
+export const createLocal = (localData: any) => apiClient.post('/locais', localData);
+export const updateLocal = (id: number, localData: any) => apiClient.put(`/locais/${id}`, localData);
+export const deleteLocal = (id: number) => apiClient.delete(`/locais/${id}`);
+export const searchLocais = (term: string) => apiClient.get(`/locais/search?term=${term}`);
+
+
 export const exportPdf = async (eventId: number) => {
     try {
         const response = await apiClient.get(`/event/${eventId}/export-pdf`, {

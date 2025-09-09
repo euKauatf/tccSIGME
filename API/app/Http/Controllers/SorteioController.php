@@ -37,7 +37,7 @@ class SorteioController extends Controller
               'status' => 'nao contemplado',
               'rodada' => $novaRodada  //transforma todos esses usuários em "nao contemplado" pois não tem mais vagas
             ]);
-            // CORRIGIDO: Removido o 'A' extra de 'AAuditLogger'
+            // CORRIGIDO: Removido o 'A' extra de 'AuditLogger'
              AuditLogger::log($user, "foi nao contemplado na rodada {$novaRodada}", $evento);
           }
         }
