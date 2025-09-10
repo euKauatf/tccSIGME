@@ -1,0 +1,59 @@
+Sala 5
+40
+
+Setor de Agroindústria - Planta de Vegetais
+30
+
+Auditório
+186
+
+Setor de Agroindústria - Planta de Panificação
+20
+
+Sala 15
+20
+
+Sala 14
+20
+
+Auditório do EEcoE
+40
+
+Laboratório de Química do Bloco IV
+20
+
+Laboratório de Físico-Química
+20
+
+Laboratório de Zoologia e Anatomia
+30
+
+Dojo
+20
+
+Laboratório 7
+30
+
+Laboratório 6
+30
+
+Sala 7
+40
+
+Viveiro
+30
+
+Sala 19
+30
+
+sala 21
+30
+
+Laboratório de Anatomia Vegetal
+20
+
+Quadra Coberta
+50
+
+Sala 18
+40
