@@ -102,6 +102,21 @@ function FormEvent() {
     const vagasMax = Number(formData.vagas_max);
     const vagasTot = Number(formData.vagas_tot);
 
+    if (!formData.email_palestrante || !formData.telefone_palestrante) {
+      formData.email_palestrante = "nao@inserido.com";
+      formData.telefone_palestrante = "(00) 00000-0000";
+    }
+
+    if (formData.local != selectedLocal?.name) {
+      setErrorMessage("O local deve ser selecionado.");
+      return;
+    }
+
+    if (formData.palestrante != selectedPalestrante?.name) {
+      setErrorMessage("O palestrante deve ser selecionado.");
+      return;
+    }
+
     if (vagasMax <= 0) {
       setErrorMessage("A quantidade de vagas do evento deve ser maior que zero.");
       return;
@@ -262,12 +277,12 @@ function FormEvent() {
 
             <div>
               <label htmlFor="email_palestrante" className="block text-sm font-medium text-gray-700">Email do Palestrante</label>
-              <input name="email_palestrante" value={formData.email_palestrante} onChange={handleChange} type="text" placeholder="Email" className="w-full input input-bordered" disabled required />
+              <input name="email_palestrante" value={formData.email_palestrante ?? ''} onChange={handleChange} type="text" placeholder="Email" className="w-full input input-bordered" disabled />
             </div>
 
             <div>
               <label htmlFor="telefone_palestrante" className="block text-sm font-medium text-gray-700">Telefone do Palestrante</label>
-              <IMaskInput mask="(00) 00000-0000" disabled name="telefone_palestrante" value={formData.telefone_palestrante} placeholder="(00) 00000-0000" className="w-full input input-bordered" required onAccept={(value) => { setFormData(prevState => ({ ...prevState, telefone_palestrante: value as string, })); }} />
+              <IMaskInput mask="(00) 00000-0000" disabled name="telefone_palestrante" value={formData.telefone_palestrante ?? ''} placeholder="(00) 00000-0000" className="w-full input input-bordered" onAccept={(value) => { setFormData(prevState => ({ ...prevState, telefone_palestrante: value as string, })); }} />
             </div>
 
             <div>
