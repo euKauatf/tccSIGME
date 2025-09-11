@@ -34,7 +34,7 @@ function HomePage() {
   const nomeHoje = diasJs[hojeIndex]; // Pega o nome do dia da semana atual
   const indiceHojeNaSemana = ordemDosDias.indexOf(nomeHoje); // Pega o índice do dia da semana atual na semana
   const TotalEventosInscritos = user?.eventos ? user.eventos.filter(e => e.pivot?.status === "inscrito").length : 0; // Pega o total de eventos inscritos
-  const TotalEventosSelecionados = user?.eventos ? user.eventos.filter(e => e.pivot?.status === "selecionado").length : 0; // Pega o total de eventos selecionados
+  const TotalEventosSelecionados = user?.eventos ? user.eventos.filter(e => e.pivot?.status === "contemplado").length : 0; // Pega o total de eventos selecionados
 
   const proximosEventosSelecionados = user?.eventos // Pega os 3 próximos eventos selecionados do usuário
     ? user.eventos
