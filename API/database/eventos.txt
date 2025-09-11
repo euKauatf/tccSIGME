@@ -1,0 +1,639 @@
+Palestra: Manejo reprodutivo de bovinos de corte e Benefícios e Desafios da pecuária leiteira
+Hora de início: 13:00
+Hora de término: 15:00
+Dia: Segunda
+Sala: Sala 5
+Quantidade de Vagas: 30
+Palestrante: Fábio Teixeira e Pedro Henrique Miranda
+E-mail para contato: carlos.teixeira@ifrj.edu.br
+Número para contato: (24) 99813-1967
+
+Palestra: Preparação de tinturas, extratos e pomadas medicinais
+Hora de início: 13:00
+Hora de término: 15:00
+Dia: Segunda
+Sala: Planta vegetais
+Quantidade de Vagas: 20
+Palestrante: Alcilúcia Olivieira
+E-mail para contato: erika.arruda@ifrj.edu.br
+Número para contato: (24) 99954-6155
+
+Palestra: Mesa-redonda: Perspectivas sobre a Inteligência Artificial
+Hora de início: 13:00
+Hora de término: 15:00
+Dia: Segunda
+Sala: Auditório
+Quantidade de Vagas: 186
+Palestrante: Debatedores: Daniele Gonçalves Nunes, Isaque da Silva do Couto (MA 204), Gabriel Victor da Silva Ferreira (MA 203), Isabella Schwichtemberg de Almeida (TA 202). Mediadora: Amanda Veloso Garcia
+E-mail para contato: amanda.garcia@ifrj.edu.br
+Número para contato: Não informado
+
+Palestra: Oficina: Biscoitos "Da Maricotinha" - Decorados com Glacê Real
+Hora de início: 13:00
+Hora de término: 17:00
+Dia: Segunda
+Sala: Planta panificação
+Quantidade de Vagas: 15
+Palestrante: Mariângela de Carvalho Leal
+E-mail para contato: erika.arruda@ifrj.edu.br
+Número para contato: (24) 99954-6155
+
+Palestra: Oficina de crochê
+Hora de início: 13:00
+Hora de término: 15:00
+Dia: Segunda
+Sala: Sala 15
+Quantidade de Vagas: 20
+Palestrante: Carla Lima
+E-mail para contato: Não informado
+Número para contato: Não informado
+
+Palestra: Tráfico de animais silvestres: um desafio socioambiental
+Hora de início: 13:00
+Hora de término: 15:00
+Dia: Segunda
+Sala: Sala 21
+Quantidade de Vagas: 30
+Palestrante: Lais Alves C da Silva, Paulo Vitor B. Ferreira, Krys Ellen da S. Barros
+E-mail para contato: helaine.mendonca@ifrj.edu.br
+Número para contato: (21) 98759-5548
+
+Palestra: Oficina de Controle de Formigas
+Hora de início: 13:00
+Hora de término: 15:00
+Dia: Segunda
+Sala: Sala 14
+Quantidade de Vagas: 20
+Palestrante: Bruno Otávio Alcantara Teixeira, Clara Lima Alves, Bruna da Cunha Sergio Figueiredo Silva
+E-mail para contato: Não informado
+Número para contato: Não informado
+
+Palestra: Sarau à Moda da Casa
+Hora de início: 15:00
+Hora de término: 17:00
+Dia: Segunda
+Sala: Auditório
+Quantidade de Vagas: 186
+Palestrante: Diogenes Oliveira da Costa e Morgana de Abreu Leal
+E-mail para contato: morgana.leal@ifrj.edu.br
+Número para contato: (21) 98178-0060
+
+Palestra: Educação Ambiental
+Hora de início: 15:00
+Hora de término: 17:00
+Dia: Segunda
+Sala: Auditório EECOE
+Quantidade de Vagas: 40
+Palestrante: Pedro Alonso
+E-mail para contato: helaine.mendonca@ifrj.edu.br
+Número para contato: (21) 98759-5548
+
+Palestra: Taxação dos super ricos e impactos para a população brasileira
+Hora de início: 15:00
+Hora de término: 17:00
+Dia: Segunda
+Sala: Sala 5
+Quantidade de Vagas: 40
+Palestrante: Aline Camila
+E-mail para contato: Não informado
+Número para contato: Não informado
+
+Palestra: Sob as Ondas da Cultura Oceânica: O Mar Dentro da Concha
+Hora de início: 15:00
+Hora de término: 17:00
+Dia: Segunda
+Sala: Lab Química Bloco 4
+Quantidade de Vagas: 20
+Palestrante: JÉSSICA MARTINS SILVA, LUCAS PERES GUIMARÃES
+E-mail para contato: vanessa.victorino@ifrj.edu.br
+Número para contato: (24) 98177-1407
+
+Palestra: Oficina: Como montar o cubo mágico
+Hora de início: 15:00
+Hora de término: 17:00
+Dia: Segunda
+Sala: Lab 9 de computação
+Quantidade de Vagas: 14
+Palestrante: Cilmar Castro
+E-mail para contato: edgar.lima@ifrj.edu.br
+Número para contato: (24) 98155-1843
+
+Palestra: Disputas estratégicas e a eletromobilidade no setor automotivo brasileiro
+Hora de início: 19:00
+Hora de término: 21:00
+Dia: Segunda
+Sala: Auditório
+Quantidade de Vagas: 150
+Palestrante: Vinícius Henrique Brandão
+E-mail para contato: Morgana.leal@ifrj.edu.br
+Número para contato: (21) 98178-0060
+
+Palestra: Oficina de Bala Baiana
+Hora de início: 13:00
+Hora de término: 15:00
+Dia: Terça
+Sala: Planta panificação
+Quantidade de Vagas: 20
+Palestrante: Sarah Adrine
+E-mail para contato: erika.arruda@ifrj.edu.br
+Número para contato: (24)999546155
+
+Palestra: Curso de Cozinha para iniciantes
+Hora de início: 13:00
+Hora de término: 17:00
+Dia: Terça
+Sala: Planta vegetais
+Quantidade de Vagas: 30
+Palestrante: Júlia Oliveira Barros e Érika Francisquini Arruda
+E-mail para contato: erika.arruda@ifrj.edu.br
+Número para contato: (24) 99954-6155
+
+Palestra: Controle Biológico de Insetos: sua contribuição para a agricultura sustentável
+Hora de início: 13:00
+Hora de término: 15:00
+Dia: Terça
+Sala: Auditório
+Quantidade de Vagas: 186
+Palestrante: Ellen Aguiar Menezes
+E-mail para contato: alexandre.donato@ifrj.edu.br
+Número para contato: (21) 98024-9769
+
+Palestra: Produção de sabonetes 100% Naturais e Veganos
+Hora de início: 13:00
+Hora de término: 17:00
+Dia: Terça
+Sala: Lab Físico-Química
+Quantidade de Vagas: 20
+Palestrante: Ivone Van Der Made e Allana de Sousa Izidório
+E-mail para contato: erika.arruda@ifrj.edu.br
+Número para contato: (24) 99954-6155
+
+Palestra: Oficina: Ecologia e Anatomia de Peixes
+Hora de início: 13:00
+Hora de término: 15:00
+Dia: Terça
+Sala: Laboratório de Zoologia-Anatomia
+Quantidade de Vagas: 30
+Palestrante: Helaine da Silva Mendonça
+E-mail para contato: helaine.mendonca@ifrj.edu.br
+Número para contato: (21) 98759-5548
+
+Palestra: Oficina de Produção de Mudas
+Hora de início: 13:00
+Hora de término: 15:00
+Dia: Terça
+Sala: Sala 15 + Viveiro
+Quantidade de Vagas: 10
+Palestrante: Gabrielle Bonfim da Silva, Letícia Alves Soares, Nicole Reis Hammes Teixeira, Anna Júlia Rodrigues Garcia, Lorena Cassiano de Mendonça, Victor Silva Belizário
+E-mail para contato: daniele.nunes@ifrj.edu.br
+Número para contato: (24) 99208-8048
+
+Palestra: Conselho Regional dos Técnicos Industriais do Estado do Rio de Janeiro (CRT-RJ)
+Hora de início: 15:00
+Hora de término: 17:00
+Dia: Terça
+Sala: Auditório
+Quantidade de Vagas: 186
+Palestrante: Marcelo de Almeida Duarte
+E-mail para contato: vanessa.victorino@ifrj.edu.br
+Número para contato: (24) 98177-1407
+
+Palestra: Oficina de primeiros socorros
+Hora de início: 15:00
+Hora de término: 17:00
+Dia: Terça
+Sala: Sala 5
+Quantidade de Vagas: 40
+Palestrante: Ariana Melo Valle e Linykeer Campos Pereira
+E-mail para contato: carla.lima@ifrj.edu.br
+Número para contato: (24) 98149-6363
+
+Palestra: Oficina de Dança do Ventre
+Hora de início: 15:00
+Hora de término: 17:00
+Dia: Terça
+Sala: Dojo
+Quantidade de Vagas: 20
+Palestrante: Larissa Zanetti
+E-mail para contato: larissa.antas@ifrj.edu.br
+Número para contato: (21) 99948-4144
+
+Palestra: Fundamentos e aplicações da Robótica
+Hora de início: 15:00
+Hora de término: 17:00
+Dia: Terça
+Sala: Lab 7 Info
+Quantidade de Vagas: 30
+Palestrante: Frederico Pitassi
+E-mail para contato: roberto.silveira@ifrj.edu.br
+Número para contato: (24) 99252-9412
+
+Palestra: Oficina: Explorando o Jardim Sensorial Afrorreferenciado e Indígena com Microscópios Caseiros
+Hora de início: 15:00
+Hora de término: 17:00
+Dia: Terça
+Sala: Auditório EECOE
+Quantidade de Vagas: 20
+Palestrante: Gabriela Rodrigues de Azevedo, Lavinia Prota de Paula e Matheus Silva Nunes
+E-mail para contato: vanessa.victorino@ifrj.edu.br
+Número para contato: (24) 98177-1407
+
+Palestra: A atuação do técnico em informática no dia-a-dia da maior software house do Sul Fluminense: ex-alunos do IFRJ que atuam na VRTech
+Hora de início: 15:00
+Hora de término: 17:00
+Dia: Terça
+Sala: Lab 6 Info
+Quantidade de Vagas: 30
+Palestrante: Guilherme Carmo e Lucas Carelli
+E-mail para contato: roberto.silveira@ifrj.edu.br
+Número para contato: (24) 99252-9412
+
+Palestra: Diálogos da pós-graduação: inciação à pesquisa
+Hora de início: 19:00
+Hora de término: 21:00
+Dia: Terça
+Sala: Auditório
+Quantidade de Vagas: 150
+Palestrante: Rafael Castro e Alberto Alvadia
+E-mail para contato: alberto.filho@ifrj.edu.br
+Número para contato: (24) 98154-6944
+ 
+Palestra: Atividade cultural: Rio, Tom e Vinícius e FANP
+Hora de início: 13:00
+Hora de término: 17:00
+Dia: Quarta
+Sala: Auditório
+Quantidade de Vagas: 186
+Palestrante: Carlos André e Gesiane
+E-mail para contato: carlos.teixeira@ifrj.edu.br
+Número para contato: (24) 99813-1967
+
+Palestra: Oficina de Aproveitamento Integral de Vegetais
+Hora de início: 13:00
+Hora de término: 17:00
+Dia: Quarta
+Sala: Planta Vegetais
+Quantidade de Vagas: 20
+Palestrante: Kamila Nascimento, Igor da Silva Diz, Israel Martins Francisco, Raianey Roberta de Souza Rezende, Saulo dos Santos Olimpio, Ícaro Salgueiro Passos, José Ricardo Araújo Paiva, Arthur dos Santos de Paula, Thiago Oliveira Groetaers, Cássia Ellen Barbosa Neves, Maria Clara Faria Pontes, Amanda Santos de Assis, Manuaela Melo Peres, Kethlyn C. da Silva Oliveira
+E-mail para contato: erika.arruda@ifrj.edu.br
+Número para contato: (24) 99954-6155
+
+Palestra: Plantas alimentícias não colonizadas (PANCs): dos saberes aos sabores do CTUR/UFRRJ ao IFRJ
+Hora de início: 13:00
+Hora de término: 17:00
+Dia: Quarta
+Sala: Planta Panificação
+Quantidade de Vagas: 20
+Palestrante: Camila Conceição, Fernanda Travasso, Hugo Neves
+E-mail para contato: erika.arruda@ifrj.edu.br
+Número para contato: (24) 99954-6155
+
+Palestra: Oficina: Mãos á obra: Zoologia Modelada
+Hora de início: 13:00
+Hora de término: 15:00
+Dia: Quarta
+Sala: Sala 5
+Quantidade de Vagas: 40
+Palestrante: Bianca Rodrigues e Gabrielle Batista
+E-mail para contato: helaine.mendonca@ifrj.edu.br
+Número para contato: (21) 98759-5548
+
+Palestra: Quem nada por aqui? Oficina do projeto Mundo submerso sobre a diversidade de peixes do Rio de Janeiro
+Hora de início: 13:00
+Hora de término: 15:00
+Dia: Quarta
+Sala: Laboratório Zoologia
+Quantidade de Vagas: 20
+Palestrante: Prof. Francisco Gerson de Araújo, Leonardo A. Freitas, Jéssica da R. Silva, Letícia P. de Araújo, Victória de J. Souva, Dandhara R. Carvalho
+E-mail para contato: helaine.mendonca@ifrj.edu.br
+Número para contato: (21) 98759-5548
+
+Palestra: Oficina de reciclagem de óleo de sabão sustentável
+Hora de início: 13:00
+Hora de término: 15:00
+Dia: Quarta
+Sala: Laboratório Fisico-Química
+Quantidade de Vagas: 20
+Palestrante: Leticia Silotti Zampirolli e Sumaia Hottes
+E-mail para contato: erika.arruda@ifrj.edu.br
+Número para contato: (24) 99954-6155
+
+Palestra: @versosdealerta: roda de conversa sobre músicas e relacionamento abusivo
+Hora de início: 15:00
+Hora de término: 17:00
+Dia: Quarta
+Sala: Auditório EECOE
+Quantidade de Vagas: 30
+Palestrante: Larissa Zanetti
+E-mail para contato: larissa.antas@ifrj.edu.br
+Número para contato: (21) 99948-4144
+
+Palestra: NotebookLM: a IA como ferramenta de auxílio acadêmico
+Hora de início: 15:00
+Hora de término: 17:00
+Dia: Quarta
+Sala: Lab 6 Info
+Quantidade de Vagas: 30
+Palestrante: Marcus Vinícius
+E-mail para contato: roberto.silveira@ifrj.edu.br
+Número para contato: (24) 99252-9412
+
+Palestra: Quem nada por aqui? Oficina do projeto Mundo submerso sobre a diversidade de peixes do Rio de Janeiro
+Hora de início: 15:00
+Hora de término: 17:00
+Dia: Quarta
+Sala: Lab Zoologia
+Quantidade de Vagas: 20
+Palestrante: Prof. Francisco Gerson de Araújo, Leonardo A. Freitas, Jéssica da R. Silva, Letícia P. de Araújo, Victória de J. Souza, Dandhara R. Carvalho
+E-mail para contato: helaine.mendonca@ifrj.edu.br
+Número para contato: (21) 98759-5548
+
+Palestra: Cine debate: Narrativas das Negritudes do Sul Fluminense
+Hora de início: 15:00
+Hora de término: 17:00
+Dia: Quarta
+Sala: Sala 5
+Quantidade de Vagas: 40
+Palestrante: Patrícia Manuela de Souza e Ana Júlia Misael Sansão Gomes
+E-mail para contato: vanessa.victorino@ifrj.edu.br
+Número para contato: (24) 98177-1407
+
+Palestra: Incluir é transformar vidas
+Hora de início: 15:00
+Hora de término: 17:00
+Dia: Quarta
+Sala: Sala 7
+Quantidade de Vagas: 40
+Palestrante: Edilma Rodrigues de Oliveira
+E-mail para contato: psicopedagogaedilma@gmail.com
+Número para contato: (24) 99829-3663
+
+Palestra: Produção de Bokashi
+Hora de início: 19:00
+Hora de término: 21:00
+Dia: Quarta
+Sala: Viveiro de Mudas
+Quantidade de Vagas: 30
+Palestrante: Luciano Vilarin
+E-mail para contato: Não informado
+Número para contato: Não informado
+
+Palestra: A transição energética no Brasil e o debate sobre a desapropriação de terras indígenas e quilombolas
+Hora de início: 19:00
+Hora de término: 21:00
+Dia: Quarta
+Sala: Sala 19
+Quantidade de Vagas: 30
+Palestrante: Rodrigo Caetano
+E-mail para contato: vanessa.victorino@ifrj.edu.br
+Número para contato: (24) 98177-1407
+
+Palestra: O processo decisório e a inteligência estratégica na administração
+Hora de início: 19:00
+Hora de término: 21:00
+Dia: Quarta
+Sala: Sala 21
+Quantidade de Vagas: 30
+Palestrante: Camila Freitas
+E-mail para contato: camila.freitas@ifrj.edu.br
+Número para contato: (24) 99954-6939
+
+Palestra: Curso de Salgadinhos
+Hora de início: 13:00
+Hora de término: 17:00
+Dia: Quinta
+Sala: Planta Panificação
+Quantidade de Vagas: 20
+Palestrante: Júlia Oliveira Barros e Érika Francisquini Arruda
+E-mail para contato: erika.arruda@ifrj.edu.br
+Número para contato: (24) 99954-6155
+
+Palestra: Introdução ao estudo do crescimento secundário em árvores: teoria e prática
+Hora de início: 13:00
+Hora de término: 17:00
+Dia: Quinta
+Sala: Lab Anatomia Vegetal
+Quantidade de Vagas: 20
+Palestrante: Raphaella Pierre
+E-mail para contato: glaziele.campbell@ifrj.edu.br
+Número para contato: (24) 99837-0171
+
+Palestra: Noções sobre o direito do consumidor (lei 8.078/90)
+Hora de início: 13:00
+Hora de término: 15:00
+Dia: Quinta
+Sala: Auditório
+Quantidade de Vagas: 186
+Palestrante: Rodrigo Pinto Adriano
+E-mail para contato: rodrigo.adriano@ifrj.edu.br
+Número para contato: Não informado
+
+Palestra: Oficina: Herpetofauna como ferramenta para avaliação da qualidade ambiental e controle populacional
+Hora de início: 13:00
+Hora de término: 15:00
+Dia: Quinta
+Sala: Lab Zoologia
+Quantidade de Vagas: 30
+Palestrante: André Luiz P. dos Santos e João Pedro Brum de Alcantara
+E-mail para contato: helaine.mendonca@ifjr.edu.br
+Número para contato: (21) 98759-5548
+
+Palestra: Cine Debate - Mulheres na Área de Ciências Exatas
+Hora de início: 13:00
+Hora de término: 15:00
+Dia: Quinta
+Sala: Sala 5
+Quantidade de Vagas: 40
+Palestrante: Juliana Esteves, Helenna Moreira e a Monitora do Nugeds
+E-mail para contato: leandro.raja@ifrj.edu.br
+Número para contato: (21) 99992-1305
+
+Palestra: Primeiros passos na impressão 3D
+Hora de início: 15:00
+Hora de término: 17:00
+Dia: Quinta
+Sala: Lab 7 Info
+Quantidade de Vagas: 30
+Palestrante: Rubens Cesar de Souza Aguiar
+E-mail para contato: edgar.lima@ifrj.edu.br
+Número para contato: (24) 98155-1843
+
+Palestra: Taekwondo: origem, filosofia e fundamentos
+Hora de início: 15:00
+Hora de término: 17:00
+Dia: Quinta
+Sala: Quadra Coberta
+Quantidade de Vagas: 50
+Palestrante: Nelson da Silva Francisco
+E-mail para contato: roberto.silveira@ifrj.edu.br
+Número para contato: (24) 99252-9412
+
+Palestra: Fibra óptica: tecnologias e classificações
+Hora de início: 15:00
+Hora de término: 17:00
+Dia: Quinta
+Sala: Lab 6 Info
+Quantidade de Vagas: 30
+Palestrante: Ricardo Aguiar
+E-mail para contato: roberto.silveira@ifrj.edu.br
+Número para contato: (24) 99252-9412
+
+Palestra: Manejo e conservação da microbacia do Rio Brandão
+Hora de início: 15:00
+Hora de término: 17:00
+Dia: Quinta
+Sala: Sala 5
+Quantidade de Vagas: 40
+Palestrante: Gabrielle B. de Olieira, Francielle A. R. Ferreira, Bianca da S. Rodrigues, Thatyane Augusto Gonçalves
+E-mail para contato: helaine.mendonca@ifrj.edu.br
+Número para contato: (21) 98759-5548
+
+Palestra: Árvores do nosso cotidiano: das exóticas às nativas
+Hora de início: 13:00
+Hora de término: 15:00
+Dia: Quinta
+Sala: Sala 21
+Quantidade de Vagas: 25
+Palestrante: Pedro Toledo
+E-mail para contato: Não informado
+Número para contato: (21) 99347-5844
+
+Palestra: Como o Rock e o Rock in Rio mudaram minha vida
+Hora de início: 15:00
+Hora de término: 17:00
+Dia: Quinta
+Sala: Auditório
+Quantidade de Vagas: 186
+Palestrante: Prof. Cilmar Castro
+E-mail para contato: edgar.lima@ifrj.edu.br
+Número para contato: (24) 98155-1843
+
+Palestra: Produção de Bokashi
+Hora de início: 19:00
+Hora de término: 21:00
+Dia: Quinta
+Sala: Viveiro
+Quantidade de Vagas: 30
+Palestrante: Luciano Vilarin
+E-mail para contato: Não informado
+Número para contato: Não informado
+
+Palestra: Histoquímica de plantas medicinais
+Hora de início: 19:00
+Hora de término: 21:00
+Dia: Quinta
+Sala: Lab Anatomia Vegetal
+Quantidade de Vagas: 20
+Palestrante: Diana Neres
+E-mail para contato: glaziele.campbell@ifrj.edu.br
+Número para contato: (24) 99837-0171
+
+Palestra: Diálogos da pós-graduação: inciação à pesquisa
+Hora de início: 19:00
+Hora de término: 21:00
+Dia: Quinta
+Sala: Auditório
+Quantidade de Vagas: 150
+Palestrante: Rafael Castro e Alberto Alvadia
+E-mail para contato: alberto.filho@ifrj.edu.br
+Número para contato: (24) 98154-6944
+
+Palestra: Roda de conversa sobre o Reggae e suas influências na música brasileira
+Hora de início: 13:00
+Hora de término: 15:00
+Dia: Sexta
+Sala: Auditório
+Quantidade de Vagas: 186
+Palestrante: Matheus Prado Pacheco. Mediação: Amanda Veloso
+E-mail para contato: amanda.garcia@ifrj.edu.br
+Número para contato: Não informado
+
+Palestra: Minicurso: Abelhando pelo IFRJ Pinheiral
+Hora de início: 13:00
+Hora de término: 17:00
+Dia: Sexta
+Sala: Sala 15
+Quantidade de Vagas: 10
+Palestrante: Lucas Guimarães
+E-mail para contato: coctma.cpin@ifrj.edu.br
+Número para contato: (21) 99439-5383
+
+Palestra: O papel da geologia na prevenção de desestres
+Hora de início: 13:00
+Hora de término: 15:00
+Dia: Sexta
+Sala: Sala 21
+Quantidade de Vagas: 40
+Palestrante: Lívia Torres
+E-mail para contato: Não informado
+Número para contato: Não informado
+
+Palestra: Minicurso: Produções agrícolas em sistemas integrados, com foco na sustentabilidade
+Hora de início: 13:00
+Hora de término: 15:00
+Dia: Sexta
+Sala: Sala 18
+Quantidade de Vagas: 40
+Palestrante: Filipi Augustus Ribeiro Canuto
+E-mail para contato: filipiaugustus00@gmail.com
+Número para contato: Não informado
+
+Palestra: Introdução aos métodos de suporte à tomada de decisão
+Hora de início: 13:00
+Hora de término: 15:00
+Dia: Sexta
+Sala: Auditório do EECOE
+Quantidade de Vagas: 60
+Palestrante: Alexandre Donato
+E-mail para contato: Não informado
+Número para contato: Não informado
+
+Palestra: Neurociência da nutrição: estratégias para modificação de hábitos alimentares nocivos baseadas na regulação da dopamina
+Hora de início: 15:00
+Hora de término: 17:00
+Dia: Sexta
+Sala: Auditório
+Quantidade de Vagas: 50
+Palestrante: João Paulo Barros Garcia
+E-mail para contato: vanessa.victorino@ifrj.edu.br
+Número para contato: (24) 98177-1407
+
+Palestra: Construindo conhecimentos com a Horta Escolar
+Hora de início: 15:00
+Hora de término: 17:00
+Dia: Sexta
+Sala: Sala 18
+Quantidade de Vagas: 40
+Palestrante: Patrícia Romão
+E-mail para contato: Não informado
+Número para contato: Não informado
+
+Palestra: Tecnologia, cartas e espaço aéreo: aplicações da cartografia ambiental
+Hora de início: 15:00
+Hora de término: 17:00
+Dia: Sexta
+Sala: Sala 21
+Quantidade de Vagas: 40
+Palestrante: Mariana Pessanha
+E-mail para contato: Não informado
+Número para contato: Não informado
+
+Palestra: SHOW DE TALENTOS
+Hora de início: 15:00
+Hora de término: 17:00
+Dia: Sexta
+Sala: Auditório
+Quantidade de Vagas: 186
+Palestrante: Não informado
+E-mail para contato: Não informado
+Número para contato: Não informado
+
+Palestra: Oficina de Excel
+Hora de início: 19:00
+Hora de término: 21:00
+Dia: Sexta
+Sala: Lab 7 Info
+Quantidade de Vagas: 30
+Palestrante: Aline Camila
+E-mail para contato: glaziele.campbell@ifrj.edu.br
+Número para contato: (24) 99837-0171
