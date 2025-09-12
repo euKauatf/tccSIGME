@@ -9,67 +9,84 @@ use Illuminate\Support\Facades\Log;
 
 class ImportLocals extends Command
 {
-  /**
-   * The name and signature of the console command.
-   *
-   * Example usage: php artisan import:locals
-   */
-  protected $signature = 'import:locals';
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'import:locals';
 
-  /**
-   * The console command description.
-   */
-  protected $description = 'Import locals from database/locais.txt';
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Import locals from database/locais.txt (formato: nome: XX vagas)';
 
-  /**
-   * Execute the console command.
-   */
-  public function handle(): int
-  {
-    $this->info("Começando import de locais...");
+    /**
+     * Execute the console command.
+     *
+     * @return int
+     */
+    public function handle(): int
+    {
+        $this->info("🚀 Começando importação de locais...");
 
-    DB::statement("SET session_replication_role = 'replica';");
+        DB::statement("SET session_replication_role = 'replica';");
 
-    //limpa usuários
-    Local::truncate();
+        // Limpa locais existentes para evitar duplicatas
+        Local::truncate();
 
-    //caminho do arquivo
-    $filePath = database_path('locais.txt');
+        $filePath = database_path('locais.txt');
 
-    if (!file_exists($filePath)) {
-      $this->error("❌ Arquivo não encontrado em: " . $filePath);
-      Log::error("Arquivo de seeder não encontrado: " . $filePath);
-      return self::FAILURE;
-    }
-
-    $lines = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-
-    $locaisParaInserir = [];
-
-    // Itera sobre o arquivo, pegando de 2 em 2 linhas (nome e capacidade)
-    for ($i = 0; $i < count($lines); $i += 2) {
-      // Verifica se existem as duas linhas para o local
-      if (isset($lines[$i]) && isset($lines[$i + 1])) {
-        $nome = trim($lines[$i]);
-        $capacidade = trim($lines[$i + 1]);
-
-        // Adiciona o local ao array se o nome não estiver vazio e a capacidade for um número
-        if (!empty($nome) && is_numeric($capacidade)) {
-          $locaisParaInserir[] = [
-            'name'       => $nome,
-            'capacidade' => (int) $capacidade,
-          ];
+        if (!file_exists($filePath)) {
+            $this->error("❌ Arquivo não encontrado em: " . $filePath);
+            Log::error("Arquivo de seeder não encontrado: " . $filePath);
+            return self::FAILURE;
         }
-      }
-    }
 
-    // Insere os locais no banco de dados
-    if (!empty($locaisParaInserir)) {
-      Local::insert($locaisParaInserir);
-    }
-    DB::statement("SET session_replication_role = 'origin';");
+        $lines = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        $locaisParaInserir = [];
+        $ignoredCount = 0;
 
-    $this->info(count($locaisParaInserir) . " locais importados com sucesso!");
-    return self::SUCCESS;
-  }
+        foreach ($lines as $line) {
+            // Divide a linha pelo primeiro ":" para separar nome e capacidade
+            $parts = explode(':', $line, 2);
+
+            // Garante que a linha tem o formato esperado "Nome: Capacidade"
+            if (count($parts) === 2) {
+                $nome = trim($parts[0]);
+                // **AQUI ESTÁ A MUDANÇA PRINCIPAL**
+                // Converte a segunda parte para inteiro.
+                // O PHP extrai o número do início da string (ex: "186 vagas" vira 186).
+                $capacidade = (int) $parts[1];
+
+                if (!empty($nome) && $capacidade > 0) {
+                    $locaisParaInserir[] = [
+                        'name'       => $nome,
+                        'capacidade' => $capacidade,
+                    ];
+                } else {
+                    $ignoredCount++;
+                    Log::warning("Linha com nome vazio ou capacidade inválida ignorada: $line");
+                }
+            } else {
+                $ignoredCount++;
+                Log::warning("Linha mal formatada (faltando ':') ignorada: $line");
+            }
+        }
+
+        if (!empty($locaisParaInserir)) {
+            Local::insert($locaisParaInserir);
+        }
+
+        DB::statement("SET session_replication_role = 'origin';");
+
+        $this->info("✅ " . count($locaisParaInserir) . " locais importados com sucesso!");
+        if ($ignoredCount > 0) {
+            $this->warn("⚠️  $ignoredCount linhas foram ignoradas por inconsistência no formato.");
+        }
+
+        return self::SUCCESS;
+    }
 }

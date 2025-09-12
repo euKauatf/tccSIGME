@@ -13,9 +13,9 @@ return new class extends Migration
   {
     Schema::create('palestrantes', function (Blueprint $table) {
       $table->id();
-      $table->string('name');
-      $table->string('email')->nullable();
-      $table->string('telefone')->nullable();
+      $table->text('name');
+      $table->text('email')->nullable();
+      $table->text('telefone')->nullable();
       $table->timestamps();
     });
   }
