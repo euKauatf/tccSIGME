@@ -50,15 +50,15 @@ class ImportPalestrantes extends Command
       // Verifica se existem as três linhas para o palestrante
       if (isset($lines[$i]) && isset($lines[$i + 1]) && isset($lines[$i + 2])) {
         $name = trim($lines[$i]);
-        $telefone = trim($lines[$i + 1]);
-        $email = trim($lines[$i + 2]);
+        $email = trim($lines[$i + 1]);
+        $telefone = trim($lines[$i + 2]);
 
         // Adiciona o palestrante ao array se o name não estiver vazio
         if (!empty($name)) {
           $palestrantesParaInserir[] = [
             'name'     => $name,
-            'telefone' => ($telefone !== 'Não informado') ? $telefone : null,
             'email'    => ($email !== 'Não informado') ? $email : null,
+            'telefone' => ($telefone !== 'Não informado') ? $telefone : null,
           ];
         }
       }
