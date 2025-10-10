@@ -6,16 +6,16 @@ import apiClient from "../../api/apiClient";
 function LoginPage() {
   const navigate = useNavigate();
 
-  const [matricula, setMatricula] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [matricula, setMatricula] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
-    setError('');
+    setError("");
 
     try {
-      const response = await apiClient.post('/login', {
+      const response = await apiClient.post("/login", {
         matricula,
         password,
       });
@@ -45,7 +45,10 @@ function LoginPage() {
             </h2>
           </div>
 
-          <form className="w-full flex flex-col gap-3 mt-4" onSubmit={handleLogin}>
+          <form
+            className="w-full flex flex-col gap-3 mt-4"
+            onSubmit={handleLogin}
+          >
             {/* Matrícula */}
             <div>
               <p className="text-sm mb-1">Digite a sua Matrícula</p>
@@ -54,7 +57,7 @@ function LoginPage() {
                 placeholder="Sua matrícula"
                 required
                 value={matricula}
-                onChange={e => setMatricula(e.target.value)}
+                onChange={(e) => setMatricula(e.target.value)}
                 className="w-full input input-bordered"
               />
             </div>
@@ -69,12 +72,14 @@ function LoginPage() {
                 minLength={8}
                 title="A senha deve ter mais de 8 caracteres, incluindo números e letras maiúsculas e minúsculas."
                 value={password}
-                onChange={e => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full input input-bordered"
               />
             </div>
 
-            {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
+            {error && (
+              <p className="text-red-500 text-sm text-center mt-2">{error}</p>
+            )}
 
             <button
               type="submit"
@@ -83,12 +88,6 @@ function LoginPage() {
               Logar
             </button>
           </form>
-
-          <div className="text-center text-sm mt-2">
-            <a href="#" className="text-emerald-800 underline block">
-              Esqueceu sua senha?
-            </a>
-          </div>
         </div>
       </div>
     </div>
