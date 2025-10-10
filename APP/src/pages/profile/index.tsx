@@ -11,7 +11,11 @@ function ProfilePage() {
         <div className="flex flex-col divp rounded-[20px] mt-6 p-6 sm:p-8 bg-emerald-50 shadow-lg">
           <div className="flex flex-col items-center gap-6 md:flex-row">
             <div className="flex-shrink-0">
-              <img src="/images/icon.jpg" alt="Avatar" className="object-cover w-32 h-32 rounded-full md:w-40 md:h-40 ring-4 ring-emerald-600" />
+              <img
+                src="/images/icon.jpg"
+                alt="Avatar"
+                className="object-cover w-32 h-32 rounded-full md:w-40 md:h-40 ring-4 ring-emerald-600"
+              />
             </div>
             <div className="flex flex-col text-center md:text-left">
               <h2 className="text-4xl font-bold text-emerald-700">
@@ -39,7 +43,15 @@ function ProfilePage() {
                 Seu QR Code para presenças
               </h3>
               <div className="bg-white p-4 rounded-lg shadow-inner max-w-[200px] mx-auto">
-                <QRCode value={String(user.matricula)} title={String(user.matricula)} size={256} fgColor="#065f46" bgColor="#FFFFFF" style={{ height: "auto", maxWidth: "100%", width: "100%" }} viewBox={`0 0 256 256`} />
+                <QRCode
+                  value={String(user.matricula)}
+                  title={String(user.matricula)}
+                  size={256}
+                  fgColor="#065f46"
+                  bgColor="#FFFFFF"
+                  style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                  viewBox={`0 0 256 256`}
+                />
               </div>
             </div>
           ) : null}

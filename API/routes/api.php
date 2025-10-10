@@ -8,6 +8,7 @@ use App\Http\Controllers\InscricaoController;
 use App\Http\Controllers\SorteioController;
 use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\PalestranteController; 
+use App\Http\Controllers\MudarSenhaController; 
 
 // Autenticação
 Route::post('/login', [AuthController::class, 'login']);
@@ -31,6 +32,8 @@ Route::delete('/event/{event}/unsubscribe', [InscricaoController::class, 'destro
 
 // Alunos
 Route::get('/alunos', [\App\Http\Controllers\UserController::class, 'indexAlunos'])
+  ->middleware('auth:sanctum');
+Route::put('/alunos/mudar-senha', [MudarSenhaController::class, 'updatePassword'])
   ->middleware('auth:sanctum');
 
 // Audit Logs
