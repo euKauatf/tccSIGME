@@ -31,7 +31,7 @@
         # .env - Exemplo de Variáveis de Ambiente
 
         # Configurações da aplicação
-        APP_NAME=Minha Aplicação
+        APP_NAME="Minha Aplicação"
         PORT=3000
 
         # Configurações do banco de dados
