@@ -131,4 +131,15 @@ class EventController extends Controller
     $pdf = Pdf::loadView('pdf.lista_alunos', $data);
     return $pdf->download('lista-alunos-' . str_replace(' ', '-', $event->tema) . '.pdf');
   }
+
+  public function topEvents() {
+    $events = Event::withCount(['users as inscritos_count' => function ($query) {
+      $query->where('status', 'inscrito');
+    }])
+    ->orderByDesc('inscritos_count')
+    ->take(5)  
+    ->get();                    
+
+    return response()->json($events);
+  }
 }

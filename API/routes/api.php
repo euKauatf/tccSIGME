@@ -22,6 +22,9 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 // Eventos
+Route::get('/topEvents', [EventController::class, 'topEvents'])
+  ->middleware('auth:sanctum');
+  
 Route::apiResource('event', EventController::class);
 Route::get('/event/{event}/export-pdf', [EventController::class, 'exportPdf'])
   ->middleware('auth:sanctum');

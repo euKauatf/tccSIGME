@@ -43,6 +43,8 @@ export const subscribeToEvent = (eventId: number) =>
 export const unsubscribeFromEvent = (eventId: number) =>
   apiClient.delete(`/event/${eventId}/unsubscribe`);
 
+export const getTopEvents = () => apiClient.get("/topEvents");
+
 export const getAlunos = () => apiClient.get("/alunos");
 
 export const getAuditLogs = () => apiClient.get("/audit-logs");
@@ -125,5 +127,6 @@ export const updatePassword = (data: {
     old_password: data.senha_antiga,
     new_password: data.nova_senha,
   });
+
 
 export default apiClient;
