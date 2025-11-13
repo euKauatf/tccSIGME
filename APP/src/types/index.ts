@@ -26,6 +26,7 @@ export interface Event {
   pivot?: {
     status: 'inscrito' | 'contemplado' | 'nao-contemplado';
   };
+  inscritos_count?: number;
 }
 
 export interface AuditLog {

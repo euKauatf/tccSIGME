@@ -94,15 +94,6 @@ function Sidebar({
           <CalendarDays size={22} className="opacity-80" />
           <span>Atividades</span>
         </NavLink>
-        <NavLink
-          to="/mudar-senha"
-          className={({ isActive }) =>
-            `${linkClasses} ${isActive ? activeLinkClasses : ""}`
-          }
-        >
-          <Lock size={22} className="opacity-80" />
-          <span>Mudar Senha</span>
-        </NavLink>
 
         {/* Se o usuário for adm, mostra os links que tão aqui embaixo*/}
         {user?.tipo == "adm" ? (
@@ -208,6 +199,15 @@ function Sidebar({
       </div>
       {/* Butão pra sair da conta */}
       <div className="pt-5 mt-auto">
+        <NavLink
+          to="/mudar-senha"
+          className={({ isActive }) =>
+            `${linkClasses} ${isActive ? activeLinkClasses : ""}`
+          }
+        >
+          <Lock size={22} className="opacity-80" />
+          <span>Mudar Senha</span>
+        </NavLink>
         <button
           onClick={onLogout}
           className={`${linkClasses} w-full text-left`}

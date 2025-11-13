@@ -32,6 +32,7 @@ const FormLocalPage = lazy(() => import("./components/Forms/FormLocalPage"));
 const StudentsPage = lazy(() => import("./pages/students"));
 const AuditLogsPage = lazy(() => import("./pages/auditLogs"));
 const ScannerPage = lazy(() => import("./pages/scanner"));
+const DashboardPage = lazy(() => import("./pages/dashboard"));
 
 function App() {
   // Componente de fallback para ser exibido enquanto as páginas carregam
@@ -46,6 +47,7 @@ function App() {
       <Routes>
         {/* Rota pública */}
         <Route path="/" element={<LoginPage />} />
+        
         {/* Rotas protegidas */}
         <Route element={<ProtectedRoute />}>
           <Route element={<MainLayout />}>
@@ -64,16 +66,11 @@ function App() {
               <Route path="logs" element={<AuditLogsPage />} />
               <Route path="students" element={<StudentsPage />} />
               <Route path="scanner" element={<ScannerPage />} />
-              <Route
-                path="palestrantes/add"
-                element={<FormPalestrantePage />}
-              />
-              <Route
-                path="palestrantes/edit/:id"
-                element={<FormPalestrantePage />}
-              />
+              <Route path="palestrantes/add" element={<FormPalestrantePage />} />
+              <Route path="palestrantes/edit/:id" element={<FormPalestrantePage />} />
               <Route path="locais/add" element={<FormLocalPage />} />
               <Route path="locais/edit/:id" element={<FormLocalPage />} />
+              <Route path="dashboard" element={<DashboardPage />} />
             </Route>
           </Route>
         </Route>
