@@ -36,22 +36,20 @@ function LoginPage() {
 
   return (
     <div className="flex flex-col h-screen font-san">
-      <div className="flex flex-grow items-center justify-center">
+      <div className="flex items-center justify-center flex-grow">
         <div className="w-[387px] min-h-[400px] bg-white rounded-[20px] divp px-6 py-4 flex flex-col items-center justify-between">
           <div className="text-center">
             <h1 className="text-4xl font-bold text-emerald-800">SIGME</h1>
-            <h2 className="text-2xl text-emerald-600 leading-tight mt-1">
+            <h2 className="mt-1 text-2xl leading-tight text-emerald-600">
               Sistema Integrado de Gestão e Matrículas da Expocanp
             </h2>
           </div>
 
           <form
-            className="w-full flex flex-col gap-3 mt-4"
-            onSubmit={handleLogin}
-          >
-            {/* Matrícula */}
+            className="flex flex-col w-full gap-3 mt-4"
+            onSubmit={handleLogin}>
             <div>
-              <p className="text-sm mb-1">Digite a sua Matrícula</p>
+              <p className="mb-1 text-sm">Digite a sua Matrícula</p>
               <input
                 type="text"
                 placeholder="Sua matrícula"
@@ -62,9 +60,8 @@ function LoginPage() {
               />
             </div>
 
-            {/* Senha */}
             <div>
-              <p className="text-sm mb-1">Digite a sua senha</p>
+              <p className="mb-1 text-sm">Digite a sua senha</p>
               <input
                 type="password"
                 required
@@ -78,13 +75,12 @@ function LoginPage() {
             </div>
 
             {error && (
-              <p className="text-red-500 text-sm text-center mt-2">{error}</p>
+              <p className="mt-2 text-sm text-center text-red-500">{error}</p>
             )}
 
             <button
               type="submit"
-              className="mt-2 py-2 rounded-full bg-emerald-600 text-white font-semibold text-lg hover:bg-emerald-700 transition"
-            >
+              className="py-2 mt-2 text-lg font-semibold text-white transition rounded-full bg-emerald-600 hover:bg-emerald-700">
               Logar
             </button>
           </form>

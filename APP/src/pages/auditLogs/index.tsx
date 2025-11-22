@@ -7,7 +7,6 @@ function AuditLogPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // --- Estados para os filtros ---
   const [nameSearch, setNameSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("todos");
   const [roundFilter, setRoundFilter] = useState("");
@@ -15,10 +14,10 @@ function AuditLogPage() {
   const fetchLogs = () => {
     setIsLoading(true);
     getAuditLogs()
-      .then(response => {
-        setLogs(response.data.data || response.data); // Compatível com e sem paginação
+      .then((response) => {
+        setLogs(response.data.data || response.data);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error("Erro ao carregar logs", err);
         setError("Não foi possível carregar os logs de auditoria.");
       })
@@ -30,7 +29,11 @@ function AuditLogPage() {
   }, []);
 
   const handleClearLogs = async () => {
-    if (!window.confirm("ATENÇÃO!\n\nTem certeza que deseja apagar TODO o histórico de auditoria? Esta ação não pode ser desfeita.")) {
+    if (
+      !window.confirm(
+        "ATENÇÃO!\n\nTem certeza que deseja apagar TODO o histórico de auditoria? Esta ação não pode ser desfeita."
+      )
+    ) {
       return;
     }
     try {
@@ -43,7 +46,6 @@ function AuditLogPage() {
     }
   };
 
-  // Calcula a rodada máxima existente nos logs para limitar o input
   const maxRound = useMemo(() => {
     return logs.reduce((max, log) => {
       const match = log.action.match(/na rodada (\d+)/);
@@ -55,50 +57,53 @@ function AuditLogPage() {
     }, 1);
   }, [logs]);
 
-
-  // Mapeia os status do filtro para as ações registadas no backend
   const statusToActionMap: { [key: string]: string[] } = {
-    'inscrito': ['inscreveu-se'],
-    'contemplado': ['foi contemplado'],
-    'nao contemplado': ['foi nao contemplado', 'foi cancelado'],
-    'presente': ['presenca marcada']
+    inscrito: ["inscreveu-se"],
+    contemplado: ["foi contemplado"],
+    "nao contemplado": ["foi nao contemplado", "foi cancelado"],
+    presente: ["presenca marcada"],
   };
 
-  // Aplica os filtros aos logs
   const filteredLogs = useMemo(() => {
-    return logs.filter(log => {
-      // Filtro por nome do aluno
-      const nameMatch = !nameSearch || log.user?.name.toLowerCase().includes(nameSearch.toLowerCase());
+    return logs.filter((log) => {
+      const nameMatch =
+        !nameSearch ||
+        log.user?.name.toLowerCase().includes(nameSearch.toLowerCase());
 
-      // CORRIGIDO: Filtro por status verifica se a ação do log CONTÉM a frase do status
-      const statusMatch = statusFilter === 'todos' || 
-        (statusToActionMap[statusFilter] && statusToActionMap[statusFilter].some(action => log.action.includes(action)));
-      
-      // CORRIGIDO: Lógica de filtro de rodada melhorada para ser exata
-      const roundMatch = !roundFilter || (log.action.match(new RegExp(`na rodada ${roundFilter}(?![0-9])`)) !== null);
+      const statusMatch =
+        statusFilter === "todos" ||
+        (statusToActionMap[statusFilter] &&
+          statusToActionMap[statusFilter].some((action) =>
+            log.action.includes(action)
+          ));
+
+      const roundMatch =
+        !roundFilter ||
+        log.action.match(new RegExp(`na rodada ${roundFilter}(?![0-9])`)) !==
+          null;
 
       return nameMatch && statusMatch && roundMatch;
     });
   }, [logs, nameSearch, statusFilter, roundFilter]);
 
-
   const formatAction = (action: string) => {
-    // Simplesmente capitaliza a primeira letra para uma melhor apresentação
     return action.charAt(0).toUpperCase() + action.slice(1);
   };
 
   if (isLoading) {
-    return <p className="text-center p-8 text-xl">Carregando logs de auditoria...</p>;
+    return (
+      <p className="p-8 text-xl text-center">Carregando logs de auditoria...</p>
+    );
   }
 
   if (error) {
-    return <p className="text-center p-8 text-xl text-red-500">{error}</p>;
+    return <p className="p-8 text-xl text-center text-red-500">{error}</p>;
   }
 
   return (
-    <div className="main font-sans w-full p-4 flex flex-col items-center">
-      <div className="w-full divp max-w-6xl flex justify-between items-center px-4">
-        <h1 className="text-4xl md:text-5xl font-bold text-center text-emerald-800 py-3">
+    <div className="flex flex-col items-center w-full p-4 font-sans main">
+      <div className="flex items-center justify-between w-full max-w-6xl px-4 divp">
+        <h1 className="py-3 text-4xl font-bold text-center md:text-5xl text-emerald-800">
           Log de Auditoria
         </h1>
         <button onClick={handleClearLogs} className="btn btn-error btn-sm">
@@ -106,10 +111,8 @@ function AuditLogPage() {
         </button>
       </div>
 
-      {/* --- Painel de Filtros --- */}
-      <div className="w-full max-w-6xl mt-6 bg-white divp rounded-lg shadow-lg p-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Barra de Pesquisa por Nome */}
+      <div className="w-full max-w-6xl p-4 mt-6 bg-white rounded-lg shadow-lg divp">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <div>
             <label className="label">
               <span className="label-text">Pesquisar por nome</span>
@@ -117,21 +120,19 @@ function AuditLogPage() {
             <input
               type="text"
               placeholder="Digite o nome do aluno..."
-              className="input input-bordered w-full"
+              className="w-full input input-bordered"
               value={nameSearch}
               onChange={(e) => setNameSearch(e.target.value)}
             />
           </div>
-          {/* Filtro por Status */}
           <div>
             <label className="label">
               <span className="label-text">Filtrar por status</span>
             </label>
             <select
-              className="select select-bordered w-full"
+              className="w-full select select-bordered"
               value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-            >
+              onChange={(e) => setStatusFilter(e.target.value)}>
               <option value="todos">Todos</option>
               <option value="inscrito">Inscrito</option>
               <option value="contemplado">Contemplado</option>
@@ -139,7 +140,6 @@ function AuditLogPage() {
               <option value="presente">Presente</option>
             </select>
           </div>
-          {/* Filtro por Rodada */}
           <div>
             <label className="label">
               <span className="label-text">Filtrar por rodada</span>
@@ -147,14 +147,16 @@ function AuditLogPage() {
             <input
               type="number"
               placeholder={`Nº da rodada (1 a ${maxRound})`}
-              className="input input-bordered w-full"
+              className="w-full input input-bordered"
               value={roundFilter}
-              min="1" // Impede setas de irem abaixo de 1
-              max={maxRound} // Impede setas de irem acima do máximo
+              min="1"
+              max={maxRound}
               onChange={(e) => {
-                // CORRIGIDO: Impede a inserção de valores negativos ou acima do limite
                 const value = e.target.value;
-                if (value === "" || (parseInt(value) >= 1 && parseInt(value) <= maxRound)) {
+                if (
+                  value === "" ||
+                  (parseInt(value) >= 1 && parseInt(value) <= maxRound)
+                ) {
                   setRoundFilter(value);
                 }
               }}
@@ -163,30 +165,39 @@ function AuditLogPage() {
         </div>
       </div>
 
-
       <div className="w-full max-w-6xl mt-6">
-        <div className="bg-white divp rounded-lg shadow-lg p-4 md:p-6">
+        <div className="p-4 bg-white rounded-lg shadow-lg divp md:p-6">
           {filteredLogs.length > 0 ? (
             <ul className="space-y-3">
               {filteredLogs.map((log) => (
-                <li key={log.id} className="p-3 bg-gray-50 divp rounded-md border border-gray-200">
+                <li
+                  key={log.id}
+                  className="p-3 border border-gray-200 rounded-md bg-gray-50 divp">
                   <p>
-                    <span className="font-bold text-emerald-600">{log.user?.name || 'Utilizador Apagado'}</span>
-                    <span className="text-gray-700"> {formatAction(log.action)} </span>
+                    <span className="font-bold text-emerald-600">
+                      {log.user?.name || "Utilizador Apagado"}
+                    </span>
+                    <span className="text-gray-700">
+                      {" "}
+                      {formatAction(log.action)}{" "}
+                    </span>
                     {log.auditable && (
                       <span className="text-gray-700">
-                        no evento <span className="font-bold">{log.auditable.tema}</span>
+                        no evento{" "}
+                        <span className="font-bold">{log.auditable.tema}</span>
                       </span>
                     )}
                   </p>
-                  <p className="text-xs text-gray-500 mt-1">
-                    {new Date(log.created_at).toLocaleString('pt-BR')}
+                  <p className="mt-1 text-xs text-gray-500">
+                    {new Date(log.created_at).toLocaleString("pt-BR")}
                   </p>
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="text-center text-gray-500 py-10">Nenhum registo encontrado com os filtros aplicados.</p>
+            <p className="py-10 text-center text-gray-500">
+              Nenhum registo encontrado com os filtros aplicados.
+            </p>
           )}
         </div>
       </div>

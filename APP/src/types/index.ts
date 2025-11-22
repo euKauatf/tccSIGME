@@ -4,7 +4,7 @@ export interface User {
   id: number;
   name: string;
   matricula: string;
-  tipo: 'aluno' | 'adm';
+  tipo: "aluno" | "adm";
   created_at: string;
   updated_at: string;
   eventos: Event[];
@@ -24,7 +24,7 @@ export interface Event {
   local: string;
   vagas_restantes: number;
   pivot?: {
-    status: 'inscrito' | 'contemplado' | 'nao-contemplado';
+    status: "inscrito" | "contemplado" | "nao-contemplado";
   };
   inscritos_count?: number;
 }
@@ -32,15 +32,15 @@ export interface Event {
 export interface AuditLog {
   id: number;
   action: string;
-  user: { // O objeto do usuário que realizou a ação
+  user: {
     id: number;
     name: string;
-  } | null; // Pode ser nulo se o usuário for deletado
-  auditable: { // O objeto que sofreu a ação (neste caso, um Evento)
+  } | null;
+  auditable: {
     id: number;
     tema: string;
-  } | null; // Pode ser nulo se não houver objeto alvo
-  created_at: string; // O Laravel envia datas como strings no formato ISO
+  } | null;
+  created_at: string;
 }
 
 export interface Palestrante {
