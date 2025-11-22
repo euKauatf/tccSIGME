@@ -21,7 +21,6 @@ function ProfilePage() {
               <h2 className="text-4xl font-bold text-emerald-700">
                 {user?.name}
               </h2>
-              {/* Mostra o tipo do perfil apenas se for admin, usando operador ternário */}
               {isAdmin ? (
                 <p className="text-gray-600">
                   <strong>Tipo:</strong> Administrador
@@ -36,7 +35,6 @@ function ProfilePage() {
             </div>
           </div>
 
-          {/* Mostra o QR Code apenas se NÃO for admin e tiver matrícula, usando operador ternário */}
           {!isAdmin && user?.matricula ? (
             <div className="pt-6 mt-8 border-t border-emerald-200">
               <h3 className="mb-4 text-lg font-semibold text-center text-emerald-700">

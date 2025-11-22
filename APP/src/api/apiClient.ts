@@ -1,8 +1,6 @@
-// !!! Pede as parada pro backend através desse arquivo !!!
-import axios from "axios"; // Biblioteca para fazer requisições HTTP (🔥 a API rs)
+import axios from "axios";
 
 const apiClient = axios.create({
-  // Cria uma instância do axios com configurações padrão
   baseURL: import.meta.env.VITE_API_URL,
   headers: {
     Accept: "application/json",
@@ -10,10 +8,8 @@ const apiClient = axios.create({
   },
 });
 
-// Define o tipo EventData como um subconjunto de Event, omitindo as propriedades id, created_at e updated_at (pra ninguém descobrir isso kj)
 type EventData = Omit<Event, "id" | "created_at" | "updated_at">;
 
-// Adiciona um interceptor para adicionar o token de autenticação a cada requisição (não roubarão a API)
 apiClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("authToken");
@@ -27,7 +23,6 @@ apiClient.interceptors.request.use(
   }
 );
 
-// FUNÇÕES PARA FAZER REQUISIÇÕES HTTP
 export const getUser = () => apiClient.get("/user");
 export const getEvents = () => apiClient.get("/event");
 export const getEventById = (id: number) => apiClient.get(`/event/${id}`);
@@ -87,15 +82,13 @@ export const searchLocais = (term: string) =>
 export const exportPdf = async (eventId: number) => {
   try {
     const response = await apiClient.get(`/event/${eventId}/export-pdf`, {
-      responseType: "blob", // diz pro axios (biblioteca que linka app com api) pra tratar isso como arquivo
+      responseType: "blob",
     });
 
-    // criar o link pra baixar o arquivo com a resposta trazida pelo get la da api
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement("a");
     link.href = url;
 
-    // Tenta extrair o nome do arquivo do header da resposta, ou usa um nome padrão -> faz isso ai mesmo
     const contentDisposition = response.headers["content-disposition"];
     let fileName = "lista-presenca.pdf";
     if (contentDisposition) {
@@ -107,7 +100,7 @@ export const exportPdf = async (eventId: number) => {
     link.setAttribute("download", fileName);
     document.body.appendChild(link);
     link.click();
-    link.remove(); // Limpa o link após o download
+    link.remove();
   } catch (error) {
     console.error("Erro ao exportar PDF:", error);
     alert("Não foi possível gerar a lista de presença.");
@@ -127,6 +120,5 @@ export const updatePassword = (data: {
     old_password: data.senha_antiga,
     new_password: data.nova_senha,
   });
-
 
 export default apiClient;

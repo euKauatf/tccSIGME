@@ -1,5 +1,5 @@
-import './style.css';
-import { useState, useEffect, type KeyboardEvent } from 'react';
+import "./style.css";
+import { useState, useEffect, type KeyboardEvent } from "react";
 
 interface PasswordModalProps {
   isOpen: boolean;
@@ -9,27 +9,28 @@ interface PasswordModalProps {
   message: string;
 }
 
-function PasswordModal({ isOpen, onClose, onConfirm, title, message }: PasswordModalProps) {
-  const [password, setPassword] = useState('');
+function PasswordModal({
+  isOpen,
+  onClose,
+  onConfirm,
+  title,
+  message,
+}: PasswordModalProps) {
+  const [password, setPassword] = useState("");
 
-  // Efeito para bloquear o scroll do body quando o modal está aberto
   useEffect(() => {
     if (isOpen) {
-      // Adiciona o estilo para impedir o scroll
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     }
 
-    // Função de limpeza: será executada quando o modal fechar ou for "destruído"
     return () => {
-      // Remove o estilo, permitindo o scroll novamente
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
-  }, [isOpen]); // O efeito é re-executado toda vez que 'isOpen' muda
+  }, [isOpen]);
 
-  // Limpa a senha quando o modal é fechado
   useEffect(() => {
     if (!isOpen) {
-      setPassword('');
+      setPassword("");
     }
   }, [isOpen]);
 
@@ -42,17 +43,18 @@ function PasswordModal({ isOpen, onClose, onConfirm, title, message }: PasswordM
   };
 
   const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       handleConfirmClick();
     }
   };
 
   return (
-    // Fundo escurecido do modal (backdrop)
-    // MUDANÇA 1: Aumentamos o z-index de z-50 para z-[999]
-    <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50" onClick={onClose}>
-      {/* Corpo do Modal */}
-      <div className="relative w-full max-w-md p-6 mx-4 rounded-lg shadow-xl bg-base-100" onClick={(e) => e.stopPropagation()}>
+    <div
+      className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50"
+      onClick={onClose}>
+      <div
+        className="relative w-full max-w-md p-6 mx-4 rounded-lg shadow-xl bg-base-100"
+        onClick={(e) => e.stopPropagation()}>
         <h2 className="mb-4 text-xl font-bold text-base-content">{title}</h2>
         <p className="mb-5 text-gray-600">{message}</p>
 

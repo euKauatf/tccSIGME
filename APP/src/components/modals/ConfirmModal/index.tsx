@@ -1,6 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
-type ButtonType = 'btn-primary' | 'btn-secondary' | 'btn-success' | 'btn-error' | 'btn-info';
+type ButtonType =
+  | "btn-primary"
+  | "btn-secondary"
+  | "btn-success"
+  | "btn-error"
+  | "btn-info";
 
 interface ConfirmModalProps {
   isOpen: boolean;
@@ -12,14 +17,21 @@ interface ConfirmModalProps {
   confirmButtonType?: ButtonType;
 }
 
-function ConfirmModal({ isOpen, onClose, onConfirm, title, message, confirmButtonText = 'Confirmar', confirmButtonType = 'btn-primary' }: ConfirmModalProps) {
-  // Efeito para bloquear o scroll do body
+function ConfirmModal({
+  isOpen,
+  onClose,
+  onConfirm,
+  title,
+  message,
+  confirmButtonText = "Confirmar",
+  confirmButtonType = "btn-primary",
+}: ConfirmModalProps) {
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     }
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, [isOpen]);
 
@@ -28,8 +40,12 @@ function ConfirmModal({ isOpen, onClose, onConfirm, title, message, confirmButto
   }
 
   return (
-    <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50" onClick={onClose}>
-      <div className="relative w-full max-w-md p-6 mx-4 rounded-lg shadow-xl bg-base-100" onClick={(e) => e.stopPropagation()}>
+    <div
+      className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50"
+      onClick={onClose}>
+      <div
+        className="relative w-full max-w-md p-6 mx-4 rounded-lg shadow-xl bg-base-100"
+        onClick={(e) => e.stopPropagation()}>
         <h2 className="mb-4 text-xl font-bold text-base-content">{title}</h2>
         <p className="mb-5 text-base-content text-opacity-80">{message}</p>
 
