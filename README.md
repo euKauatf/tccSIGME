@@ -51,7 +51,7 @@
 3. após isso clique o simbolo "+" no parte superior direita do terminal para abrir mais um terminal e coloque os seguintes comandos:
         1-cd app
         2-npm run dev
-4. no terminal que utilizou o comando "cd app" segure ctrl e clique com o botão esquerdo em ciam do link gerado após o comando run dev
+4. no terminal que utilizou o comando "cd app" segure ctrl e clique com o botão esquerdo em cima do link gerado após o comando run dev
 
 ## No computador -> Criando perfil de Admin
 1. Após registrar um perfil através do Site, abra o app pgadmin4
