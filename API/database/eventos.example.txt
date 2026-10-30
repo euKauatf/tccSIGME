@@ -1,0 +1,29 @@
+Palestra: Introdução à programação com Python
+Hora de início: 13:00
+Hora de término: 15:00
+Dia: Segunda
+Sala: Auditório
+Quantidade de Vagas: 186
+Palestrante: Palestrante Exemplo Um
+E-mail para contato: palestrante1@example.com
+Número para contato: (24) 90000-0001
+
+Palestra: Oficina de robótica
+Hora de início: 15:00
+Hora de término: 17:00
+Dia: Terça
+Sala: Dojo
+Quantidade de Vagas: 20
+Palestrante: Palestrante Exemplo Dois
+E-mail para contato: palestrante2@example.com
+Número para contato: Não informado
+
+Palestra: Roda de conversa: carreira em tecnologia
+Hora de início: 13:00
+Hora de término: 15:00
+Dia: Quarta
+Sala: Auditório EECOE
+Quantidade de Vagas: 40
+Palestrante: Palestrante Exemplo Três
+E-mail para contato: Não informado
+Número para contato: Não informado

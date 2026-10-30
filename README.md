@@ -102,6 +102,16 @@ DB_USERNAME=seu_usuario
 DB_PASSWORD=sua_senha
 ```
 
+Os comandos de importação leem arquivos `.txt` da pasta `API/database/`. Os dados reais da Expocanp não ficam no repositório por causa da LGPD, então comece pelos exemplos com dados fictícios:
+
+```bash
+cd database
+cp alunos.example.txt alunos.txt
+cp eventos.example.txt eventos.txt
+cp palestrantes.example.txt palestrantes.txt
+cd ..
+```
+
 Depois gere a chave, crie as tabelas, importe os dados e suba o servidor:
 
 ```bash
@@ -113,8 +123,6 @@ php artisan import:palestrantes
 php artisan import:events
 php artisan serve
 ```
-
-> Os comandos `import:*` leem os arquivos `.txt` da pasta `API/database/`.
 
 **3. Front-end** (em outro terminal)
 
@@ -129,7 +137,8 @@ Abra o endereço que o Vite mostrar no terminal (normalmente `http://localhost:5
 **4. Criar um administrador:** na tabela `users`, troque o campo `tipo` do usuário de `aluno` para `adm`:
 
 ```sql
-UPDATE users SET tipo = 'adm' WHERE matricula = 'SUA_MATRICULA';
+-- 20250000001 é a primeira matrícula do arquivo de exemplo
+UPDATE users SET tipo = 'adm' WHERE matricula = '20250000001';
 ```
 
 ## 👥 Equipe

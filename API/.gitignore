@@ -22,3 +22,8 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Dados reais da Expocanp (LGPD): ficam só na máquina de quem roda o sistema
+/database/alunos.txt
+/database/eventos.txt
+/database/palestrantes.txt
