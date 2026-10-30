@@ -1,61 +1,139 @@
-# Dependências para rodar no seu dispositivo windows
+<h1 align="center">🎟️ SIGME</h1>
 
-1. Baixar PHP; Composer; Git; Node; PostgreSQL
+<p align="center">
+  <b>Sistema Integrado de Gestão de Matrículas da Expocanp</b><br>
+  Inscrições, sorteio de vagas e presença por QR Code para o evento acadêmico do IFRJ Campus Pinheiral
+</p>
 
-2. adicionar nova regra de entrada no windows defender firewall
-        -> crie uma regra do tipo porta e insira a porta 5432(padrão do postgre)
-3. Nas variáveis do ambiente, procure por path e adicione duas novas variáveis e cole o caminho para o composer na primeira e do postgre na segunda (geralmente C:\ProgramData\ComposerSetup\bin para o composer e, C:\Program Files\PostgreSQLz17\bin para o postgre)
+<p align="center">
+  <img src="https://img.shields.io/badge/React-19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS" />
+  <img src="https://img.shields.io/badge/Laravel-12-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel" />
+  <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
+</p>
 
-4. Abra o arquivo php.ini pelo bloco de notas e retire o ";" antes das extensões zip, pdo_pgsql, pgsql e fileinfo
+<p align="center">
+  <img src="docs/screenshots/programacao.png" width="820" alt="Programação da Expocanp no SIGME" />
+</p>
 
-5. com o composer já instalado baixe o Laravel pelo CMD com o comando 'composer require laravel/installer'
+> Projeto final do **Técnico em Informática do IFRJ, Campus Pinheiral** (2025), desenvolvido para um cliente real: a comissão organizadora da Expocanp.
 
-5. Abra o app pgAdmin4 e crie um usuário com nome e senha de sua preferência clicando com o botão direito do mouse em "login/group roles"( clique na aba security para definir a senha e na aba Privileges e selecione as opções "canlogin?" e "superuser?")
+## 💡 O problema
 
-7. Ainda no pgAdmin4, crie um banco com nome de sua preferencia e selecione o usuário oque vc criou com "owner"(proprietário/dono)
+A Expocanp é a semana de extensão, pesquisa e inovação do campus, com dezenas de palestras e oficinas. Até então, todo o processo era manual:
 
-8. caso já tenha o Visual Studio code instalado utilize ctrl+j e use o comando git clone + link do repositório no github(para obte-lo, clique no botão verde escrito "<>code" e copie o link fornecido)
+- os alunos se inscreviam por **Google Forms**;
+- nas atividades concorridas, a comissão **sorteava as vagas à mão** e remanejava alunos um por um;
+- a presença era confirmada por **lista de papel** ou um QR Code genérico, fácil de burlar.
 
-9. agora você já tem tudo o que precisa para rodar o programa em seu dispositvo windows
+O resultado eram superlotação, conflitos de horário e muito trabalho para a comissão.
 
-# Rodando na sua máquina:
-## No computador
+## ✨ O que o SIGME faz
 
-1. Abra o app pgAdmin4 e crie um usuário com nome e senha de sua preferência clicando com o botão direito do mouse em "login/group roles"( clique na aba security para definir a senha e na aba Privileges e selecione as opções "canlogin?" e "superuser?")
-2. Ainda no pgAdmin4, crie um banco com nome de sua preferencia e selecione o usuári oque vc criou com "owner"(proprietário/dono)
+**Para os alunos**
+- Login com a matrícula
+- Programação completa do evento, com filtro por dia
+- Inscrição nas atividades que quiser concorrer
+- **QR Code pessoal** no perfil, usado para registrar a presença
+- Modo claro e escuro
 
-## Dentro do VSCode(já com o programa clonado)
+**Para a comissão organizadora**
+- Cadastro e edição de eventos, palestrantes e locais, com aviso quando um palestrante ou local já está ocupado no mesmo horário
+- **Sorteio automático das vagas**, em rodadas, que nunca coloca o mesmo aluno em duas atividades no mesmo horário
+- **Scanner de presença** pela câmera ou por imagem do QR Code
+- Log de auditoria de inscrições, cancelamentos e sorteios
+- Lista de participantes de cada evento exportada em **PDF**
+- Importação em massa de alunos, eventos, locais e palestrantes
 
-1. Clique uma vez em API na parte esquerda e verifique se existe um arquivo chamado .env, caso não exista clique com o botão direito em API e depois clique em new file (novo arquivo) e coloque o nome de ".env". Após isso, edite o arquivo conforme especificações da internet, com opor exemplo:
+## 📸 Telas
 
-        # .env - Exemplo de Variáveis de Ambiente
+| Login com matrícula | Perfil com QR Code de presença |
+|:---:|:---:|
+| <img src="docs/screenshots/login.png" width="400" alt="Tela de login" /> | <img src="docs/screenshots/perfil-qrcode.png" width="400" alt="Perfil do aluno com QR Code" /> |
+| **Scanner de presença (comissão)** | **Tela inicial no modo escuro** |
+| <img src="docs/screenshots/scanner.png" width="400" alt="Scanner de presença" /> | <img src="docs/screenshots/inicio-escuro.png" width="400" alt="Tela inicial no modo escuro" /> |
 
-        # Configurações da aplicação
-        APP_NAME="Minha Aplicação"
-        PORT=3000
+## 🛠️ Stack
 
-        # Configurações do banco de dados
-        DB_HOST=localhost
-        DB_PORT=5432
-        DB_USER=root
-        DB_PASS=minhasenhasecreta
-        DB_DATABASE=sucos
+| Camada | Tecnologias |
+|---|---|
+| **Front-end** (`APP/`) | React 19, TypeScript, Vite, Tailwind CSS 4 + DaisyUI, React Router, Axios, html5-qrcode (leitura), react-qr-code (geração), Recharts |
+| **Back-end** (`API/`) | Laravel 12 (PHP 8.2), Laravel Sanctum (autenticação), DomPDF (relatórios em PDF) |
+| **Banco de dados** | PostgreSQL |
 
-        # Chaves de API
-        API_KEY=aqui_vai_sua_chave_de_api_secreta
-        NODE_ENV=development
-        
-2. utilize ctrl+j para abrir o terminal e cooque a seguinte série de comandos:
-        1-cd api
-        2-php artisan serve
-3. após isso clique o simbolo "+" no parte superior direita do terminal para abrir mais um terminal e coloque os seguintes comandos:
-        1-cd app
-        2-npm run dev
-4. no terminal que utilizou o comando "cd app" segure ctrl e clique com o botão esquerdo em cima do link gerado após o comando run dev
+```
+tccSIGME/
+├── API/   # API REST em Laravel
+└── APP/   # Interface em React + TypeScript
+```
 
-## No computador -> Criando perfil de Admin
-1. Após registrar um perfil através do Site, abra o app pgadmin4
-2. clique no banco de dados criado por você e abra schemas>public>tables
-3. clique com o botão direito na tabela com o nom "users" e depois "view/edit data">"all rolls" que irá abrir uma tabela no canto inferio direito
-4. navegando pela tabela procure o usuário que você deseja tranformar em admnistrador
-5. encontrando o usuário, procure pela coluna "tipo" e troque "aluno" por "adm"
+## 🚀 Como rodar
+
+**Pré-requisitos:** PHP 8.2+, Composer, Node.js 20+ e PostgreSQL.
+
+<details>
+<summary><b>Usando Windows? Veja os ajustes do PHP antes de começar</b></summary>
+
+1. Adicione as pastas do Composer e do PostgreSQL ao `PATH` (normalmente `C:\ProgramData\ComposerSetup\bin` e `C:\Program Files\PostgreSQL\17\bin`).
+2. No `php.ini`, tire o `;` da frente das extensões `zip`, `pdo_pgsql`, `pgsql` e `fileinfo`.
+3. Se o banco estiver em outra máquina, libere a porta `5432` no Firewall do Windows.
+
+</details>
+
+**1. Banco de dados:** no pgAdmin (ou no `psql`), crie um usuário com permissão de login e um banco de dados que pertença a ele.
+
+**2. API**
+
+```bash
+cd API
+composer install
+```
+
+Crie o arquivo `API/.env` com a configuração do banco:
+
+```env
+APP_KEY=
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=sigme_db
+DB_USERNAME=seu_usuario
+DB_PASSWORD=sua_senha
+```
+
+Depois gere a chave, crie as tabelas, importe os dados e suba o servidor:
+
+```bash
+php artisan key:generate
+php artisan migrate
+php artisan import:users
+php artisan import:locals
+php artisan import:palestrantes
+php artisan import:events
+php artisan serve
+```
+
+> Os comandos `import:*` leem os arquivos `.txt` da pasta `API/database/`.
+
+**3. Front-end** (em outro terminal)
+
+```bash
+cd APP
+npm install
+npm run dev
+```
+
+Abra o endereço que o Vite mostrar no terminal (normalmente `http://localhost:5173`).
+
+**4. Criar um administrador:** na tabela `users`, troque o campo `tipo` do usuário de `aluno` para `adm`:
+
+```sql
+UPDATE users SET tipo = 'adm' WHERE matricula = 'SUA_MATRICULA';
+```
+
+## 👥 Equipe
+
+Desenvolvido por Filipe da Costa Coutinho, João Pedro Curty Silveira, **Kauã dos Reis Fernandes**, Lucas Dantas Ortiz Nora de Oliveira, Pedro Mediato Gonçalves e Pedro Silva Lopes de Jesus.
+
+Orientação: prof. Rosenclever Lopes Gazzoni e prof. Antônio Paulo Muccillo de Medeiros.
